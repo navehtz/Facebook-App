@@ -15,15 +15,24 @@ namespace FacebookMini
     {
         private const string k_AppId = "806995989056767";
         private readonly string[] r_RequestedPermissions =
-            {
+            {   
                 "public_profile",
                 "email",
                 "user_friends",
                 "user_posts",
                 "user_photos",
-                "user_events"
-            };
+                "user_events",
+                "email",
+                "user_age_range",
+                "user_birthday",
+                "user_gender",
+                "user_hometown",
+                "user_likes",
+                "user_link",
+                "user_location",
+                "user_videos"
 
+            };
         public LoginForm()
         {
             InitializeComponent();
@@ -40,7 +49,6 @@ namespace FacebookMini
             {
                 login();
             }
-
         }
 
         private void login()
@@ -55,7 +63,7 @@ namespace FacebookMini
 
                 if (string.IsNullOrEmpty(m_LoginResult.ErrorMessage))
                 {
-                    afterLogin();
+                    openMainForm(m_LoginResult.LoggedInUser);
                 }
                 else
                 {
@@ -72,13 +80,11 @@ namespace FacebookMini
 
         }
 
-
         private void buttonConnectAsDesig_Click(object sender, EventArgs e)
         {
             try
             {
                 m_LoginResult = FacebookService.Connect("EAAUm6cZC4eUEBPZCFs9rJRpwlUmdHcPvU1tUNkIyP37zRZCjSvfdHaW5t3xsOnUL0bEKHL8Snjk6AZC3O32KWEbaItglEnXWQ2zEMXHqsdfdv0ecXNs3hO69juHrZCfRN9FGvfuJZAXhP4Pm57DRRoDeB8De6ZABnfrRflh6zgPwnavpyHS3ZCYX1E6K1QLTHff5sAZDZD");
-
                 openMainForm(m_LoginResult.LoggedInUser);
             }
             catch (Exception ex)
@@ -89,23 +95,13 @@ namespace FacebookMini
 
         private void openMainForm(User i_LoggedInUser)
         {
-            using (UserMainForm mainForm = new UserMainForm(i_LoggedInUser))
+            using (UserMainForm userMainForm = new UserMainForm(i_LoggedInUser))
             {
                 Hide();
-                mainForm.ShowDialog();
+                userMainForm.ShowDialog();
             }
             Close();
         }
-
-        //private void afterLogin()
-        //{
-
-        //    buttonLogin.Text = $"Logged in as {m_LoginResult.LoggedInUser.Name}";
-        //    buttonLogin.BackColor = Color.LightGreen;
-        //    pictureBoxProfile.ImageLocation = m_LoginResult.LoggedInUser.PictureNormalURL;
-        //    buttonLogin.Enabled = false;
-        //    buttonLogout.Enabled = true;
-        //}
 
         private void buttonLogout_Click(object sender, EventArgs e)
         {
