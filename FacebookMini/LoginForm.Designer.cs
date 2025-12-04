@@ -1,6 +1,6 @@
-﻿namespace BasicFacebookFeatures
+﻿namespace FacebookMini
 {
-    partial class FormMain
+    partial class LoginForm
     {
         /// <summary>
         /// Required designer variable.
