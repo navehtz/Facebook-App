@@ -77,6 +77,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomComponent\PostView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomComponent\SelectionWithImagePreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Logic\AnalyticsManager.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
