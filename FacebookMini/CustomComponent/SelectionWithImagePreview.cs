@@ -22,6 +22,8 @@ namespace FacebookMini.MyComponents
         private string m_TitleText = "Items";
         private Func<object, string> m_DisplaySelector;     // Selects display text for each item
         private Func<object, string> m_ImageUrlSelector;    // Selects image URL for each item
+        private Label TitleLabel;
+        private VScrollBar vScrollBar1;
         private Image m_CurrentImage;
 
         // חובה ל-Designer
@@ -252,6 +254,45 @@ namespace FacebookMini.MyComponents
             }
 
             return retImage;
+        }
+
+        private void InitializeComponent()
+        {
+            this.TitleLabel = new System.Windows.Forms.Label();
+            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.SuspendLayout();
+            // 
+            // TitleLabel
+            // 
+            this.TitleLabel.AutoSize = true;
+            this.TitleLabel.Location = new System.Drawing.Point(20, 15);
+            this.TitleLabel.Name = "TitleLabel";
+            this.TitleLabel.Size = new System.Drawing.Size(30, 15);
+            this.TitleLabel.TabIndex = 0;
+            this.TitleLabel.Text = "Title";
+            // 
+            // vScrollBar1
+            // 
+            this.vScrollBar1.Location = new System.Drawing.Point(23, 42);
+            this.vScrollBar1.Name = "vScrollBar1";
+            this.vScrollBar1.Size = new System.Drawing.Size(346, 261);
+            this.vScrollBar1.TabIndex = 1;
+            this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
+            // 
+            // SelectionWithImagePreview
+            // 
+            this.Controls.Add(this.vScrollBar1);
+            this.Controls.Add(this.TitleLabel);
+            this.Name = "SelectionWithImagePreview";
+            this.Size = new System.Drawing.Size(400, 332);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+
         }
     }
 }
