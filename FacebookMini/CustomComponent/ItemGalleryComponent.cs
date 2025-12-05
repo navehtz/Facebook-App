@@ -148,7 +148,7 @@ namespace FacebookWinFormsApp.CustomComponent
                 vScrollBar.Enabled = true;
                 vScrollBar.Minimum = 0;
                 vScrollBar.Maximum = m_TotalContentHeight - visibleHeight;
-                vScrollBar.LargeChange = visibleHeight;
+                //vScrollBar.LargeChange = visibleHeight;
                 if (vScrollBar.Value > vScrollBar.Maximum)
                 {
                     vScrollBar.Value = vScrollBar.Maximum;
