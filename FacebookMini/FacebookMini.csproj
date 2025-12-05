@@ -97,6 +97,8 @@
       <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
     </Compile>
     <Compile Include="Logic\AnalyticsManager.cs" />
+    <Compile Include="Logic\EFavoriteCatagory.cs" />
+    <Compile Include="Logic\FavoritesManager.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
