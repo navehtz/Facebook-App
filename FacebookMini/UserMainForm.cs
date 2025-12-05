@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using FacebookMini.Logic;
 using FacebookMini.MyComponents;
 using FacebookWinFormsApp.CustomComponent;
 using FacebookWrapper.ObjectModel;
@@ -205,23 +207,37 @@ namespace FacebookMini
             };
 
             // Pages section
-            var pagesTitleLabel = new Label
-            {
-                Text = "Pages you like",
-                Dock = DockStyle.Top,
-                Height = 25,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Padding = new Padding(5, 10, 0, 0)
-            };
+            //var pagesTitleLabel = new Label
+            //{
+            //    Text = "Pages you like",
+            //    Dock = DockStyle.Top,
+            //    Height = 25,
+            //    Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+            //    Padding = new Padding(5, 10, 0, 0)
+            //};
 
-            var pagesSection = new ItemGalleryComponent
+            //var pagesSection = new ItemGalleryComponent
+            //{
+            //    Dock = DockStyle.Fill
+            //};
+
+            var favoritesTitleLabel = new Label
+              {
+                  Text = "Favorites Pages",
+                  Dock = DockStyle.Top,
+                  Height = 25,
+                  Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                  Padding = new Padding(5, 10, 0, 0)
+              };
+
+            var favoritesSection = new ItemGalleryComponent
             {
                 Dock = DockStyle.Fill
             };
 
             // add in reverse order for Dock = Top stacking
-            rightPanel.Controls.Add(pagesSection);
-            rightPanel.Controls.Add(pagesTitleLabel);
+            rightPanel.Controls.Add(favoritesSection);
+            rightPanel.Controls.Add(favoritesTitleLabel);
             rightPanel.Controls.Add(albumsSection);
             rightPanel.Controls.Add(albumsTitleLabel);
 
@@ -273,21 +289,40 @@ namespace FacebookMini
             albumsSection.SetItems(albumsItems);
 
             // ===== fill pages =====
-            var pagesItems = new System.Collections.Generic.List<GalleryItem>();
+            //var pagesItems = new System.Collections.Generic.List<GalleryItem>();
+            //if (r_LoggedInUser.LikedPages != null)
+            //{
+            //    foreach (Page page in r_LoggedInUser.LikedPages)
+            //    {
+            //        Image pageImage = page.ImageNormal;
+            //        pagesItems.Add(new GalleryItem
+            //        {
+            //            Title = page.Name,
+            //            Image = pageImage,
+            //            Tag = page
+            //        });
+            //    }
+            //}
+            //pagesSection.SetItems(pagesItems);
+
+            var favoritesItems = new System.Collections.Generic.List<GalleryItem>();
+            FavoritesManager favoritesManager = new FavoritesManager();
+            favoritesManager.Add(r_LoggedInUser.LikedPages.First(), eFavoritesCategory.LikedPages);
+            
             if (r_LoggedInUser.LikedPages != null)
             {
-                foreach (Page page in r_LoggedInUser.LikedPages)
+                foreach (Page page in favoritesManager.GetList(eFavoritesCategory.LikedPages))
                 {
                     Image pageImage = page.ImageNormal;
-                    pagesItems.Add(new GalleryItem
-                    {
-                        Title = page.Name,
-                        Image = pageImage,
-                        Tag = page
-                    });
+                    favoritesItems.Add(new GalleryItem
+                       {
+                           Title = page.Name,
+                           Image = pageImage,
+                           Tag = page
+                       });
                 }
             }
-            pagesSection.SetItems(pagesItems);
+            favoritesSection.SetItems(favoritesItems);
 
             return profilePanel;
         }
