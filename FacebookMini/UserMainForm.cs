@@ -16,13 +16,12 @@ namespace FacebookMini
     public partial class UserMainForm : Form
     {
         private readonly User r_LoggedInUser;
-        //private readonly AnalyticsManager r_AnalyticsManager;
-        //private readonly ThemeManager r_ThemeManager = new ThemeManager();
+        private readonly FavoritesManager r_FavouritesManager;
         
         public UserMainForm(User i_LoggedInUser)
         {
             r_LoggedInUser = i_LoggedInUser;
-            //r_AnalyticsManager = new AnalyticsManager(r_LoggedInUser);
+            r_FavouritesManager = new FavoritesManager();
             
             InitializeComponent();
         }
@@ -32,11 +31,6 @@ namespace FacebookMini
         private void UserMainForm_Load(object sender, EventArgs e)
         {
           
-            
-            //postView1.SetPost(r_AnalyticsManager.MostLikedPost, "most liked post");
-            //postView2.SetPost(r_AnalyticsManager.LatestPostLikedByUser, "latest post liked by user");
-            //postView3.SetPost(r_AnalyticsManager.MostLikedPhoto, "most liked photo");
-            //postView4.SetPost(r_AnalyticsManager.LatestPhotoLikedByUser, "latest photo liked by user");
         }
 
         private void selectionWithImagePreview1_Load(object sender, EventArgs e)
@@ -46,13 +40,8 @@ namespace FacebookMini
 
         private void selectionWithImagePreview2_Load(object sender, EventArgs e)
         {
-            //selectionWithImagePreview2.SetData(r_LoggedInUser.Albums.SelectMany(a => a.Photos) , "My photos:", obj => ((Photo)obj).Name, obj => ((Photo)obj).PictureNormalURL);
-        }
-
-        
-        private void selectionWithImagePreview3_Load(object sender, EventArgs e)
-        {
-
+            r_FavouritesManager.Add(r_LoggedInUser.LikedPages.First(), eFavoritesCategory.LikedPages);
+            selectionWithImagePreview2.SetData(r_FavouritesManager.GetList(eFavoritesCategory.LikedPages), "favorites paSges:", obj => ((Page)obj).Name, obj => ((Page)obj).PictureNormalURL);
         }
 
     }
