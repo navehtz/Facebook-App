@@ -77,11 +77,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomComponent\GalleryItem.cs" />
+    <Compile Include="CustomComponent\PostComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomComponent\PostComponent.Designer.cs">
+      <DependentUpon>PostComponent.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomComponent\PostView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="CustomComponent\SelectionWithImagePreview.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomComponent\ItemGalleryComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomComponent\ItemGalleryComponent.Designer.cs">
+      <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
     </Compile>
     <Compile Include="Logic\AnalyticsManager.cs" />
     <Compile Include="LoginForm.cs">
@@ -98,6 +111,15 @@
     <Compile Include="UserMainForm.Designer.cs">
       <DependentUpon>UserMainForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CustomComponent\ItemGalleryComponent.resx">
+      <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomComponent\PostComponent.resx">
+      <DependentUpon>PostComponent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomComponent\SelectionWithImagePreview.resx">
+      <DependentUpon>SelectionWithImagePreview.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -132,6 +154,26 @@
       <Version>141.0.110</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Coments.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Like.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Comments.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\no-image.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Facebook_default_male_avatar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Facebook_default_male_avatar.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Facebook_logo_%28square%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
