@@ -30,7 +30,6 @@
         {
             this.selectionWithImagePreview1 = new FacebookMini.MyComponents.SelectionWithImagePreview();
             this.selectionWithImagePreview2 = new FacebookMini.MyComponents.SelectionWithImagePreview();
-            this.selectionWithImagePreview3 = new FacebookMini.MyComponents.SelectionWithImagePreview();
             this.SuspendLayout();
             // 
             // selectionWithImagePreview1
@@ -59,25 +58,11 @@
             this.selectionWithImagePreview2.TitleText = "Items";
             this.selectionWithImagePreview2.Load += new System.EventHandler(this.selectionWithImagePreview2_Load);
             // 
-            // selectionWithImagePreview3
-            // 
-            this.selectionWithImagePreview3.DataSource = null;
-            this.selectionWithImagePreview3.DisplaySelector = null;
-            this.selectionWithImagePreview3.ImageUrlSelector = null;
-            this.selectionWithImagePreview3.Location = new System.Drawing.Point(610, 157);
-            this.selectionWithImagePreview3.Name = "selectionWithImagePreview3";
-            this.selectionWithImagePreview3.Size = new System.Drawing.Size(151, 231);
-            this.selectionWithImagePreview3.SplitterDistance = 164;
-            this.selectionWithImagePreview3.TabIndex = 3;
-            this.selectionWithImagePreview3.TitleText = "Items";
-            this.selectionWithImagePreview3.Load += new System.EventHandler(this.selectionWithImagePreview3_Load);
-            // 
             // UserMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1189, 773);
-            this.Controls.Add(this.selectionWithImagePreview3);
             this.Controls.Add(this.selectionWithImagePreview2);
             this.Controls.Add(this.selectionWithImagePreview1);
             this.Name = "UserMainForm";
@@ -90,6 +75,5 @@
         #endregion
         private MyComponents.SelectionWithImagePreview selectionWithImagePreview1;
         private MyComponents.SelectionWithImagePreview selectionWithImagePreview2;
-        private MyComponents.SelectionWithImagePreview selectionWithImagePreview3;
     }
 }
