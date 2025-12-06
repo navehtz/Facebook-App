@@ -1,4 +1,5 @@
-﻿using FacebookWrapper.ObjectModel;
+﻿using FacebookWinFormsApp.Logic;
+using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
 
 namespace FacebookMini.Logic

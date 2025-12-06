@@ -1,16 +1,30 @@
-﻿using FacebookWrapper.ObjectModel;
+﻿using FacebookWinFormsApp.Logic;
+using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FacebookMini.Logic
 {
     public class FacebookAppLogic : IFacebookAppLogic
     {
         private readonly User r_LoggedInUser;
-        private readonly FavoritesManager favoritesManager = new FavoritesManager();
+        private readonly FavoritesManager r_FavoritesManager = new FavoritesManager();
+        private readonly AnalyticsManager r_analyticsManager;
 
         public FacebookAppLogic(User i_LoggedInUser)
         {
             r_LoggedInUser = i_LoggedInUser;
+            //generate fake data about posts and photos.
+            //List<Photo> albumPhotos = new List<Photo>();
+            
+            //foreach (Album album in r_LoggedInUser.Albums)
+            //{
+            //    foreach (Photo photo in album.Photos)
+            //    {
+            //        albumPhotos.Add(photo);
+            //    }
+            //}
+            //r_analyticsManager = new AnalyticsManager(r_LoggedInUser.Posts.ToList(), albumPhotos.ToList());
         }
 
         public User LoggedInUser => r_LoggedInUser;

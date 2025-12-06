@@ -13,7 +13,7 @@ namespace FacebookMini
     {
         private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
-
+      
         private Control m_ProfilePage;
         private Control m_FeedPage;
         private Control m_SettingsPage;
@@ -34,7 +34,6 @@ namespace FacebookMini
         private void UserMainForm_Load(object sender, EventArgs e)
         {
             buildPages();
-
             showPage(m_ProfilePage); // default
         }
 
