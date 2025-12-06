@@ -12,6 +12,7 @@ namespace FacebookMini
     public partial class UserMainForm : Form
     {
         private readonly User r_LoggedInUser;
+        private readonly IFacebookAppLogic r_AppLogic;
 
         private Control m_ProfilePage;
         private Control m_FeedPage;
@@ -24,10 +25,10 @@ namespace FacebookMini
             InitializeComponent();
         }
 
-        public UserMainForm(User i_LoggedInUser)
+        public UserMainForm(IFacebookAppLogic i_AppLogic)
             : this() // calls the parameterless ctor (InitializeComponent)
         {
-            r_LoggedInUser = i_LoggedInUser ?? throw new ArgumentNullException(nameof(i_LoggedInUser));
+            r_AppLogic = i_AppLogic ?? throw new ArgumentNullException(nameof(i_AppLogic));
         }
 
         private void UserMainForm_Load(object sender, EventArgs e)
@@ -64,9 +65,12 @@ namespace FacebookMini
         /// <summary>
         /// Profile page example: posts component + item gallery (albums / liked pages).
         /// </summary>
+
         private Control buildProfilePage()
         {
             var profilePanel = new Panel { Dock = DockStyle.Fill };
+
+            User loggedInUser = r_AppLogic.LoggedInUser;
 
             // ===== top "Profile" title =====
             var labelHeader = new Label
@@ -77,9 +81,8 @@ namespace FacebookMini
                 Font = new Font("Segoe UI", 16F, FontStyle.Bold),
                 Padding = new Padding(10, 5, 0, 0)
             };
-            profilePanel.Controls.Add(labelHeader);
 
-            // ===== user info section =====
+            // ===== user info section (full width) =====
             var userInfoPanel = new Panel
             {
                 Dock = DockStyle.Top,
@@ -87,62 +90,52 @@ namespace FacebookMini
                 Padding = new Padding(10, 5, 10, 5)
             };
 
-            // profile picture
             var userPictureBox = new PictureBox
             {
                 Size = new Size(80, 80),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Location = new Point(10, 10),
-                Image = FacebookWinFormsApp.Properties.
-                            Resources.Facebook_default_male_avatar1 // fallback
+                Image = FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1
             };
 
-            if (!string.IsNullOrEmpty(r_LoggedInUser.PictureNormalURL))
+            if (!string.IsNullOrEmpty(loggedInUser.PictureNormalURL))
             {
-                try
-                {
-                    userPictureBox.LoadAsync(r_LoggedInUser.PictureNormalURL);
-                }
-                catch
-                {
-                    // ignore, keep default avatar
-                }
+                try { userPictureBox.LoadAsync(loggedInUser.PictureNormalURL); }
+                catch { }
             }
 
-            // user name
             var userNameLabel = new Label
             {
                 AutoSize = true,
                 Font = new Font("Segoe UI", 14F, FontStyle.Bold),
                 Location = new Point(110, 20),
-                Text = r_LoggedInUser.Name
+                Text = loggedInUser.Name
             };
 
-            // user extra info (email / birthday / location if available)
             string extraInfo = string.Empty;
 
-            if (!string.IsNullOrEmpty(r_LoggedInUser.Email))
+            if (!string.IsNullOrEmpty(loggedInUser.Email))
             {
-                extraInfo += r_LoggedInUser.Email;
+                extraInfo += loggedInUser.Email;
             }
 
-            if (r_LoggedInUser.Birthday != null)
+            if (loggedInUser.Birthday != null)
             {
                 if (extraInfo.Length > 0) extraInfo += "   |   ";
-                extraInfo += $"Birthday: {r_LoggedInUser.Birthday}";
+                extraInfo += $"Birthday: {loggedInUser.Birthday}";
             }
 
-            if (r_LoggedInUser.Location != null &&
-                !string.IsNullOrEmpty(r_LoggedInUser.Location.Name))
+            if (loggedInUser.Location != null &&
+                !string.IsNullOrEmpty(loggedInUser.Location.Name))
             {
                 if (extraInfo.Length > 0) extraInfo += "   |   ";
-                extraInfo += r_LoggedInUser.Location.Name;
+                extraInfo += loggedInUser.Location.Name;
             }
 
             var userExtraLabel = new Label
             {
                 AutoSize = true,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Font = new Font("Segoe UI", 9F),
                 Location = new Point(110, 55),
                 Text = extraInfo
             };
@@ -151,18 +144,14 @@ namespace FacebookMini
             userInfoPanel.Controls.Add(userNameLabel);
             userInfoPanel.Controls.Add(userExtraLabel);
 
-            profilePanel.Controls.Add(userInfoPanel);
-            profilePanel.Controls.SetChildIndex(userInfoPanel, 1);   // under "Profile"
-            profilePanel.Controls.SetChildIndex(labelHeader, 0);     // title remains top
-
-            // ===== layout for posts + gallery =====
+            // ===== split container: left = posts, right = albums/pages =====
             var splitContainer = new SplitContainer
             {
                 Dock = DockStyle.Fill,
                 Orientation = Orientation.Vertical
             };
 
-            // ===== LEFT: posts section =====
+            // ----- LEFT: posts section -----
             var postsSectionPanel = new Panel { Dock = DockStyle.Fill };
 
             var postsTitleLabel = new Label
@@ -179,18 +168,17 @@ namespace FacebookMini
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 FlowDirection = FlowDirection.TopDown,
-                WrapContents = false
+                WrapContents = false,
+                Padding = new Padding(10, 5, 10, 10)
             };
 
             postsSectionPanel.Controls.Add(postsFlowPanel);
             postsSectionPanel.Controls.Add(postsTitleLabel);
-
             splitContainer.Panel1.Controls.Add(postsSectionPanel);
 
-            // ===== RIGHT: albums + pages stacked vertically =====
+            // ----- RIGHT: albums (top) + pages (bottom) -----
             var rightPanel = new Panel { Dock = DockStyle.Fill };
 
-            // Albums section
             var albumsTitleLabel = new Label
             {
                 Text = "Albums",
@@ -206,48 +194,34 @@ namespace FacebookMini
                 Height = 250
             };
 
-            // Pages section
-            //var pagesTitleLabel = new Label
-            //{
-            //    Text = "Pages you like",
-            //    Dock = DockStyle.Top,
-            //    Height = 25,
-            //    Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-            //    Padding = new Padding(5, 10, 0, 0)
-            //};
+            var pagesTitleLabel = new Label
+            {
+                Text = "Pages you like",
+                Dock = DockStyle.Top,
+                Height = 25,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                Padding = new Padding(5, 10, 0, 0)
+            };
 
-            //var pagesSection = new ItemGalleryComponent
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
-            var favoritesTitleLabel = new Label
-              {
-                  Text = "Favorites Pages",
-                  Dock = DockStyle.Top,
-                  Height = 25,
-                  Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                  Padding = new Padding(5, 10, 0, 0)
-              };
-
-            var favoritesSection = new ItemGalleryComponent
+            var pagesSection = new ItemGalleryComponent
             {
                 Dock = DockStyle.Fill
             };
 
-            // add in reverse order for Dock = Top stacking
-            rightPanel.Controls.Add(favoritesSection);
-            rightPanel.Controls.Add(favoritesTitleLabel);
+            rightPanel.Controls.Add(pagesSection);
+            rightPanel.Controls.Add(pagesTitleLabel);
             rightPanel.Controls.Add(albumsSection);
             rightPanel.Controls.Add(albumsTitleLabel);
 
             splitContainer.Panel2.Controls.Add(rightPanel);
 
-            // add split container under header + user info
-            profilePanel.Controls.Add(splitContainer);
-            profilePanel.Controls.SetChildIndex(splitContainer, 2);
+            // add to main panel
+            profilePanel.SuspendLayout();
+            profilePanel.Controls.Add(splitContainer);   // Fill
+            profilePanel.Controls.Add(userInfoPanel);    // Top
+            profilePanel.Controls.Add(labelHeader);      // Top
+            profilePanel.ResumeLayout();
 
-            // set splitter distance after panel has a valid size
             profilePanel.Resize += (sender, args) =>
             {
                 if (profilePanel.Width > 0)
@@ -256,28 +230,33 @@ namespace FacebookMini
                 }
             };
 
-            // ===== fill posts =====
-            if (r_LoggedInUser?.Posts != null)
+            // ===== fill posts (via logic) =====
+            var posts = r_AppLogic.GetUserPosts();
+            if (posts != null)
             {
-                foreach (Post post in r_LoggedInUser.Posts)
+                foreach (Post post in posts)
                 {
                     var postControl = new PostComponent
                     {
-                        Margin = new Padding(5)
+                        Margin = new Padding(5, 5, 5, 15)
                     };
 
-                    postControl.SetPost(post, r_LoggedInUser);
+                    // still uses Facebook types – but the data comes from logic
+                    postControl.SetPost(post, loggedInUser);
                     postsFlowPanel.Controls.Add(postControl);
                 }
             }
 
-            // ===== fill albums =====
+            // ===== fill albums (via logic) =====
             var albumsItems = new System.Collections.Generic.List<GalleryItem>();
-            if (r_LoggedInUser.Albums != null)
+            var albums = r_AppLogic.GetUserAlbums();
+
+            if (albums != null)
             {
-                foreach (Album album in r_LoggedInUser.Albums)
+                foreach (Album album in albums)
                 {
                     Image albumImage = album.ImageAlbum;
+
                     albumsItems.Add(new GalleryItem
                     {
                         Title = album.Name,
@@ -286,46 +265,41 @@ namespace FacebookMini
                     });
                 }
             }
+
             albumsSection.SetItems(albumsItems);
 
-            // ===== fill pages =====
-            //var pagesItems = new System.Collections.Generic.List<GalleryItem>();
-            //if (r_LoggedInUser.LikedPages != null)
-            //{
-            //    foreach (Page page in r_LoggedInUser.LikedPages)
-            //    {
-            //        Image pageImage = page.ImageNormal;
-            //        pagesItems.Add(new GalleryItem
-            //        {
-            //            Title = page.Name,
-            //            Image = pageImage,
-            //            Tag = page
-            //        });
-            //    }
-            //}
-            //pagesSection.SetItems(pagesItems);
-
-            var favoritesItems = new System.Collections.Generic.List<GalleryItem>();
-            FavoritesManager favoritesManager = new FavoritesManager();
-            favoritesManager.Add(r_LoggedInUser.LikedPages.First(), eFavoritesCategory.LikedPages);
-            
-            if (r_LoggedInUser.LikedPages != null)
+            if (albumsItems.Count == 0)
             {
-                foreach (Page page in favoritesManager.GetList(eFavoritesCategory.LikedPages))
+                albumsSection.Visible = false;
+                albumsTitleLabel.Visible = false;
+                albumsSection.Height = 0;
+            }
+
+            // ===== fill pages (via logic) =====
+            var pagesItems = new System.Collections.Generic.List<GalleryItem>();
+            var likedPages = r_AppLogic.GetUserLikedPages();
+
+            if (likedPages != null)
+            {
+                foreach (Page page in likedPages)
                 {
                     Image pageImage = page.ImageNormal;
-                    favoritesItems.Add(new GalleryItem
-                       {
-                           Title = page.Name,
-                           Image = pageImage,
-                           Tag = page
-                       });
+
+                    pagesItems.Add(new GalleryItem
+                    {
+                        Title = page.Name,
+                        Image = pageImage,
+                        Tag = page
+                    });
                 }
             }
-            favoritesSection.SetItems(favoritesItems);
+
+            pagesSection.SetItems(pagesItems);
 
             return profilePanel;
         }
+
+
 
 
         private void showPage(Control i_Page)
