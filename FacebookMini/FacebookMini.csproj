@@ -97,6 +97,7 @@
       <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
     </Compile>
     <Compile Include="Logic\AnalyticsManager.cs" />
+    <Compile Include="Logic\AnalyticsSnapshot.cs" />
     <Compile Include="Logic\EFavoriteCatagory.cs" />
     <Compile Include="Logic\FacebookAppLogic.cs" />
     <Compile Include="Logic\FavoritesManager.cs" />
