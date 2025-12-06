@@ -98,7 +98,9 @@
     </Compile>
     <Compile Include="Logic\AnalyticsManager.cs" />
     <Compile Include="Logic\EFavoriteCatagory.cs" />
+    <Compile Include="Logic\FacebookAppLogic.cs" />
     <Compile Include="Logic\FavoritesManager.cs" />
+    <Compile Include="Logic\IFacebookAppLogic.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

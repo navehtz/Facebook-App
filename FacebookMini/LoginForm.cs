@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FacebookMini.Logic;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 
@@ -95,11 +96,14 @@ namespace FacebookMini
 
         private void openMainForm(User i_LoggedInUser)
         {
-            using (UserMainForm userMainForm = new UserMainForm(i_LoggedInUser))
+            IFacebookAppLogic appLogic = new FacebookAppLogic(i_LoggedInUser);
+
+            using (UserMainForm userMainForm = new UserMainForm(appLogic))
             {
                 Hide();
                 userMainForm.ShowDialog();
             }
+
             Close();
         }
 
