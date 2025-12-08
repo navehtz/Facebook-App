@@ -43,7 +43,9 @@
         private void InitializeComponent()
         {
             this.panelHeader = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelTitle = new System.Windows.Forms.Label();
+            this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.panelSideMenu = new System.Windows.Forms.Panel();
             this.buttonLogout = new System.Windows.Forms.Button();
             this.buttonFeature2 = new System.Windows.Forms.Button();
@@ -52,12 +54,10 @@
             this.buttonFeed = new System.Windows.Forms.Button();
             this.buttonProfile = new System.Windows.Forms.Button();
             this.panelContent = new System.Windows.Forms.Panel();
-            this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelHeader.SuspendLayout();
-            this.panelSideMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
+            this.panelSideMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -72,6 +72,17 @@
             this.panelHeader.Size = new System.Drawing.Size(1195, 86);
             this.panelHeader.TabIndex = 0;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1;
+            this.pictureBox1.Location = new System.Drawing.Point(1115, 13);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(64, 56);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
             // labelTitle
             // 
             this.labelTitle.AutoSize = true;
@@ -79,9 +90,19 @@
             this.labelTitle.ForeColor = System.Drawing.Color.White;
             this.labelTitle.Location = new System.Drawing.Point(75, 23);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(148, 41);
+            this.labelTitle.Size = new System.Drawing.Size(119, 32);
             this.labelTitle.TabIndex = 1;
             this.labelTitle.Text = "facebook";
+            // 
+            // pictureBoxLogo
+            // 
+            this.pictureBoxLogo.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_logo__square_;
+            this.pictureBoxLogo.Location = new System.Drawing.Point(25, 17);
+            this.pictureBoxLogo.Name = "pictureBoxLogo";
+            this.pictureBoxLogo.Size = new System.Drawing.Size(44, 44);
+            this.pictureBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxLogo.TabIndex = 0;
+            this.pictureBoxLogo.TabStop = false;
             // 
             // panelSideMenu
             // 
@@ -203,26 +224,6 @@
             this.panelContent.Size = new System.Drawing.Size(1015, 687);
             this.panelContent.TabIndex = 2;
             // 
-            // pictureBoxLogo
-            // 
-            this.pictureBoxLogo.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_logo__square_;
-            this.pictureBoxLogo.Location = new System.Drawing.Point(25, 17);
-            this.pictureBoxLogo.Name = "pictureBoxLogo";
-            this.pictureBoxLogo.Size = new System.Drawing.Size(44, 44);
-            this.pictureBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxLogo.TabIndex = 0;
-            this.pictureBoxLogo.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1;
-            this.pictureBox1.Location = new System.Drawing.Point(1115, 13);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(64, 56);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
             // UserMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -236,9 +237,9 @@
             this.Load += new System.EventHandler(this.UserMainForm_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
-            this.panelSideMenu.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
+            this.panelSideMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
