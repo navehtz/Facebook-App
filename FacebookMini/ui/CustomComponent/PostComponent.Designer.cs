@@ -1,4 +1,6 @@
-﻿namespace FacebookWinFormsApp.CustomComponent
+﻿using System.Windows.Forms;
+
+namespace FacebookWinFormsApp.CustomComponent
 {
     partial class PostComponent
     {
@@ -152,9 +154,11 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox ProfilePicPictureBox;
-        private System.Windows.Forms.Label DateTimeLabel;
-        private System.Windows.Forms.PictureBox LikesPictureBox;
-        private System.Windows.Forms.PictureBox CommentsPictureBox;
+        private PictureBox ProfilePicPictureBox;
+        private Label DateTimeLabel;
+        private PictureBox LikesPictureBox;
+        private PictureBox CommentsPictureBox;
+
+
     }
 }
