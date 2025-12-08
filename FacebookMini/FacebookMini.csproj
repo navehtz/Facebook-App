@@ -82,6 +82,8 @@
     <Compile Include="logic\dummyData\DummyPhoto.cs" />
     <Compile Include="logic\dummyData\DummyPost.cs" />
     <Compile Include="logic\dummyData\DummyUser.cs" />
+    <Compile Include="logic\postNotes\InMemoryPostNotesManager.cs" />
+    <Compile Include="logic\postNotes\IPostNotesManager.cs" />
     <Compile Include="ui\CustomComponent\GalleryItem.cs" />
     <Compile Include="ui\CustomComponent\PostComponent.cs">
       <SubType>UserControl</SubType>
