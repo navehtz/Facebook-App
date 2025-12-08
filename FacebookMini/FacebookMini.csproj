@@ -82,7 +82,15 @@
     <Compile Include="logic\dummyData\DummyPhoto.cs" />
     <Compile Include="logic\dummyData\DummyPost.cs" />
     <Compile Include="logic\dummyData\DummyUser.cs" />
+    <Compile Include="logic\postNotes\InMemoryPostNotesManager.cs" />
+    <Compile Include="logic\postNotes\IPostNotesManager.cs" />
     <Compile Include="ui\CustomComponent\GalleryItem.cs" />
+    <Compile Include="ui\CustomComponent\NoteEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ui\CustomComponent\NoteEditForm.Designer.cs">
+      <DependentUpon>NoteEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ui\CustomComponent\PostComponent.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -183,6 +191,7 @@
     <Content Include="Resources\jsons\posts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\note.png" />
     <None Include="Resources\photos\Like.jpg" />
   </ItemGroup>
   <ItemGroup>
