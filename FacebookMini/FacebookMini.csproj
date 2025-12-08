@@ -77,55 +77,63 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomComponent\GalleryItem.cs" />
-    <Compile Include="CustomComponent\PostComponent.cs">
+    <Compile Include="logic\dummyData\DummyComment.cs" />
+    <Compile Include="logic\dummyData\DummyDataLoader.cs" />
+    <Compile Include="logic\dummyData\DummyPhoto.cs" />
+    <Compile Include="logic\dummyData\DummyPost.cs" />
+    <Compile Include="logic\dummyData\DummyUser.cs" />
+    <Compile Include="ui\CustomComponent\GalleryItem.cs" />
+    <Compile Include="ui\CustomComponent\PostComponent.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CustomComponent\PostComponent.Designer.cs">
+    <Compile Include="ui\CustomComponent\PostComponent.Designer.cs">
       <DependentUpon>PostComponent.cs</DependentUpon>
     </Compile>
-    <Compile Include="CustomComponent\PostView.cs">
+    <Compile Include="ui\CustomComponent\PostView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CustomComponent\SelectionWithImagePreview.cs">
+    <Compile Include="ui\CustomComponent\SelectionWithImagePreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CustomComponent\ItemGalleryComponent.cs">
+    <Compile Include="ui\CustomComponent\ItemGalleryComponent.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CustomComponent\ItemGalleryComponent.Designer.cs">
+    <Compile Include="ui\CustomComponent\ItemGalleryComponent.Designer.cs">
       <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logic\AnalyticsManager.cs" />
-    <Compile Include="Logic\AnalyticsSnapshot.cs" />
-    <Compile Include="Logic\EFavoriteCatagory.cs" />
-    <Compile Include="Logic\FacebookAppLogic.cs" />
-    <Compile Include="Logic\FavoritesManager.cs" />
-    <Compile Include="Logic\IFacebookAppLogic.cs" />
-    <Compile Include="LoginForm.cs">
+    <Compile Include="logic\features\AnalyticsManager.cs" />
+    <Compile Include="logic\features\AnalyticsSnapshot.cs" />
+    <Compile Include="logic\features\EFavoriteCatagory.cs" />
+    <Compile Include="logic\FacebookAppLogic.cs" />
+    <Compile Include="logic\features\FavoritesManager.cs" />
+    <Compile Include="logic\IFacebookAppLogic.cs" />
+    <Compile Include="ui\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoginForm.Designer.cs">
+    <Compile Include="ui\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserMainForm.cs">
+    <Compile Include="ui\UserMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserMainForm.Designer.cs">
+    <Compile Include="ui\UserMainForm.Designer.cs">
       <DependentUpon>UserMainForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="CustomComponent\ItemGalleryComponent.resx">
+    <Compile Include="ui\viewModels\FeedPostViewModel.cs" />
+    <Compile Include="ui\viewModels\FriendViewModel.cs" />
+    <Compile Include="utils\Constants.cs" />
+    <EmbeddedResource Include="ui\CustomComponent\ItemGalleryComponent.resx">
       <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CustomComponent\PostComponent.resx">
+    <EmbeddedResource Include="ui\CustomComponent\PostComponent.resx">
       <DependentUpon>PostComponent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CustomComponent\SelectionWithImagePreview.resx">
+    <EmbeddedResource Include="ui\CustomComponent\SelectionWithImagePreview.resx">
       <DependentUpon>SelectionWithImagePreview.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoginForm.resx">
+    <EmbeddedResource Include="ui\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -138,7 +146,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="UserMainForm.resx">
+    <EmbeddedResource Include="ui\UserMainForm.resx">
       <DependentUpon>UserMainForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -158,27 +166,42 @@
     <PackageReference Include="CefSharp.WinForms">
       <Version>141.0.110</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.4</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Coments.png" />
+    <None Include="Resources\photos\Coments.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Like.jpg" />
+    <Content Include="Resources\jsons\friends.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\jsons\photos.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\jsons\posts.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\photos\Like.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Comments.png" />
+    <None Include="Resources\photos\Comments.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\no-image.jpg" />
+    <None Include="Resources\photos\no-image.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Facebook_default_male_avatar.gif" />
+    <None Include="Resources\photos\Facebook_default_male_avatar.gif" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Facebook_default_male_avatar.jpg" />
+    <None Include="Resources\photos\Facebook_default_male_avatar.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Facebook_logo_%28square%29.png" />
+    <None Include="Resources\photos\Facebook_logo_%28square%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="data\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
