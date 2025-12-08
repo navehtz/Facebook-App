@@ -43,7 +43,7 @@
         private void InitializeComponent()
         {
             this.panelHeader = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.userPictureBoxTopBar = new System.Windows.Forms.PictureBox();
             this.labelTitle = new System.Windows.Forms.Label();
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.panelSideMenu = new System.Windows.Forms.Panel();
@@ -55,7 +55,7 @@
             this.buttonProfile = new System.Windows.Forms.Button();
             this.panelContent = new System.Windows.Forms.Panel();
             this.panelHeader.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.userPictureBoxTopBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             this.panelSideMenu.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +63,7 @@
             // panelHeader
             // 
             this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(119)))), ((int)(((byte)(242)))));
-            this.panelHeader.Controls.Add(this.pictureBox1);
+            this.panelHeader.Controls.Add(this.userPictureBoxTopBar);
             this.panelHeader.Controls.Add(this.labelTitle);
             this.panelHeader.Controls.Add(this.pictureBoxLogo);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -72,16 +72,17 @@
             this.panelHeader.Size = new System.Drawing.Size(1195, 86);
             this.panelHeader.TabIndex = 0;
             // 
-            // pictureBox1
+            // userPictureBoxTopBar
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1;
-            this.pictureBox1.Location = new System.Drawing.Point(1115, 13);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(64, 56);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.userPictureBoxTopBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.userPictureBoxTopBar.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1;
+            this.userPictureBoxTopBar.Location = new System.Drawing.Point(1115, 13);
+            this.userPictureBoxTopBar.Name = "userPictureBoxTopBar";
+            this.userPictureBoxTopBar.Size = new System.Drawing.Size(64, 56);
+            this.userPictureBoxTopBar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.userPictureBoxTopBar.TabIndex = 0;
+            this.userPictureBoxTopBar.TabStop = false;
+            this.userPictureBoxTopBar.Click += new System.EventHandler(this.userPictureBoxTopBar_Click);
             // 
             // labelTitle
             // 
@@ -149,7 +150,6 @@
             this.buttonFeature2.Text = "Feature 2";
             this.buttonFeature2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonFeature2.UseVisualStyleBackColor = true;
-            this.buttonFeature2.Click += new System.EventHandler(this.buttonFeature2_Click);
             // 
             // buttonFeature1
             // 
@@ -237,7 +237,7 @@
             this.Load += new System.EventHandler(this.UserMainForm_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.userPictureBoxTopBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.panelSideMenu.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -246,6 +246,6 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox userPictureBoxTopBar;
     }
 }
