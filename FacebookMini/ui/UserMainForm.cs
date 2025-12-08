@@ -5,12 +5,14 @@ using System.Windows.Forms;
 using FacebookMini.Logic;
 using FacebookMini.MyComponents;
 using FacebookWinFormsApp.CustomComponent;
+using FacebookWinFormsApp.logic.postNotes;
 using FacebookWrapper.ObjectModel;
 
 namespace FacebookMini
 {
     public partial class UserMainForm : Form
     {
+        //TODO: Define min size
         private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
       
@@ -225,19 +227,30 @@ namespace FacebookMini
             {
                 if (profilePanel.Width > 0)
                 {
-                    splitContainer.SplitterDistance = (int)(profilePanel.Width * 0.6);
+                    try
+                    {
+                        splitContainer.SplitterDistance = (int)(profilePanel.Width * 0.6);
+                    }
+                    catch
+                    {
+                        // do nothing
+                    }
                 }
             };
 
             // ===== fill posts (via logic) =====
             var posts = r_AppLogic.GetUserPosts();
+
             if (posts != null)
             {
+                IPostNotesManager postNotesManager = new InMemoryPostNotesManager();
+
                 foreach (Post post in posts)
                 {
                     var postControl = new PostComponent
                     {
-                        Margin = new Padding(5, 5, 5, 15)
+                        Margin = new Padding(5, 5, 5, 15),
+                        PostNotesManager = postNotesManager
                     };
 
                     // still uses Facebook types – but the data comes from logic
