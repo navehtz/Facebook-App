@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FacebookMini.Logic;
+using FacebookWinFormsApp.utils;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 
@@ -14,7 +15,6 @@ namespace FacebookMini
 {
     public partial class LoginForm : Form
     {
-        private const string k_AppId = "806995989056767";
         private readonly string[] r_RequestedPermissions =
             {   
                 "public_profile",
@@ -58,7 +58,7 @@ namespace FacebookMini
 
             try
             {
-                m_LoginResult = FacebookService.Login(k_AppId, r_RequestedPermissions);
+                m_LoginResult = FacebookService.Login(Constants.k_AppId, r_RequestedPermissions);
 
                 //m_LoginResult = FacebookService.Connect()
 
