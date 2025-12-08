@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Facebook;
+using FacebookWinFormsApp.logic.postNotes;
+using FacebookWinFormsApp.ui.CustomComponent;
 using FacebookWrapper.ObjectModel;
 
 namespace FacebookWinFormsApp.CustomComponent
@@ -15,6 +17,8 @@ namespace FacebookWinFormsApp.CustomComponent
     public partial class PostComponent : UserControl
     {
         private Post m_Post;
+        public IPostNotesManager PostNotesManager { get; set; }
+        public string PostId { get; private set; }
         private static readonly Random sr_Random = new Random();
 
         public PostComponent()
@@ -88,6 +92,8 @@ namespace FacebookWinFormsApp.CustomComponent
                     // ignore – keep default avatar
                 }
             }
+
+            PostId = i_Post.Id;
         }
 
         // Optional: click handlers (you can raise events here later if you want)
@@ -99,6 +105,36 @@ namespace FacebookWinFormsApp.CustomComponent
         private void CommentsLabel_Click(object sender, EventArgs e)
         {
             // For example: open comments of m_Post
+        }
+
+        private void btnNote_Click(object sender, EventArgs e)
+        {
+            if(PostNotesManager == null || string.IsNullOrEmpty(PostId))
+            {
+                return;
+            }
+
+            string currentNote = PostNotesManager.GetNoteForPost(PostId) ?? string.Empty;
+
+            using(var noteForm = new NoteEditForm(currentNote))
+            {
+                if(noteForm.ShowDialog() == DialogResult.OK)
+                {
+                    string newNote = noteForm.NoteText;
+                    if(string.IsNullOrEmpty(newNote))
+                    {
+                        PostNotesManager.RemoveNoteForPost(PostId);
+                        btnNote.Text = "Add Note";
+                        NoteIcon.Visible = false;
+                    }
+                    else
+                    {
+                        PostNotesManager.SetNoteForPost(PostId, newNote);
+                        btnNote.Text = "Edit Note";
+                        NoteIcon.Visible = !string.IsNullOrWhiteSpace(newNote);
+                    }
+                }
+            }
         }
     }
 }
