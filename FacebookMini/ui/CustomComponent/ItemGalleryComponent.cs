@@ -29,7 +29,7 @@ namespace FacebookWinFormsApp.CustomComponent
                              Padding = new Padding(5)
                          };
 
-            Controls.Add(m_Flow);
+            this.panelItems.Controls.Add(m_Flow);
         }
 
         internal void SetItems(IEnumerable<GalleryItem> i_Items)
