@@ -191,7 +191,7 @@
     <Content Include="Resources\jsons\posts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\note.png" />
+    <None Include="Resources\photos\note.png" />
     <None Include="Resources\photos\Like.jpg" />
   </ItemGroup>
   <ItemGroup>

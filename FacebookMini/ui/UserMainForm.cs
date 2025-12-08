@@ -13,14 +13,12 @@ namespace FacebookMini
     public partial class UserMainForm : Form
     {
         //TODO: Define min size
-        private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
       
         private Control m_ProfilePage;
         private Control m_FeedPage;
         private Control m_SettingsPage;
         private Control m_Feature1Page;
-        private Control m_Feature2Page;
 
         public UserMainForm()
         {
@@ -45,7 +43,6 @@ namespace FacebookMini
             m_FeedPage = buildSimplePlaceholderPage("Feed");
             m_SettingsPage = buildSimplePlaceholderPage("Settings");
             m_Feature1Page = buildSimplePlaceholderPage("Feature 1");
-            m_Feature2Page = buildSimplePlaceholderPage("Feature 2");
         }
 
         private Control buildSimplePlaceholderPage(string i_Title)
@@ -96,7 +93,7 @@ namespace FacebookMini
                 Size = new Size(80, 80),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Location = new Point(10, 10),
-                Image = FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1
+                Image = loggedInUser.ImageNormal ?? FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1
             };
 
             if (!string.IsNullOrEmpty(loggedInUser.PictureNormalURL))
@@ -310,10 +307,7 @@ namespace FacebookMini
 
             return profilePanel;
         }
-
-
-
-
+        
         private void showPage(Control i_Page)
         {
             panelContent.Controls.Clear();
@@ -343,15 +337,15 @@ namespace FacebookMini
             showPage(m_Feature1Page);
         }
 
-        private void buttonFeature2_Click(object sender, EventArgs e)
-        {
-            showPage(m_Feature2Page);
-        }
-
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             // TODO: add real logout logic.
             this.Close();
+        }
+
+        private void userPictureBoxTopBar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
