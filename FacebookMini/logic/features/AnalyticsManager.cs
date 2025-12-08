@@ -17,7 +17,7 @@ namespace FacebookMini.Logic
             Dictionary<DayOfWeek, int> dayCounter = new Dictionary<DayOfWeek, int>();
             Dictionary<int, int> hourCounter = new Dictionary<int, int>();
 
-            calculatePosts(i_Posts, likerCounts, commenterCounts, dayCounter, hourCounter);
+            calculatePostsAnalytics(i_Posts, likerCounts, commenterCounts, dayCounter, hourCounter);
             calculatePhotos(i_Photos, likerCounts, commenterCounts, dayCounter, hourCounter);
             
             r_Snapshot.TopLiker = selectMaxByValue(likerCounts);
@@ -26,7 +26,7 @@ namespace FacebookMini.Logic
             r_Snapshot.FavoritePostingHour = maxKey(hourCounter);
         }
         
-        private void calculatePosts(List<Post> i_Posts, Dictionary<User, int> i_LikerCounts, Dictionary<User, int> i_CommenterCounts, Dictionary<DayOfWeek, int> i_DayCounter, Dictionary<int, int> i_HourCounter)
+        private void calculatePostsAnalytics(List<Post> i_Posts, Dictionary<User, int> i_LikerCounts, Dictionary<User, int> i_CommenterCounts, Dictionary<DayOfWeek, int> i_DayCounter, Dictionary<int, int> i_HourCounter)
         {
             int maximumLikes = -1;
             int maximumComments = -1;
