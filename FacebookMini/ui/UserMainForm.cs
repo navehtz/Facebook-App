@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Facebook;
 using FacebookMini.Logic;
 using FacebookMini.MyComponents;
 using FacebookWinFormsApp.CustomComponent;
@@ -14,6 +15,7 @@ namespace FacebookMini
     {
         //TODO: Define min size
         private readonly IFacebookAppLogic r_AppLogic;
+        private readonly User r_LoggedInUser;
       
         private Control m_ProfilePage;
         private Control m_FeedPage;
@@ -29,6 +31,7 @@ namespace FacebookMini
             : this() // calls the parameterless ctor (InitializeComponent)
         {
             r_AppLogic = i_AppLogic ?? throw new ArgumentNullException(nameof(i_AppLogic));
+            r_LoggedInUser = r_AppLogic.LoggedInUser;
         }
 
         private void UserMainForm_Load(object sender, EventArgs e)
@@ -40,7 +43,7 @@ namespace FacebookMini
         private void buildPages()
         {
             m_ProfilePage = buildProfilePage();
-            m_FeedPage = buildSimplePlaceholderPage("Feed");
+            m_FeedPage = null;
             m_SettingsPage = buildSimplePlaceholderPage("Settings");
             m_Feature1Page = buildSimplePlaceholderPage("Feature 1");
         }
@@ -68,8 +71,6 @@ namespace FacebookMini
         {
             var profilePanel = new Panel { Dock = DockStyle.Fill };
 
-            User loggedInUser = r_AppLogic.LoggedInUser;
-
             // ===== top "Profile" title =====
             var labelHeader = new Label
             {
@@ -93,12 +94,12 @@ namespace FacebookMini
                 Size = new Size(80, 80),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Location = new Point(10, 10),
-                Image = loggedInUser.ImageNormal ?? FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1
+                Image = r_LoggedInUser.ImageNormal ?? FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1
             };
 
-            if (!string.IsNullOrEmpty(loggedInUser.PictureNormalURL))
+            if (!string.IsNullOrEmpty(r_LoggedInUser.PictureNormalURL))
             {
-                try { userPictureBox.LoadAsync(loggedInUser.PictureNormalURL); }
+                try { userPictureBox.LoadAsync(r_LoggedInUser.PictureNormalURL); }
                 catch { }
             }
 
@@ -107,27 +108,27 @@ namespace FacebookMini
                 AutoSize = true,
                 Font = new Font("Segoe UI", 14F, FontStyle.Bold),
                 Location = new Point(110, 20),
-                Text = loggedInUser.Name
+                Text = r_LoggedInUser.Name
             };
 
             string extraInfo = string.Empty;
 
-            if (!string.IsNullOrEmpty(loggedInUser.Email))
+            if (!string.IsNullOrEmpty(r_LoggedInUser.Email))
             {
-                extraInfo += loggedInUser.Email;
+                extraInfo += r_LoggedInUser.Email;
             }
 
-            if (loggedInUser.Birthday != null)
+            if (r_LoggedInUser.Birthday != null)
             {
                 if (extraInfo.Length > 0) extraInfo += "   |   ";
-                extraInfo += $"Birthday: {loggedInUser.Birthday}";
+                extraInfo += $"Birthday: {r_LoggedInUser.Birthday}";
             }
 
-            if (loggedInUser.Location != null &&
-                !string.IsNullOrEmpty(loggedInUser.Location.Name))
+            if (r_LoggedInUser.Location != null &&
+                !string.IsNullOrEmpty(r_LoggedInUser.Location.Name))
             {
                 if (extraInfo.Length > 0) extraInfo += "   |   ";
-                extraInfo += loggedInUser.Location.Name;
+                extraInfo += r_LoggedInUser.Location.Name;
             }
 
             var userExtraLabel = new Label
@@ -251,7 +252,7 @@ namespace FacebookMini
                     };
 
                     // still uses Facebook types – but the data comes from logic
-                    postControl.SetPost(post, loggedInUser);
+                    postControl.SetPost(post, r_LoggedInUser);
                     postsFlowPanel.Controls.Add(postControl);
                 }
             }
@@ -307,7 +308,71 @@ namespace FacebookMini
 
             return profilePanel;
         }
-        
+
+        private Control buildFriendsFeedPage()
+        {
+            var feedPanel = new Panel { Dock = DockStyle.Fill };
+
+            // Header "Feed"
+            var headerLabel = new Label
+                                  {
+                                      Text = "Feed",
+                                      Dock = DockStyle.Top,
+                                      Height = 40,
+                                      Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                                      Padding = new Padding(10, 5, 0, 0)
+                                  };
+            feedPanel.Controls.Add(headerLabel);
+
+            // Scrollable list of posts
+            var postsFlowPanel = new FlowLayoutPanel
+                                     {
+                                         Dock = DockStyle.Fill,
+                                         AutoScroll = true,
+                                         FlowDirection = FlowDirection.TopDown,
+                                         WrapContents = false,
+                                         Padding = new Padding(10)
+                                     };
+            feedPanel.Controls.Add(postsFlowPanel);
+            feedPanel.Controls.SetChildIndex(postsFlowPanel, 1); // under header
+
+            // --- core: load friends & their posts ---
+            if (r_LoggedInUser.Friends != null && r_LoggedInUser.Friends.Count > 0)
+            {
+                foreach (User friend in r_LoggedInUser.Friends)
+                {
+                    if (friend == null)
+                    {
+                        continue;
+                    }
+
+                    if (friend.Posts == null)
+                    {
+                        continue;
+                    }
+
+                    foreach (Post post in friend.Posts)
+                    {
+                        if (post == null)
+                        {
+                            continue;
+                        }
+
+                        var postControl = new PostComponent
+                                              {
+                                                  Margin = new Padding(5, 5, 5, 15)
+                                              };
+
+                        postControl.SetPost(post, friend);
+
+                        postsFlowPanel.Controls.Add(postControl);
+                    }
+                }
+            }
+
+            return feedPanel;
+        }
+
         private void showPage(Control i_Page)
         {
             panelContent.Controls.Clear();
@@ -324,8 +389,40 @@ namespace FacebookMini
 
         private void buttonFeed_Click(object sender, EventArgs e)
         {
-            showPage(m_FeedPage);
+            try
+            {
+                if (r_LoggedInUser.Friends == null || r_LoggedInUser.Friends.Count == 0)
+                {
+                    MessageBox.Show(
+@"No friends are available to display in the feed.
+
+This can happen if:
+• The user has no friends
+• Or Facebook did not grant access to friends data",
+                        "Feed is empty",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    return;
+                }
+
+                if (m_FeedPage == null)
+                {
+                    m_FeedPage = buildFriendsFeedPage();
+                }
+
+                showPage(m_FeedPage);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    @"An error occurred while loading the feed.{Environment.NewLine} {ex.Message}",
+                    "Feed error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
+
 
         private void buttonSettings_Click(object sender, EventArgs e)
         {
