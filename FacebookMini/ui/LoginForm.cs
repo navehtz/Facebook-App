@@ -22,7 +22,6 @@ namespace FacebookMini
                 "user_friends",
                 "user_posts",
                 "user_photos",
-                "user_events",
                 "email",
                 "user_age_range",
                 "user_birthday",
@@ -30,9 +29,6 @@ namespace FacebookMini
                 "user_hometown",
                 "user_likes",
                 "user_link",
-                "user_location",
-                "user_videos"
-
             };
         public LoginForm()
         {
