@@ -39,34 +39,15 @@ namespace FacebookMini
             buildPages();
             showPage(m_ProfilePage); // default
         }
-
         private void buildPages()
         {
             m_ProfilePage = buildProfilePage();
             m_FeedPage = null;
-            m_SettingsPage = buildSimplePlaceholderPage("Settings");
-            m_Feature1Page = buildSimplePlaceholderPage("Feature 1");
-        }
-
-        private Control buildSimplePlaceholderPage(string i_Title)
-        {
-            var label = new Label
-            {
-                Dock = DockStyle.Fill,
-                Text = i_Title,
-                TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
-                Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold)
-            };
-
-            var panel = new Panel { Dock = DockStyle.Fill };
-            panel.Controls.Add(label);
-            return panel;
         }
 
         /// <summary>
         /// Profile page example: posts component + item gallery (albums / liked pages).
         /// </summary>
-
         private Control buildProfilePage()
         {
             var profilePanel = new Panel { Dock = DockStyle.Fill };
@@ -99,7 +80,11 @@ namespace FacebookMini
 
             if (!string.IsNullOrEmpty(r_LoggedInUser.PictureNormalURL))
             {
-                try { userPictureBox.LoadAsync(r_LoggedInUser.PictureNormalURL); }
+                try 
+                { 
+                    userPictureBox.LoadAsync(r_LoggedInUser.PictureNormalURL); 
+                    userPictureBoxTopBar.Image = userPictureBox.Image;
+                }
                 catch { }
             }
 
@@ -184,7 +169,7 @@ namespace FacebookMini
                 Dock = DockStyle.Top,
                 Height = 25,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Padding = new Padding(5, 5, 0, 0)
+                Padding = new Padding(5, 2, 0, 0)
             };
 
             var albumsSection = new ItemGalleryComponent
@@ -199,7 +184,7 @@ namespace FacebookMini
                 Dock = DockStyle.Top,
                 Height = 25,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Padding = new Padding(5, 10, 0, 0)
+                Padding = new Padding(5, 2, 0, 0)
             };
 
             var pagesSection = new ItemGalleryComponent
@@ -308,7 +293,6 @@ namespace FacebookMini
 
             return profilePanel;
         }
-
         private Control buildFriendsFeedPage()
         {
             var feedPanel = new Panel { Dock = DockStyle.Fill };
@@ -372,7 +356,6 @@ namespace FacebookMini
 
             return feedPanel;
         }
-
         private void showPage(Control i_Page)
         {
             panelContent.Controls.Clear();
@@ -381,12 +364,10 @@ namespace FacebookMini
                 panelContent.Controls.Add(i_Page);
             }
         }
-
         private void buttonProfile_Click(object sender, EventArgs e)
         {
             showPage(m_ProfilePage);
         }
-
         private void buttonFeed_Click(object sender, EventArgs e)
         {
             try
@@ -422,27 +403,10 @@ This can happen if:
                     MessageBoxIcon.Error);
             }
         }
-
-
-        private void buttonSettings_Click(object sender, EventArgs e)
-        {
-            showPage(m_SettingsPage);
-        }
-
-        private void buttonFeature1_Click(object sender, EventArgs e)
-        {
-            showPage(m_Feature1Page);
-        }
-
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             // TODO: add real logout logic.
             this.Close();
-        }
-
-        private void userPictureBoxTopBar_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

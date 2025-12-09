@@ -19,7 +19,6 @@ namespace FacebookWinFormsApp.CustomComponent
         public ItemGalleryComponent()
         {
             InitializeComponent();
-
             m_Flow = new FlowLayoutPanel
                          {
                              Dock = DockStyle.Fill,
