@@ -25,6 +25,7 @@ namespace FacebookMini
         public UserMainForm()
         {
             InitializeComponent();
+            this.MinimumSize = new Size(1000, 700);
         }
 
         public UserMainForm(IFacebookAppLogic i_AppLogic)
@@ -160,9 +161,19 @@ namespace FacebookMini
             postsSectionPanel.Controls.Add(postsTitleLabel);
             splitContainer.Panel1.Controls.Add(postsSectionPanel);
 
-            // ----- RIGHT: albums (top) + pages (bottom) -----
-            var rightPanel = new Panel { Dock = DockStyle.Fill };
+            // ----- RIGHT: albums (top) + pages (bottom) 50/50 -----
+            var tlpRight = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 2,
+                Margin = new Padding(0),
+                Padding = new Padding(0)
+            };
+            tlpRight.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
+            tlpRight.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
 
+            // --- ALBUMS ---
             var albumsTitleLabel = new Label
             {
                 Text = "Albums",
@@ -171,13 +182,13 @@ namespace FacebookMini
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 Padding = new Padding(5, 2, 0, 0)
             };
+            var albumsSection = new ItemGalleryComponent { Dock = DockStyle.Fill };
 
-            var albumsSection = new ItemGalleryComponent
-            {
-                Dock = DockStyle.Top,
-                Height = 250
-            };
+            var albumsContainer = new Panel { Dock = DockStyle.Fill };
+            albumsContainer.Controls.Add(albumsSection);      // Fill
+            albumsContainer.Controls.Add(albumsTitleLabel);   // Top
 
+            // --- PAGES ---
             var pagesTitleLabel = new Label
             {
                 Text = "Pages you like",
@@ -186,18 +197,16 @@ namespace FacebookMini
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 Padding = new Padding(5, 2, 0, 0)
             };
+            var pagesSection = new ItemGalleryComponent { Dock = DockStyle.Fill };
 
-            var pagesSection = new ItemGalleryComponent
-            {
-                Dock = DockStyle.Fill
-            };
+            var pagesContainer = new Panel { Dock = DockStyle.Fill };
+            pagesContainer.Controls.Add(pagesSection);        // Fill
+            pagesContainer.Controls.Add(pagesTitleLabel);     // Top
 
-            rightPanel.Controls.Add(pagesSection);
-            rightPanel.Controls.Add(pagesTitleLabel);
-            rightPanel.Controls.Add(albumsSection);
-            rightPanel.Controls.Add(albumsTitleLabel);
+            tlpRight.Controls.Add(albumsContainer, 0, 0);
+            tlpRight.Controls.Add(pagesContainer, 0, 1);
 
-            splitContainer.Panel2.Controls.Add(rightPanel);
+            splitContainer.Panel2.Controls.Add(tlpRight);
 
             // add to main panel
             profilePanel.SuspendLayout();
@@ -405,7 +414,6 @@ This can happen if:
         }
         private void buttonLogout_Click(object sender, EventArgs e)
         {
-            // TODO: add real logout logic.
             this.Close();
         }
     }

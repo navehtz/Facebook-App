@@ -184,7 +184,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.panelSideMenu.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
         #endregion
