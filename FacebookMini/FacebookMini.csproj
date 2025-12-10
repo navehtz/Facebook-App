@@ -85,6 +85,7 @@
     <Compile Include="logic\postNotes\InMemoryPostNotesManager.cs" />
     <Compile Include="logic\postNotes\IPostNotesManager.cs" />
     <Compile Include="logic\postTags\IPostTagsManager.cs" />
+    <Compile Include="logic\postTags\PostTagsManager.cs" />
     <Compile Include="ui\CustomComponent\GalleryItem.cs" />
     <Compile Include="ui\CustomComponent\NoteEditForm.cs">
       <SubType>Form</SubType>
