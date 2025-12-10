@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,16 +8,19 @@ using FacebookMini.Logic;
 using FacebookMini.MyComponents;
 using FacebookWinFormsApp.CustomComponent;
 using FacebookWinFormsApp.logic.postNotes;
+using FacebookWinFormsApp.logic.postTags;
 using FacebookWrapper.ObjectModel;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace FacebookMini
 {
     public partial class UserMainForm : Form
     {
         //TODO: Define min size
-        private readonly IFacebookAppLogic r_AppLogic;
         private readonly User r_LoggedInUser;
-      
+        private readonly IFacebookAppLogic r_AppLogic;
+        private readonly IPostTagsManager r_PostTagsManager = new PostTagsManager();
+
         private Control m_ProfilePage;
         private Control m_FeedPage;
         private Control m_SettingsPage;
@@ -37,6 +41,7 @@ namespace FacebookMini
         private void UserMainForm_Load(object sender, EventArgs e)
         {
             buildPages();
+            buttonFeature1.Text = "Tags Analytics";
             showPage(m_ProfilePage); // default
         }
 
@@ -45,7 +50,7 @@ namespace FacebookMini
             m_ProfilePage = buildProfilePage();
             m_FeedPage = null;
             m_SettingsPage = buildSimplePlaceholderPage("Settings");
-            m_Feature1Page = buildSimplePlaceholderPage("Feature 1");
+            m_Feature1Page = buildTagsAnalyticsPage();
         }
 
         private Control buildSimplePlaceholderPage(string i_Title)
@@ -245,10 +250,11 @@ namespace FacebookMini
 
                 foreach (Post post in posts)
                 {
-                    var postControl = new PostComponent
+                    PostComponent postControl = new PostComponent
                     {
                         Margin = new Padding(5, 5, 5, 15),
-                        PostNotesManager = postNotesManager
+                        PostNotesManager = postNotesManager,
+                        PostTagsManager = r_PostTagsManager
                     };
 
                     // still uses Facebook types – but the data comes from logic
@@ -431,6 +437,7 @@ This can happen if:
 
         private void buttonFeature1_Click(object sender, EventArgs e)
         {
+            m_Feature1Page = buildTagsAnalyticsPage();
             showPage(m_Feature1Page);
         }
 
@@ -443,6 +450,116 @@ This can happen if:
         private void userPictureBoxTopBar_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private Control buildTagsAnalyticsPage()
+        {
+            Panel mainPanel = new Panel();
+            mainPanel.Dock = DockStyle.Fill;
+
+            // Header
+            Label headerLabel = new Label();
+            headerLabel.Text = "Tags Analytics";
+            headerLabel.Dock = DockStyle.Top;
+            headerLabel.Height = 40;
+            headerLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            headerLabel.Padding = new Padding(10, 5, 0, 0);
+            mainPanel.Controls.Add(headerLabel);
+
+            // Info label
+            Label infoLabel = new Label();
+            infoLabel.Dock = DockStyle.Top;
+            infoLabel.Height = 30;
+            infoLabel.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+            infoLabel.Padding = new Padding(10, 5, 0, 0);
+            mainPanel.Controls.Add(infoLabel);
+            mainPanel.Controls.SetChildIndex(infoLabel, 1);   // under header
+
+            // ===== Chart (smaller, centered-ish) =====
+            Chart tagsChart = new Chart();
+            tagsChart.Width = 500;
+            tagsChart.Height = 350;
+            tagsChart.Anchor = AnchorStyles.Top;  // stays at top center
+            tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
+            tagsChart.Top = 80;
+
+            // update position when panel resizes
+            mainPanel.Resize += delegate
+            {
+                tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
+            };
+
+            ChartArea chartArea = new ChartArea("TagsArea");
+            tagsChart.ChartAreas.Add(chartArea);
+
+            Series series = new Series("Tags");
+            series.ChartType = SeriesChartType.Pie;
+            series.YValueType = ChartValueType.Int32;
+
+            // show tag names + percent on each slice
+            series.IsValueShownAsLabel = true;
+            series.Label = "#VALX (#PERCENT{P0})";
+            series.ToolTip = "#VALX: #VAL (#PERCENT{P0})";
+            tagsChart.Series.Add(series);
+
+            Legend legend = new Legend("TagsLegend");
+            legend.Docking = Docking.Right;
+            tagsChart.Legends.Add(legend);
+
+            mainPanel.Controls.Add(tagsChart);
+            mainPanel.Controls.SetChildIndex(tagsChart, 2);
+
+            // ===== load data from PostTagsManager =====
+            IList<string> allTags = r_PostTagsManager.GetAllTags();
+            Dictionary<string, int> counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            int total = 0;
+
+            if (allTags != null)
+            {
+                foreach (string tag in allTags)
+                {
+                    if (string.IsNullOrEmpty(tag))
+                    {
+                        continue;
+                    }
+
+                    int current;
+                    if (counts.TryGetValue(tag, out current))
+                    {
+                        counts[tag] = current + 1;
+                    }
+                    else
+                    {
+                        counts[tag] = 1;
+                    }
+
+                    total++;
+                }
+            }
+
+            if (total == 0)
+            {
+                infoLabel.Text = "No tags to display yet. Add tags to your posts first.";
+            }
+            else
+            {
+                infoLabel.Text = "Showing distribution of all tags by percentage.";
+
+                foreach (KeyValuePair<string, int> pair in counts)
+                {
+                    string tagName = pair.Key;
+                    int count = pair.Value;
+
+                    DataPoint point = new DataPoint();
+                    point.AxisLabel = tagName;     // used by #VALX
+                    point.LegendText = tagName;
+                    point.YValues = new double[] { count };
+
+                    series.Points.Add(point);
+                }
+            }
+
+            return mainPanel;
         }
     }
 }

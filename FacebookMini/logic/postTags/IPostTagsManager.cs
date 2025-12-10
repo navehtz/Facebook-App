@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FacebookWinFormsApp.logic.postTags
 {
-    internal interface IPostTagsManager
+    public interface IPostTagsManager
     {
         IList<string> GetPostTags(string i_PostId);
         void SetPostTags(string i_PostId, IList<string> i_Tags);

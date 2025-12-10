@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Facebook;
 using FacebookWinFormsApp.logic.postNotes;
+using FacebookWinFormsApp.logic.postTags;
 using FacebookWinFormsApp.ui.CustomComponent;
 using FacebookWrapper.ObjectModel;
 
@@ -17,13 +18,28 @@ namespace FacebookWinFormsApp.CustomComponent
     public partial class PostComponent : UserControl
     {
         private Post m_Post;
-        public IPostNotesManager PostNotesManager { get; set; }
         public string PostId { get; private set; }
+        public IPostNotesManager PostNotesManager { get; set; }
+        private IPostTagsManager m_PostTagsManager;
         private static readonly Random sr_Random = new Random();
+
+        private Button m_TagsButton;
+        private Label m_TagsLabel;
+
+        public IPostTagsManager PostTagsManager
+        {
+            get { return m_PostTagsManager; }
+            set
+            {
+                m_PostTagsManager = value;
+                updateTagsLabel();
+            }
+        }
 
         public PostComponent()
         {
             InitializeComponent();
+            initializeTagsUi();
         }
 
         /// <summary>
@@ -94,6 +110,7 @@ namespace FacebookWinFormsApp.CustomComponent
             }
 
             PostId = i_Post.Id;
+            updateTagsLabel();
         }
 
         // Optional: click handlers (you can raise events here later if you want)
@@ -109,19 +126,19 @@ namespace FacebookWinFormsApp.CustomComponent
 
         private void btnNote_Click(object sender, EventArgs e)
         {
-            if(PostNotesManager == null || string.IsNullOrEmpty(PostId))
+            if (PostNotesManager == null || string.IsNullOrEmpty(PostId))
             {
                 return;
             }
 
             string currentNote = PostNotesManager.GetNoteForPost(PostId) ?? string.Empty;
 
-            using(var noteForm = new NoteEditForm(currentNote))
+            using (var noteForm = new NoteEditForm(currentNote))
             {
-                if(noteForm.ShowDialog() == DialogResult.OK)
+                if (noteForm.ShowDialog() == DialogResult.OK)
                 {
                     string newNote = noteForm.NoteText;
-                    if(string.IsNullOrEmpty(newNote))
+                    if (string.IsNullOrEmpty(newNote))
                     {
                         PostNotesManager.RemoveNoteForPost(PostId);
                         btnNote.Text = "Add Note";
@@ -133,6 +150,122 @@ namespace FacebookWinFormsApp.CustomComponent
                         btnNote.Text = "Edit Note";
                         NoteIcon.Visible = !string.IsNullOrWhiteSpace(newNote);
                     }
+                }
+            }
+        }
+
+        private void initializeTagsUi()
+        {
+            // "Tags" button – next to the Note button
+            m_TagsButton = new Button();
+            m_TagsButton.Text = "Tags";
+            m_TagsButton.Width = 60;
+            m_TagsButton.Height = 26;
+            m_TagsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+
+            // place it to the left of the Note button
+            m_TagsButton.Left = btnNote.Left - m_TagsButton.Width - 5;
+            m_TagsButton.Top = btnNote.Top;
+
+            m_TagsButton.Click += tagsButton_Click;
+            Controls.Add(m_TagsButton);
+
+            // Label that shows the tags, above the buttons on the left
+            m_TagsLabel = new Label();
+            m_TagsLabel.AutoSize = true;
+            m_TagsLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            m_TagsLabel.Left = 11;
+            m_TagsLabel.Top = btnNote.Top - 18;
+            m_TagsLabel.Visible = false;
+
+            Controls.Add(m_TagsLabel);
+        }
+
+        private void tagsButton_Click(object sender, EventArgs e)
+        {
+            if (m_PostTagsManager != null && !string.IsNullOrEmpty(PostId))
+            {
+                IList<string> existingTags = m_PostTagsManager.GetPostTags(PostId);
+                string initialText = string.Empty;
+
+                for (int i = 0; i < existingTags.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        initialText += ", ";
+                    }
+
+                    initialText += existingTags[i];
+                }
+
+                using (NoteEditForm dialog = new NoteEditForm(initialText))
+                {
+                    dialog.Text = "Edit tags (comma separated)";
+
+                    if (dialog.ShowDialog(this) == DialogResult.OK)
+                    {
+                        string raw = dialog.NoteText;
+                        List<string> tagsList = new List<string>();
+
+                        if (!string.IsNullOrEmpty(raw))
+                        {
+                            string[] parts = raw.Split(',');
+
+                            foreach (string part in parts)
+                            {
+                                if (part != null)
+                                {
+                                    string tag = part.Trim();
+                                    if (tag.Length > 0)
+                                    {
+                                        tagsList.Add(tag);
+                                    }
+                                }
+                            }
+                        }
+
+                        m_PostTagsManager.SetPostTags(PostId, tagsList);
+                        updateTagsLabel();
+                    }
+                }
+            }
+        }
+
+        private void updateTagsLabel()
+        {
+            if (m_TagsLabel == null)
+            {
+                return;
+            }
+
+            if (m_PostTagsManager == null || string.IsNullOrEmpty(PostId))
+            {
+                m_TagsLabel.Visible = false;
+            }
+            else
+            {
+                IList<string> tags = m_PostTagsManager.GetPostTags(PostId);
+
+                if (tags == null || tags.Count == 0)
+                {
+                    m_TagsLabel.Visible = false;
+                }
+                else
+                {
+                    string text = "Tags: ";
+
+                    for (int i = 0; i < tags.Count; i++)
+                    {
+                        if (i > 0)
+                        {
+                            text += ", ";
+                        }
+
+                        text += tags[i];
+                    }
+
+                    m_TagsLabel.Text = text;
+                    m_TagsLabel.Visible = true;
                 }
             }
         }
