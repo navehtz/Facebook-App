@@ -53,9 +53,7 @@ namespace FacebookMini
             {
                 m_LoginResult = FacebookService.Login(Constants.k_AppId, r_RequestedPermissions);
 
-                //m_LoginResult = FacebookService.Connect()
-
-                if (string.IsNullOrEmpty(m_LoginResult.ErrorMessage))
+                if (string.IsNullOrEmpty(m_LoginResult.AccessToken) == false)
                 {
                     openMainForm(m_LoginResult.LoggedInUser);
                 }
@@ -67,8 +65,8 @@ namespace FacebookMini
             catch (Exception)
             {
                 MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed");
+                executeLogout();
                 this.Enabled = true;
-                //Try again or exit
             }
 
 
@@ -81,7 +79,7 @@ namespace FacebookMini
                 m_LoginResult = FacebookService.Connect("EAAUm6cZC4eUEBPZCFs9rJRpwlUmdHcPvU1tUNkIyP37zRZCjSvfdHaW5t3xsOnUL0bEKHL8Snjk6AZC3O32KWEbaItglEnXWQ2zEMXHqsdfdv0ecXNs3hO69juHrZCfRN9FGvfuJZAXhP4Pm57DRRoDeB8De6ZABnfrRflh6zgPwnavpyHS3ZCYX1E6K1QLTHff5sAZDZD");
                 openMainForm(m_LoginResult.LoggedInUser);
             }
-            catch (Exception ex)
+            catch 
             {
                 MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed");
             }
@@ -97,17 +95,25 @@ namespace FacebookMini
                 userMainForm.ShowDialog();
             }
 
-            this.Close();
+            executeLogout();
+            Show();
+            this.Enabled = true;
         }
-
+        private void executeLogout()
+        {
+            try
+            {
+                FacebookService.Logout();
+                m_LoginResult = null;
+            }
+            catch 
+            {
+                throw new Exception();
+            }
+        }
         private void buttonLogout_Click(object sender, EventArgs e)
         {
-            FacebookService.LogoutWithUI();
-            buttonLogin.Text = "Login";
-            buttonLogin.BackColor = buttonLogout.BackColor;
-            m_LoginResult = null;
-            buttonLogin.Enabled = true;
-            buttonLogout.Enabled = false;
+            this.Close();
         }
     }
 }
