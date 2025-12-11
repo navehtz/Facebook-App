@@ -22,14 +22,11 @@ namespace FacebookMini
                 "user_friends",
                 "user_posts",
                 "user_photos",
-                "email",
-                "user_age_range",
                 "user_birthday",
-                "user_gender",
                 "user_hometown",
-                "user_likes",
-                "user_link",
+                "user_likes"
             };
+
         public LoginForm()
         {
             InitializeComponent();
@@ -94,7 +91,7 @@ namespace FacebookMini
 
             using (UserMainForm userMainForm = new UserMainForm(appLogic))
             {
-                Hide();
+                userMainForm.Shown += ((i_Sender, i_Args) => this.Hide());
                 userMainForm.ShowDialog();
             }
 
