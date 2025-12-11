@@ -2,7 +2,6 @@
 using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
-using FacebookWinFormsApp.logic.dummyData;
 
 namespace FacebookMini.Logic
 {
@@ -16,18 +15,6 @@ namespace FacebookMini.Logic
         {
             r_LoggedInUser = i_LoggedInUser;
             r_analyticsManager = new AnalyticsManager(r_LoggedInUser.Posts.ToList(), r_LoggedInUser.PhotosTaggedIn.ToList());
-
-            //generate fake data about posts and photos.
-            //List<Photo> albumPhotos = new List<Photo>();
-
-            //foreach (Album album in r_LoggedInUser.Albums)
-            //{
-            //    foreach (Photo photo in album.Photos)
-            //    {
-            //        albumPhotos.Add(photo);
-            //    }
-            //}
-            //r_analyticsManager = new AnalyticsManager(r_LoggedInUser.Posts.ToList(), albumPhotos.ToList());
         }
 
         public User LoggedInUser => r_LoggedInUser;
@@ -50,7 +37,6 @@ namespace FacebookMini.Logic
         public IEnumerable<User> GetUserFriendsOrDummy()
         {
             return r_LoggedInUser.Friends;
-            //return r_LoggedInUser.Friends != null ? r_LoggedInUser.Friends : DummyDataLoader.LoadDummyFriends();
         }
     }
 }
