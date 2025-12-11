@@ -19,6 +19,7 @@ namespace FacebookMini
         //TODO: Define min size
         private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
+        private readonly IPostNotesManager r_PostNotesManager = new InMemoryPostNotesManager();
         private readonly IPostTagsManager r_PostTagsManager = new PostTagsManager();
 
         private Control m_ProfilePage;
@@ -48,7 +49,7 @@ namespace FacebookMini
         private void buildPages()
         {
             m_ProfilePage = buildProfilePage();
-            m_FeedPage = null;
+            m_FeedPage = buildFriendsFeedPage();
             m_SettingsPage = buildSimplePlaceholderPage("Settings");
             m_Feature1Page = buildTagsAnalyticsPage();
         }
@@ -83,7 +84,7 @@ namespace FacebookMini
                 Dock = DockStyle.Top,
                 Height = 40,
                 Font = new Font("Segoe UI", 16F, FontStyle.Bold),
-                Padding = new Padding(10, 5, 0, 0)
+                Padding = new Padding(10, 5, 0, 5)
             };
 
             // ===== user info section (full width) =====
@@ -246,14 +247,12 @@ namespace FacebookMini
 
             if (posts != null)
             {
-                IPostNotesManager postNotesManager = new InMemoryPostNotesManager();
-
                 foreach (Post post in posts)
                 {
                     PostComponent postControl = new PostComponent
                     {
                         Margin = new Padding(5, 5, 5, 15),
-                        PostNotesManager = postNotesManager,
+                        PostNotesManager = r_PostNotesManager,
                         PostTagsManager = r_PostTagsManager
                     };
 
@@ -326,7 +325,7 @@ namespace FacebookMini
                                       Dock = DockStyle.Top,
                                       Height = 40,
                                       Font = new Font("Segoe UI", 16F, FontStyle.Bold),
-                                      Padding = new Padding(10, 5, 0, 0)
+                                      Padding = new Padding(10, 5, 0, 5)
                                   };
             feedPanel.Controls.Add(headerLabel);
 
@@ -364,10 +363,12 @@ namespace FacebookMini
                             continue;
                         }
 
-                        var postControl = new PostComponent
-                                              {
-                                                  Margin = new Padding(5, 5, 5, 15)
-                                              };
+                        var postControl = new PostComponent 
+                        {
+                            Margin = new Padding(5, 5, 5, 15),
+                            PostNotesManager = r_PostNotesManager,
+                            PostTagsManager = r_PostTagsManager
+                        };
 
                         postControl.SetPost(post, friend);
 
@@ -400,21 +401,16 @@ namespace FacebookMini
                 if (r_LoggedInUser.Friends == null || r_LoggedInUser.Friends.Count == 0)
                 {
                     MessageBox.Show(
-@"No friends are available to display in the feed.
+                    @"No friends are available to display in the feed.
 
-This can happen if:
-• The user has no friends
-• Or Facebook did not grant access to friends data",
-                        "Feed is empty",
+                    This can happen if:
+                    • The user has no friends
+                    • Or Facebook did not grant access to friends data",
+                    "Feed is empty",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
                     return;
-                }
-
-                if (m_FeedPage == null)
-                {
-                    m_FeedPage = buildFriendsFeedPage();
                 }
 
                 showPage(m_FeedPage);

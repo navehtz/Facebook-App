@@ -22,18 +22,11 @@ namespace FacebookMini
                 "user_friends",
                 "user_posts",
                 "user_photos",
-                "user_events",
-                "email",
-                "user_age_range",
                 "user_birthday",
-                "user_gender",
                 "user_hometown",
-                "user_likes",
-                "user_link",
-                "user_location",
-                "user_videos"
-
+                "user_likes"
             };
+
         public LoginForm()
         {
             InitializeComponent();
@@ -100,11 +93,11 @@ namespace FacebookMini
 
             using (UserMainForm userMainForm = new UserMainForm(appLogic))
             {
-                Hide();
+                userMainForm.Shown += ((i_Sender, i_Args) => this.Hide());
                 userMainForm.ShowDialog();
             }
 
-            Close();
+            this.Close();
         }
 
         private void buttonLogout_Click(object sender, EventArgs e)
