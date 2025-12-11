@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Facebook;
 using FacebookMini.Logic;
-using FacebookMini.MyComponents;
 using FacebookWinFormsApp.CustomComponent;
 using FacebookWinFormsApp.logic.postNotes;
 using FacebookWinFormsApp.logic.postTags;
@@ -16,7 +15,6 @@ namespace FacebookMini
 {
     public partial class UserMainForm : Form
     {
-        //TODO: Define min size
         private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
         private readonly IPostNotesManager r_PostNotesManager = new InMemoryPostNotesManager();
@@ -50,7 +48,6 @@ namespace FacebookMini
         {
             m_ProfilePage = buildProfilePage();
             m_FeedPage = buildFriendsFeedPage();
-            m_SettingsPage = buildSimplePlaceholderPage("Settings");
             m_Feature1Page = buildTagsAnalyticsPage();
         }
 
@@ -309,64 +306,51 @@ namespace FacebookMini
 
             return profilePanel;
         }
+        
         private Control buildFriendsFeedPage()
         {
             var feedPanel = new Panel { Dock = DockStyle.Fill };
 
-            // Header "Feed"
             var headerLabel = new Label
-                                  {
-                                      Text = "Feed",
-                                      Dock = DockStyle.Top,
-                                      Height = 40,
-                                      Font = new Font("Segoe UI", 16F, FontStyle.Bold),
-                                      Padding = new Padding(10, 5, 0, 5)
-                                  };
-            feedPanel.Controls.Add(headerLabel);
+            {
+                Text = "Feed",
+                Dock = DockStyle.Top,
+                Height = 45,
+                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                Padding = new Padding(10, 5, 0, 5)
+            };
 
-            // Scrollable list of posts
             var postsFlowPanel = new FlowLayoutPanel
-                                     {
-                                         Dock = DockStyle.Fill,
-                                         AutoScroll = true,
-                                         FlowDirection = FlowDirection.TopDown,
-                                         WrapContents = false,
-                                         Padding = new Padding(10)
-                                     };
-            feedPanel.Controls.Add(postsFlowPanel);
-            feedPanel.Controls.SetChildIndex(postsFlowPanel, 1); // under header
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                Padding = new Padding(10, 5, 10, 10) 
+            };
 
-            // --- core: load friends & their posts ---
+            feedPanel.SuspendLayout();
+            feedPanel.Controls.Add(postsFlowPanel); // Fill
+            feedPanel.Controls.Add(headerLabel);    // Top
+            feedPanel.ResumeLayout();
+
             if (r_LoggedInUser.Friends != null && r_LoggedInUser.Friends.Count > 0)
             {
                 foreach (User friend in r_LoggedInUser.Friends)
                 {
-                    if (friend == null)
-                    {
-                        continue;
-                    }
-
-                    if (friend.Posts == null)
-                    {
-                        continue;
-                    }
+                    if (friend?.Posts == null) continue;
 
                     foreach (Post post in friend.Posts)
                     {
-                        if (post == null)
-                        {
-                            continue;
-                        }
+                        if (post == null) continue;
 
-                        var postControl = new PostComponent 
+                        var postControl = new PostComponent
                         {
                             Margin = new Padding(5, 5, 5, 15),
                             PostNotesManager = r_PostNotesManager,
                             PostTagsManager = r_PostTagsManager
                         };
-
                         postControl.SetPost(post, friend);
-
                         postsFlowPanel.Controls.Add(postControl);
                     }
                 }
@@ -374,6 +358,7 @@ namespace FacebookMini
 
             return feedPanel;
         }
+
         private void showPage(Control i_Page)
         {
             panelContent.Controls.Clear();
@@ -416,13 +401,10 @@ namespace FacebookMini
                     MessageBoxIcon.Error);
             }
         }
-
-
         private void buttonSettings_Click(object sender, EventArgs e)
         {
             showPage(m_SettingsPage);
         }
-
         private void buttonFeature1_Click(object sender, EventArgs e)
         {
             m_Feature1Page = buildTagsAnalyticsPage();
@@ -432,12 +414,6 @@ namespace FacebookMini
         {
             this.Close();
         }
-
-        private void userPictureBoxTopBar_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private Control buildTagsAnalyticsPage()
         {
             Panel mainPanel = new Panel();
@@ -546,6 +522,10 @@ namespace FacebookMini
             }
 
             return mainPanel;
+        }
+        private void updateAnalyticsPage() 
+        {
+            //TO DO
         }
     }
 }

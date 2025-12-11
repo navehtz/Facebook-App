@@ -78,11 +78,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="logic\dummyData\DummyComment.cs" />
-    <Compile Include="logic\dummyData\DummyDataLoader.cs" />
-    <Compile Include="logic\dummyData\DummyPhoto.cs" />
-    <Compile Include="logic\dummyData\DummyPost.cs" />
-    <Compile Include="logic\dummyData\DummyUser.cs" />
     <Compile Include="logic\postNotes\InMemoryPostNotesManager.cs" />
     <Compile Include="logic\postNotes\IPostNotesManager.cs" />
     <Compile Include="logic\postTags\IPostTagsManager.cs" />
@@ -99,12 +94,6 @@
     </Compile>
     <Compile Include="ui\CustomComponent\PostComponent.Designer.cs">
       <DependentUpon>PostComponent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ui\CustomComponent\PostView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ui\CustomComponent\SelectionWithImagePreview.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ui\CustomComponent\ItemGalleryComponent.cs">
       <SubType>UserControl</SubType>
@@ -132,17 +121,12 @@
     <Compile Include="ui\UserMainForm.Designer.cs">
       <DependentUpon>UserMainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ui\viewModels\FeedPostViewModel.cs" />
-    <Compile Include="ui\viewModels\FriendViewModel.cs" />
     <Compile Include="utils\Constants.cs" />
     <EmbeddedResource Include="ui\CustomComponent\ItemGalleryComponent.resx">
       <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\CustomComponent\PostComponent.resx">
       <DependentUpon>PostComponent.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ui\CustomComponent\SelectionWithImagePreview.resx">
-      <DependentUpon>SelectionWithImagePreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
