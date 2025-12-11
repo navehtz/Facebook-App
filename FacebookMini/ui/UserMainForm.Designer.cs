@@ -80,7 +80,6 @@
             this.userPictureBoxTopBar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.userPictureBoxTopBar.TabIndex = 0;
             this.userPictureBoxTopBar.TabStop = false;
-            this.userPictureBoxTopBar.Click += new System.EventHandler(this.userPictureBoxTopBar_Click);
             // 
             // labelTitle
             // 
@@ -223,7 +222,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.panelSideMenu.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
         #endregion

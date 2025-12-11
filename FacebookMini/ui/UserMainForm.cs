@@ -30,6 +30,7 @@ namespace FacebookMini
         public UserMainForm()
         {
             InitializeComponent();
+            this.MinimumSize = new Size(1000, 700);
         }
 
         public UserMainForm(IFacebookAppLogic i_AppLogic)
@@ -45,7 +46,6 @@ namespace FacebookMini
             buttonFeature1.Text = "Tags Analytics";
             showPage(m_ProfilePage); // default
         }
-
         private void buildPages()
         {
             m_ProfilePage = buildProfilePage();
@@ -54,25 +54,9 @@ namespace FacebookMini
             m_Feature1Page = buildTagsAnalyticsPage();
         }
 
-        private Control buildSimplePlaceholderPage(string i_Title)
-        {
-            var label = new Label
-            {
-                Dock = DockStyle.Fill,
-                Text = i_Title,
-                TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
-                Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold)
-            };
-
-            var panel = new Panel { Dock = DockStyle.Fill };
-            panel.Controls.Add(label);
-            return panel;
-        }
-
         /// <summary>
         /// Profile page example: posts component + item gallery (albums / liked pages).
         /// </summary>
-
         private Control buildProfilePage()
         {
             var profilePanel = new Panel { Dock = DockStyle.Fill };
@@ -105,7 +89,11 @@ namespace FacebookMini
 
             if (!string.IsNullOrEmpty(r_LoggedInUser.PictureNormalURL))
             {
-                try { userPictureBox.LoadAsync(r_LoggedInUser.PictureNormalURL); }
+                try 
+                { 
+                    userPictureBox.LoadAsync(r_LoggedInUser.PictureNormalURL); 
+                    userPictureBoxTopBar.Image = userPictureBox.Image;
+                }
                 catch { }
             }
 
@@ -181,44 +169,52 @@ namespace FacebookMini
             postsSectionPanel.Controls.Add(postsTitleLabel);
             splitContainer.Panel1.Controls.Add(postsSectionPanel);
 
-            // ----- RIGHT: albums (top) + pages (bottom) -----
-            var rightPanel = new Panel { Dock = DockStyle.Fill };
+            // ----- RIGHT: albums (top) + pages (bottom) 50/50 -----
+            var tlpRight = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 2,
+                Margin = new Padding(0),
+                Padding = new Padding(0)
+            };
+            tlpRight.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
+            tlpRight.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
 
+            // --- ALBUMS ---
             var albumsTitleLabel = new Label
             {
                 Text = "Albums",
                 Dock = DockStyle.Top,
                 Height = 25,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Padding = new Padding(5, 5, 0, 0)
+                Padding = new Padding(5, 2, 0, 0)
             };
+            var albumsSection = new ItemGalleryComponent { Dock = DockStyle.Fill };
 
-            var albumsSection = new ItemGalleryComponent
-            {
-                Dock = DockStyle.Top,
-                Height = 250
-            };
+            var albumsContainer = new Panel { Dock = DockStyle.Fill };
+            albumsContainer.Controls.Add(albumsSection);      // Fill
+            albumsContainer.Controls.Add(albumsTitleLabel);   // Top
 
+            // --- PAGES ---
             var pagesTitleLabel = new Label
             {
                 Text = "Pages you like",
                 Dock = DockStyle.Top,
                 Height = 25,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Padding = new Padding(5, 10, 0, 0)
+                Padding = new Padding(5, 2, 0, 0)
             };
+            var pagesSection = new ItemGalleryComponent { Dock = DockStyle.Fill };
 
-            var pagesSection = new ItemGalleryComponent
-            {
-                Dock = DockStyle.Fill
-            };
+            var pagesContainer = new Panel { Dock = DockStyle.Fill };
+            pagesContainer.Controls.Add(pagesSection);        // Fill
+            pagesContainer.Controls.Add(pagesTitleLabel);     // Top
 
-            rightPanel.Controls.Add(pagesSection);
-            rightPanel.Controls.Add(pagesTitleLabel);
-            rightPanel.Controls.Add(albumsSection);
-            rightPanel.Controls.Add(albumsTitleLabel);
+            tlpRight.Controls.Add(albumsContainer, 0, 0);
+            tlpRight.Controls.Add(pagesContainer, 0, 1);
 
-            splitContainer.Panel2.Controls.Add(rightPanel);
+            splitContainer.Panel2.Controls.Add(tlpRight);
 
             // add to main panel
             profilePanel.SuspendLayout();
@@ -313,7 +309,6 @@ namespace FacebookMini
 
             return profilePanel;
         }
-
         private Control buildFriendsFeedPage()
         {
             var feedPanel = new Panel { Dock = DockStyle.Fill };
@@ -379,7 +374,6 @@ namespace FacebookMini
 
             return feedPanel;
         }
-
         private void showPage(Control i_Page)
         {
             panelContent.Controls.Clear();
@@ -388,12 +382,10 @@ namespace FacebookMini
                 panelContent.Controls.Add(i_Page);
             }
         }
-
         private void buttonProfile_Click(object sender, EventArgs e)
         {
             showPage(m_ProfilePage);
         }
-
         private void buttonFeed_Click(object sender, EventArgs e)
         {
             try
@@ -436,10 +428,8 @@ namespace FacebookMini
             m_Feature1Page = buildTagsAnalyticsPage();
             showPage(m_Feature1Page);
         }
-
         private void buttonLogout_Click(object sender, EventArgs e)
         {
-            // TODO: add real logout logic.
             this.Close();
         }
 
