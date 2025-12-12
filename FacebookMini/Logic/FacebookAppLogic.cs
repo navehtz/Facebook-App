@@ -1,4 +1,4 @@
-﻿using FacebookWinFormsApp.Logic;
+﻿using FacebookWinFormsApp.logic;
 using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,11 @@ namespace FacebookMini.Logic
     public class FacebookAppLogic : IFacebookAppLogic
     {
         private readonly User r_LoggedInUser;
-        private readonly FavoritesManager r_FavoritesManager = new FavoritesManager();
-        private readonly AnalyticsManager r_analyticsManager;
+       
 
         public FacebookAppLogic(User i_LoggedInUser)
         {
             r_LoggedInUser = i_LoggedInUser;
-            r_analyticsManager = new AnalyticsManager(r_LoggedInUser.Posts.ToList(), r_LoggedInUser.PhotosTaggedIn.ToList());
         }
 
         public User LoggedInUser => r_LoggedInUser;
