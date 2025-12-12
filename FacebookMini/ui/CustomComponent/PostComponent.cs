@@ -33,20 +33,23 @@ namespace FacebookWinFormsApp.CustomComponent
             {
                 m_PostTagsManager = value;
                 updateTagsLabel();
+               
             }
         }
 
         public PostComponent()
-        {
+        { 
             InitializeComponent();
             initializeTagsUi();
+            MessagePanel.RightToLeft = RightToLeft.No;
         }
-
         /// <summary>
         /// Binds a Facebook Post object to this UI component.
         /// </summary>
         public void SetPost(Post i_Post, User i_OwnerUser)
         {
+            
+
             if (i_Post == null)
             {
                 throw new ArgumentNullException(nameof(i_Post));
@@ -70,7 +73,7 @@ namespace FacebookWinFormsApp.CustomComponent
             string captionText = !string.IsNullOrEmpty(i_Post.Message)
                                      ? i_Post.Message
                                      : i_Post.Caption;
-            this.CaptionLabel.Text = captionText ?? string.Empty;
+            this.CaptionBox.Text = captionText ?? string.Empty;
 
             // Likes (real if available, otherwise random)
             int likesCount;
