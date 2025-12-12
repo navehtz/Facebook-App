@@ -78,10 +78,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="logic\postNotes\InMemoryPostNotesManager.cs" />
-    <Compile Include="logic\postNotes\IPostNotesManager.cs" />
-    <Compile Include="logic\postTags\IPostTagsManager.cs" />
-    <Compile Include="logic\postTags\PostTagsManager.cs" />
+    <Compile Include="logic\features\postNotes\InMemoryPostNotesManager.cs" />
+    <Compile Include="logic\features\postNotes\IPostNotesManager.cs" />
+    <Compile Include="logic\features\postTags\IPostTagsManager.cs" />
+    <Compile Include="logic\features\postTags\PostTagsManager.cs" />
     <Compile Include="ui\CustomComponent\GalleryItem.cs" />
     <Compile Include="ui\CustomComponent\NoteEditForm.cs">
       <SubType>Form</SubType>
@@ -101,11 +101,7 @@
     <Compile Include="ui\CustomComponent\ItemGalleryComponent.Designer.cs">
       <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
     </Compile>
-    <Compile Include="logic\features\AnalyticsManager.cs" />
-    <Compile Include="logic\features\AnalyticsSnapshot.cs" />
-    <Compile Include="logic\features\EFavoriteCatagory.cs" />
     <Compile Include="logic\FacebookAppLogic.cs" />
-    <Compile Include="logic\features\FavoritesManager.cs" />
     <Compile Include="logic\IFacebookAppLogic.cs" />
     <Compile Include="ui\LoginForm.cs">
       <SubType>Form</SubType>
