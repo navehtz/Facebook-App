@@ -434,15 +434,15 @@ namespace FacebookMini
             mainPanel.Controls.Add(infoLabel);
             mainPanel.Controls.SetChildIndex(infoLabel, 1);   // under header
 
-            // ===== Chart (smaller, centered-ish) =====
+            // ===== Chart (smaller, centered) =====
             Chart tagsChart = new Chart();
             tagsChart.Width = 500;
             tagsChart.Height = 350;
-            tagsChart.Anchor = AnchorStyles.Top;  // stays at top center
-            tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
+            tagsChart.Anchor = AnchorStyles.Top;
             tagsChart.Top = 80;
 
-            // update position when panel resizes
+            // center horizontally
+            tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
             mainPanel.Resize += delegate
             {
                 tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
@@ -455,15 +455,13 @@ namespace FacebookMini
             series.ChartType = SeriesChartType.Pie;
             series.YValueType = ChartValueType.Int32;
 
-            // show tag names + percent on each slice
+            // show labels outside the pie, with lines
             series.IsValueShownAsLabel = true;
-            series.Label = "#VALX (#PERCENT{P0})";
-            series.ToolTip = "#VALX: #VAL (#PERCENT{P0})";
-            tagsChart.Series.Add(series);
+            series.Label = "#VALX (#PERCENT{P0})";    // VALX = tag name, PERCENT = percent
+            series["PieLabelStyle"] = "Outside";
+            series["PieLineColor"] = "Black";
 
-            Legend legend = new Legend("TagsLegend");
-            legend.Docking = Docking.Right;
-            tagsChart.Legends.Add(legend);
+            tagsChart.Series.Add(series);
 
             mainPanel.Controls.Add(tagsChart);
             mainPanel.Controls.SetChildIndex(tagsChart, 2);
@@ -509,17 +507,14 @@ namespace FacebookMini
                     string tagName = pair.Key;
                     int count = pair.Value;
 
-                    DataPoint point = new DataPoint();
-                    point.AxisLabel = tagName;     // used by #VALX
-                    point.LegendText = tagName;
-                    point.YValues = new double[] { count };
-
-                    series.Points.Add(point);
+                    // Add point using X = tag name => #VALX will be the tag
+                    series.Points.AddXY(tagName, count);
                 }
             }
 
             return mainPanel;
         }
+
 
         private void updateAnalyticsPage() 
         {
