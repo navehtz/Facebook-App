@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.buttonLogin = new System.Windows.Forms.Button();
-            this.buttonLogout = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxAppID = new System.Windows.Forms.TextBox();
-            this.pictureBoxProfile = new System.Windows.Forms.PictureBox();
             this.buttonConnectAsDesig = new System.Windows.Forms.Button();
+            this.pictureBoxProfile = new System.Windows.Forms.PictureBox();
+            this.textBoxAppID = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.buttonLogout = new System.Windows.Forms.Button();
+            this.buttonLogin = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
@@ -57,28 +57,33 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // buttonLogin
+            // buttonConnectAsDesig
             // 
-            this.buttonLogin.Location = new System.Drawing.Point(18, 17);
-            this.buttonLogin.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new System.Drawing.Size(268, 44);
-            this.buttonLogin.TabIndex = 36;
-            this.buttonLogin.Text = "Login";
-            this.buttonLogin.UseVisualStyleBackColor = true;
-            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
+            this.buttonConnectAsDesig.Location = new System.Drawing.Point(18, 69);
+            this.buttonConnectAsDesig.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonConnectAsDesig.Name = "buttonConnectAsDesig";
+            this.buttonConnectAsDesig.Size = new System.Drawing.Size(268, 44);
+            this.buttonConnectAsDesig.TabIndex = 56;
+            this.buttonConnectAsDesig.Text = "Connect As Desig";
+            this.buttonConnectAsDesig.UseVisualStyleBackColor = true;
+            this.buttonConnectAsDesig.Click += new System.EventHandler(this.buttonConnectAsDesig_Click);
             // 
-            // buttonLogout
+            // pictureBoxProfile
             // 
-            this.buttonLogout.Enabled = true;
-            this.buttonLogout.Location = new System.Drawing.Point(18, 121);
-            this.buttonLogout.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonLogout.Name = "buttonLogout";
-            this.buttonLogout.Size = new System.Drawing.Size(268, 43);
-            this.buttonLogout.TabIndex = 52;
-            this.buttonLogout.Text = "Logout";
-            this.buttonLogout.UseVisualStyleBackColor = true;
-            this.buttonLogout.Click += new System.EventHandler(this.buttonLogout_Click);
+            this.pictureBoxProfile.Location = new System.Drawing.Point(18, 171);
+            this.pictureBoxProfile.Name = "pictureBoxProfile";
+            this.pictureBoxProfile.Size = new System.Drawing.Size(79, 78);
+            this.pictureBoxProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxProfile.TabIndex = 55;
+            this.pictureBoxProfile.TabStop = false;
+            // 
+            // textBoxAppID
+            // 
+            this.textBoxAppID.Location = new System.Drawing.Point(319, 126);
+            this.textBoxAppID.Name = "textBoxAppID";
+            this.textBoxAppID.Size = new System.Drawing.Size(446, 24);
+            this.textBoxAppID.TabIndex = 54;
+            this.textBoxAppID.Text = "806995989056767";
             // 
             // label1
             // 
@@ -91,33 +96,27 @@
             this.label1.Text = "This is the AppID of \"Design Patterns App 2.4\".\r\nThe grader will use it to test y" +
     "our app.\r\nType here your own AppID to test it:\r\n";
             // 
-            // textBoxAppID
+            // buttonLogout
             // 
-            this.textBoxAppID.Location = new System.Drawing.Point(319, 126);
-            this.textBoxAppID.Name = "textBoxAppID";
-            this.textBoxAppID.Size = new System.Drawing.Size(446, 24);
-            this.textBoxAppID.TabIndex = 54;
-            this.textBoxAppID.Text = "806995989056767";
+            this.buttonLogout.Location = new System.Drawing.Point(18, 121);
+            this.buttonLogout.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonLogout.Name = "buttonLogout";
+            this.buttonLogout.Size = new System.Drawing.Size(268, 43);
+            this.buttonLogout.TabIndex = 52;
+            this.buttonLogout.Text = "Exit";
+            this.buttonLogout.UseVisualStyleBackColor = true;
+            this.buttonLogout.Click += new System.EventHandler(this.buttonLogout_Click);
             // 
-            // pictureBoxProfile
+            // buttonLogin
             // 
-            this.pictureBoxProfile.Location = new System.Drawing.Point(18, 171);
-            this.pictureBoxProfile.Name = "pictureBoxProfile";
-            this.pictureBoxProfile.Size = new System.Drawing.Size(79, 78);
-            this.pictureBoxProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxProfile.TabIndex = 55;
-            this.pictureBoxProfile.TabStop = false;
-            // 
-            // buttonConnectAsDesig
-            // 
-            this.buttonConnectAsDesig.Location = new System.Drawing.Point(18, 69);
-            this.buttonConnectAsDesig.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonConnectAsDesig.Name = "buttonConnectAsDesig";
-            this.buttonConnectAsDesig.Size = new System.Drawing.Size(268, 44);
-            this.buttonConnectAsDesig.TabIndex = 56;
-            this.buttonConnectAsDesig.Text = "Connect As Desig";
-            this.buttonConnectAsDesig.UseVisualStyleBackColor = true;
-            this.buttonConnectAsDesig.Click += new System.EventHandler(this.buttonConnectAsDesig_Click);
+            this.buttonLogin.Location = new System.Drawing.Point(18, 17);
+            this.buttonLogin.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonLogin.Name = "buttonLogin";
+            this.buttonLogin.Size = new System.Drawing.Size(268, 44);
+            this.buttonLogin.TabIndex = 36;
+            this.buttonLogin.Text = "Login";
+            this.buttonLogin.UseVisualStyleBackColor = true;
+            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
             // 
             // tabControl1
             // 
