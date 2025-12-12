@@ -14,7 +14,6 @@
         private System.Windows.Forms.Panel panelSideMenu;
         private System.Windows.Forms.Button buttonProfile;
         private System.Windows.Forms.Button buttonFeed;
-        private System.Windows.Forms.Button buttonSettings;
         private System.Windows.Forms.Button buttonFeature1;
         private System.Windows.Forms.Button buttonLogout;
 
@@ -48,7 +47,6 @@
             this.panelSideMenu = new System.Windows.Forms.Panel();
             this.buttonLogout = new System.Windows.Forms.Button();
             this.buttonFeature1 = new System.Windows.Forms.Button();
-            this.buttonSettings = new System.Windows.Forms.Button();
             this.buttonFeed = new System.Windows.Forms.Button();
             this.buttonProfile = new System.Windows.Forms.Button();
             this.panelContent = new System.Windows.Forms.Panel();
@@ -107,7 +105,6 @@
             this.panelSideMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.panelSideMenu.Controls.Add(this.buttonLogout);
             this.panelSideMenu.Controls.Add(this.buttonFeature1);
-            this.panelSideMenu.Controls.Add(this.buttonSettings);
             this.panelSideMenu.Controls.Add(this.buttonFeed);
             this.panelSideMenu.Controls.Add(this.buttonProfile);
             this.panelSideMenu.Dock = System.Windows.Forms.DockStyle.Left;
@@ -147,22 +144,6 @@
             this.buttonFeature1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonFeature1.UseVisualStyleBackColor = true;
             this.buttonFeature1.Click += new System.EventHandler(this.buttonFeature1_Click);
-            // 
-            // buttonSettings
-            // 
-            this.buttonSettings.Dock = System.Windows.Forms.DockStyle.Top;
-            this.buttonSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSettings.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.buttonSettings.ForeColor = System.Drawing.Color.White;
-            this.buttonSettings.Location = new System.Drawing.Point(0, 90);
-            this.buttonSettings.Name = "buttonSettings";
-            this.buttonSettings.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.buttonSettings.Size = new System.Drawing.Size(180, 45);
-            this.buttonSettings.TabIndex = 2;
-            this.buttonSettings.Text = "Settings";
-            this.buttonSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonSettings.UseVisualStyleBackColor = true;
-            this.buttonSettings.Click += new System.EventHandler(this.buttonSettings_Click);
             // 
             // buttonFeed
             // 
