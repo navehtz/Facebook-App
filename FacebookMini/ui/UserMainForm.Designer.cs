@@ -214,7 +214,7 @@
             this.Controls.Add(this.panelSideMenu);
             this.Controls.Add(this.panelHeader);
             this.Name = "UserMainForm";
-            this.Text = "FacebookMini";
+            this.Text = "Facebook Mini";
             this.Load += new System.EventHandler(this.UserMainForm_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
