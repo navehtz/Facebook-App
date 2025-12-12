@@ -22,7 +22,6 @@ namespace FacebookMini
 
         private Control m_ProfilePage;
         private Control m_FeedPage;
-        private Control m_SettingsPage;
         private Control m_Feature1Page;
 
         public UserMainForm()
@@ -41,7 +40,6 @@ namespace FacebookMini
         private void UserMainForm_Load(object sender, EventArgs e)
         {
             buildPages();
-            buttonFeature1.Text = "Tags Analytics";
             showPage(m_ProfilePage); // default
         }
         private void buildPages()
@@ -401,19 +399,18 @@ namespace FacebookMini
                     MessageBoxIcon.Error);
             }
         }
-        private void buttonSettings_Click(object sender, EventArgs e)
-        {
-            showPage(m_SettingsPage);
-        }
+        
         private void buttonFeature1_Click(object sender, EventArgs e)
         {
             m_Feature1Page = buildTagsAnalyticsPage();
             showPage(m_Feature1Page);
         }
+
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
         private Control buildTagsAnalyticsPage()
         {
             Panel mainPanel = new Panel();
@@ -523,9 +520,10 @@ namespace FacebookMini
 
             return mainPanel;
         }
+
         private void updateAnalyticsPage() 
         {
-            //TO DO
+            //TODO
         }
     }
 }
