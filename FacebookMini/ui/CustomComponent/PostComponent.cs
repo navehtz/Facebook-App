@@ -178,7 +178,7 @@ namespace FacebookWinFormsApp.CustomComponent
             m_TagsLabel.AutoSize = true;
             m_TagsLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             m_TagsLabel.Left = 11;
-            m_TagsLabel.Top = btnNote.Top - 18;
+            m_TagsLabel.Top = btnNote.Top - 24;
             m_TagsLabel.Visible = false;
 
             Controls.Add(m_TagsLabel);

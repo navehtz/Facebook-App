@@ -27,7 +27,7 @@ namespace FacebookWinFormsApp.CustomComponent
             this.ProfilePicPictureBox = new System.Windows.Forms.PictureBox();
             this.NameLabel = new System.Windows.Forms.Label();
 
-            // NEW: scrollable panel for the post text
+            // Scrollable panel for the post text
             this.MessagePanel = new System.Windows.Forms.Panel();
             this.CaptionBox = new RichTextBox();
 
@@ -60,9 +60,9 @@ namespace FacebookWinFormsApp.CustomComponent
             this.btnNote.Click += new System.EventHandler(this.btnNote_Click);
 
             // NoteIcon
-            this.NoteIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.NoteIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.NoteIcon.Image = global::FacebookWinFormsApp.Properties.Resources.note;
-            this.NoteIcon.Location = new System.Drawing.Point(304, 245);
+            this.NoteIcon.Location = new System.Drawing.Point(385, 15);
             this.NoteIcon.Name = "NoteIcon";
             this.NoteIcon.Size = new System.Drawing.Size(22, 22);
             this.NoteIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -119,11 +119,11 @@ namespace FacebookWinFormsApp.CustomComponent
             this.MessagePanel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MessagePanel.Location = new System.Drawing.Point(15, 80);
             this.MessagePanel.Name = "MessagePanel";
-            this.MessagePanel.Size = new System.Drawing.Size(387, 145);
+            this.MessagePanel.Size = new System.Drawing.Size(387, 140);
             this.MessagePanel.TabIndex = 10;
 
  
-            // NEW: CaptionBox (RichTextBox בתוך הפאנל)
+            // CaptionBox (RichTextBox)
             this.CaptionBox = new System.Windows.Forms.RichTextBox();
             this.CaptionBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.CaptionBox.ReadOnly = true;
@@ -131,11 +131,10 @@ namespace FacebookWinFormsApp.CustomComponent
             this.CaptionBox.WordWrap = true;
             this.CaptionBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.CaptionBox.DetectUrls = false;
-            this.CaptionBox.BackColor = System.Drawing.SystemColors.ControlLightLight; // כמו הרקע של ה-Post
-            this.CaptionBox.RightToLeft = System.Windows.Forms.RightToLeft.No;         // חשוב – LTR יציב
+            this.CaptionBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.CaptionBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.CaptionBox.TabStop = false;
 
-            // ניגש למיקום וגודל דרך Anchors / Dock כדי שיתאים את עצמו
             this.CaptionBox.Anchor = ((System.Windows.Forms.AnchorStyles)(
                 System.Windows.Forms.AnchorStyles.Top
               | System.Windows.Forms.AnchorStyles.Left
@@ -145,7 +144,6 @@ namespace FacebookWinFormsApp.CustomComponent
             this.CaptionBox.Location = new System.Drawing.Point(7, 7);
             this.CaptionBox.Size = new System.Drawing.Size(this.MessagePanel.Width - 14, this.MessagePanel.Height - 14);
 
-            // הוסף לפאנל:
             this.MessagePanel.Controls.Add(this.CaptionBox);
 
             // width is constrained at runtime to enable wrapping + scrolling
