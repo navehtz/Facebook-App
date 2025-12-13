@@ -143,7 +143,7 @@
             this.buttonPostTagsAnalytics.Text = "Posts Tags Analytics";
             this.buttonPostTagsAnalytics.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonPostTagsAnalytics.UseVisualStyleBackColor = true;
-            this.buttonPostTagsAnalytics.Click += new System.EventHandler(this.buttonFeature1_Click);
+            this.buttonPostTagsAnalytics.Click += new System.EventHandler(this.buttonTagsAnalytics_Click);
             // 
             // buttonFeed
             // 

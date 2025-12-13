@@ -188,20 +188,25 @@ namespace FacebookWinFormsApp.CustomComponent
         {
             if (m_PostTagsManager != null && !string.IsNullOrEmpty(PostId))
             {
-                IList<string> existingTags = m_PostTagsManager.GetPostTags(PostId);
-                string initialText = string.Empty;
+                ICollection<string> existingTags = m_PostTagsManager.GetPostTags(PostId);
+                StringBuilder tagsStringBuilder = new StringBuilder();
+                bool isFirstTag = true;
 
-                for (int i = 0; i < existingTags.Count; i++)
+                foreach (string tagName in existingTags)
                 {
-                    if (i > 0)
+                    if (!isFirstTag)
                     {
-                        initialText += ", ";
+                        tagsStringBuilder.Append(", ");
+                    }
+                    else
+                    {
+                        isFirstTag = false;
                     }
 
-                    initialText += existingTags[i];
+                    tagsStringBuilder.Append(tagName);
                 }
 
-                using (NoteEditForm dialog = new NoteEditForm(initialText))
+                using (NoteEditForm dialog = new NoteEditForm(tagsStringBuilder.ToString()))
                 {
                     dialog.Text = "Edit tags (comma separated)";
 
@@ -247,27 +252,32 @@ namespace FacebookWinFormsApp.CustomComponent
             }
             else
             {
-                IList<string> tags = m_PostTagsManager.GetPostTags(PostId);
+                ICollection<string> existingTags = m_PostTagsManager.GetPostTags(PostId);
 
-                if (tags == null || tags.Count == 0)
+                if (existingTags == null || existingTags.Count == 0)
                 {
                     m_TagsLabel.Visible = false;
                 }
                 else
                 {
-                    string text = "Tags: ";
+                    StringBuilder tagsStringBuilder = new StringBuilder("Tags: ");
+                    bool isFirstTag = true;
 
-                    for (int i = 0; i < tags.Count; i++)
+                    foreach (string tagName in existingTags)
                     {
-                        if (i > 0)
+                        if (!isFirstTag)
                         {
-                            text += ", ";
+                            tagsStringBuilder.Append(", ");
+                        }
+                        else
+                        {
+                            isFirstTag = false;
                         }
 
-                        text += tags[i];
+                        tagsStringBuilder.Append(tagName);
                     }
 
-                    m_TagsLabel.Text = text;
+                    m_TagsLabel.Text = tagsStringBuilder.ToString();
                     m_TagsLabel.Visible = true;
                 }
             }
