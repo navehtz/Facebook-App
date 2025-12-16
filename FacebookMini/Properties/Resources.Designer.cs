@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FacebookWinFormsApp.Properties {
+namespace FacebookMini.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace FacebookWinFormsApp.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FacebookWinFormsApp.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FacebookMini.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -83,19 +83,9 @@ namespace FacebookWinFormsApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Facebook_default_male_avatar1 {
-            get {
-                object obj = ResourceManager.GetObject("Facebook_default_male_avatar1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Facebook_logo__square_ {
             get {
-                object obj = ResourceManager.GetObject("Facebook_logo_(square)", resourceCulture);
+                object obj = ResourceManager.GetObject("Facebook_logo__square_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -115,7 +105,7 @@ namespace FacebookWinFormsApp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap no_image {
             get {
-                object obj = ResourceManager.GetObject("no-image", resourceCulture);
+                object obj = ResourceManager.GetObject("no_image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
