@@ -51,7 +51,7 @@ namespace FacebookMini
 
             try
             {
-                m_LoginResult = FacebookService.Login(Constants.k_AppId, r_RequestedPermissions);
+                m_LoginResult = FacebookService.Login(textBoxAppID.Text, r_RequestedPermissions);
 
                 if (string.IsNullOrEmpty(m_LoginResult.AccessToken) == false)
                 {
