@@ -70,6 +70,7 @@ namespace FacebookMini.CustomComponent
             this.NoteIcon.Click += new System.EventHandler(this.btnNote_Click);
             this.NoteIcon.TabStop = false;
             this.NoteIcon.Visible = false;
+            this.NoteIcon.Cursor = Cursors.Hand;
 
             // CommentsPictureBox
             this.CommentsPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));

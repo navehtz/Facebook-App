@@ -1,4 +1,4 @@
-﻿namespace FacebookMini
+﻿namespace FacebookMini.ui
 {
     partial class UserMainForm
     {

@@ -11,7 +11,7 @@ using FacebookMini.logic.features.postTags;
 using FacebookWrapper.ObjectModel;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace FacebookMini
+namespace FacebookMini.ui
 {
     public partial class UserMainForm : Form
     {
