@@ -8,8 +8,8 @@ namespace FacebookWinFormsApp.logic.postTags
 {
     public interface IPostTagsManager
     {
-        IList<string> GetPostTags(string i_PostId);
-        void SetPostTags(string i_PostId, IList<string> i_Tags);
-        IList<string> GetAllTags();
+        ICollection<string> GetPostTags(string i_PostId);
+        void SetPostTags(string i_PostId, ICollection<string> i_Tags);
+        ICollection<string> GetAllTags();
     }
 }

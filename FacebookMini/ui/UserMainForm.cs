@@ -18,12 +18,14 @@ namespace FacebookMini
         private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
         private readonly IPostNotesManager r_PostNotesManager = new InMemoryPostNotesManager();
-        private readonly IPostTagsManager r_PostTagsManager = new PostTagsManager();
+        private readonly IPostTagsManager r_PostTagsManager = new InMemoryPostTagsManager();
 
         private Control m_ProfilePage;
         private Control m_FeedPage;
-        private Control m_SettingsPage;
-        private Control m_Feature1Page;
+        
+        private Control m_TagsAnalyticsPage;
+        private Chart m_TagsChart;
+        private Label m_TagsInfoLabel;
 
         public UserMainForm()
         {
@@ -41,14 +43,15 @@ namespace FacebookMini
         private void UserMainForm_Load(object sender, EventArgs e)
         {
             buildPages();
-            buttonFeature1.Text = "Tags Analytics";
             showPage(m_ProfilePage); // default
         }
         private void buildPages()
         {
             m_ProfilePage = buildProfilePage();
             m_FeedPage = buildFriendsFeedPage();
-            m_Feature1Page = buildTagsAnalyticsPage();
+            m_TagsAnalyticsPage = buildTagsAnalyticsPage();
+
+            updateAnalyticsPage();
         }
 
         /// <summary>
@@ -392,7 +395,7 @@ namespace FacebookMini
 
                 showPage(m_FeedPage);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show(
                     @"An error occurred while loading the feed.{Environment.NewLine} {ex.Message}",
@@ -401,19 +404,18 @@ namespace FacebookMini
                     MessageBoxIcon.Error);
             }
         }
-        private void buttonSettings_Click(object sender, EventArgs e)
+        
+        private void buttonTagsAnalytics_Click(object sender, EventArgs e)
         {
-            showPage(m_SettingsPage);
+            updateAnalyticsPage();
+            showPage(m_TagsAnalyticsPage);
         }
-        private void buttonFeature1_Click(object sender, EventArgs e)
-        {
-            m_Feature1Page = buildTagsAnalyticsPage();
-            showPage(m_Feature1Page);
-        }
+
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
         private Control buildTagsAnalyticsPage()
         {
             Panel mainPanel = new Panel();
@@ -437,19 +439,18 @@ namespace FacebookMini
             mainPanel.Controls.Add(infoLabel);
             mainPanel.Controls.SetChildIndex(infoLabel, 1);   // under header
 
-            // ===== Chart (smaller, centered-ish) =====
+            // Chart
             Chart tagsChart = new Chart();
             tagsChart.Width = 500;
             tagsChart.Height = 350;
-            tagsChart.Anchor = AnchorStyles.Top;  // stays at top center
-            tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
+            tagsChart.Anchor = AnchorStyles.Top;
             tagsChart.Top = 80;
 
-            // update position when panel resizes
+            tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
             mainPanel.Resize += delegate
-            {
-                tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
-            };
+                {
+                    tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
+                };
 
             ChartArea chartArea = new ChartArea("TagsArea");
             tagsChart.ChartAreas.Add(chartArea);
@@ -458,74 +459,81 @@ namespace FacebookMini
             series.ChartType = SeriesChartType.Pie;
             series.YValueType = ChartValueType.Int32;
 
-            // show tag names + percent on each slice
             series.IsValueShownAsLabel = true;
-            series.Label = "#VALX (#PERCENT{P0})";
-            series.ToolTip = "#VALX: #VAL (#PERCENT{P0})";
-            tagsChart.Series.Add(series);
+            series.Label = "#AXISLABEL (#PERCENT{P0})";
+            series["PieLabelStyle"] = "Outside";
+            series["PieLineColor"] = "Black";
 
-            Legend legend = new Legend("TagsLegend");
-            legend.Docking = Docking.Right;
-            tagsChart.Legends.Add(legend);
+            tagsChart.Series.Add(series);
 
             mainPanel.Controls.Add(tagsChart);
             mainPanel.Controls.SetChildIndex(tagsChart, 2);
 
-            // ===== load data from PostTagsManager =====
-            IList<string> allTags = r_PostTagsManager.GetAllTags();
-            Dictionary<string, int> counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            int total = 0;
-
-            if (allTags != null)
-            {
-                foreach (string tag in allTags)
-                {
-                    if (string.IsNullOrEmpty(tag))
-                    {
-                        continue;
-                    }
-
-                    int current;
-                    if (counts.TryGetValue(tag, out current))
-                    {
-                        counts[tag] = current + 1;
-                    }
-                    else
-                    {
-                        counts[tag] = 1;
-                    }
-
-                    total++;
-                }
-            }
-
-            if (total == 0)
-            {
-                infoLabel.Text = "No tags to display yet. Add tags to your posts first.";
-            }
-            else
-            {
-                infoLabel.Text = "Showing distribution of all tags by percentage.";
-
-                foreach (KeyValuePair<string, int> pair in counts)
-                {
-                    string tagName = pair.Key;
-                    int count = pair.Value;
-
-                    DataPoint point = new DataPoint();
-                    point.AxisLabel = tagName;     // used by #VALX
-                    point.LegendText = tagName;
-                    point.YValues = new double[] { count };
-
-                    series.Points.Add(point);
-                }
-            }
+            // keep references for later updates
+            m_TagsChart = tagsChart;
+            m_TagsInfoLabel = infoLabel;
 
             return mainPanel;
         }
+
         private void updateAnalyticsPage() 
         {
-            //TO DO
+            bool chartReady = m_TagsChart != null && m_TagsInfoLabel != null;
+
+            if (chartReady)
+            {
+                Series series = m_TagsChart.Series[0];
+                series.Points.Clear();
+
+                ICollection<string> allTags = r_PostTagsManager.GetAllTags();
+                Dictionary<string, int> tagsCountDictionary =
+                    new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                int total = 0;
+
+                if (allTags != null)
+                {
+                    foreach (string tag in allTags)
+                    {
+                        if (!string.IsNullOrEmpty(tag))
+                        {
+                            int currentTagCount;
+
+                            if (tagsCountDictionary.TryGetValue(tag, out currentTagCount))
+                            {
+                                tagsCountDictionary[tag] = currentTagCount + 1;
+                            }
+                            else
+                            {
+                                tagsCountDictionary[tag] = 1;
+                            }
+
+                            total++;
+                        }
+                    }
+                }
+
+                if (total == 0)
+                {
+                    m_TagsInfoLabel.Text =
+                        "No tags to display yet. Add tags to your posts first.";
+                }
+                else
+                {
+                    m_TagsInfoLabel.Text =
+                        "Showing distribution of all tags by percentage.";
+
+                    foreach (KeyValuePair<string, int> pair in tagsCountDictionary)
+                    {
+                        string tagName = pair.Key;
+                        int count = pair.Value;
+
+                        DataPoint point = new DataPoint();
+                        point.YValues = new double[] { count };
+                        point.AxisLabel = tagName;
+                        series.Points.Add(point);
+                    }
+                }
+            }
         }
     }
 }
