@@ -13,7 +13,7 @@ using FacebookMini.logic.features.postNotes;
 using FacebookMini.ui.CustomComponent;
 using FacebookWrapper.ObjectModel;
 
-namespace FacebookMini.CustomComponent
+namespace FacebookMini.ui.CustomComponent
 {
     public partial class PostComponent : UserControl
     {
@@ -33,7 +33,6 @@ namespace FacebookMini.CustomComponent
             {
                 m_PostTagsManager = value;
                 updateTagsLabel();
-               
             }
         }
 
@@ -48,12 +47,11 @@ namespace FacebookMini.CustomComponent
         /// </summary>
         public void SetPost(Post i_Post, User i_OwnerUser)
         {
-            
-
             if (i_Post == null)
             {
                 throw new ArgumentNullException(nameof(i_Post));
             }
+
             if (i_OwnerUser == null)
             {
                 throw new ArgumentNullException(nameof(i_OwnerUser));
@@ -97,6 +95,7 @@ namespace FacebookMini.CustomComponent
             {
                 commentsCount = sr_Random.Next(0, 50);
             }
+
             this.CommentsLabel.Text = $"{commentsCount} Comments";
 
             // Profile picture of the owner user

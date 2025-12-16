@@ -169,15 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Facebook_icon.ico" />
-    <Content Include="Resources\jsons\friends.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\jsons\photos.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\jsons\posts.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\photos\note.png" />
     <None Include="Resources\photos\Like.jpg" />
   </ItemGroup>
@@ -196,8 +187,6 @@
   <ItemGroup>
     <None Include="Resources\photos\Facebook_logo_%28square%29.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="data\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

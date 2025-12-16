@@ -12,8 +12,8 @@ namespace FacebookMini.logic.features.postNotes
 
         public string GetNoteForPost(string i_PostId)
         {
-            return i_PostId != null && r_PostIdToNote.TryGetValue(i_PostId, out string o_note)
-                   ? o_note
+            return i_PostId != null && r_PostIdToNote.TryGetValue(i_PostId, out string o_Note)
+                   ? o_Note
                    : null;
         }
 

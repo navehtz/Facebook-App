@@ -10,6 +10,7 @@ using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookWrapper.ObjectModel;
 using System.Windows.Forms.DataVisualization.Charting;
+using FacebookMini.ui.CustomComponent;
 
 namespace FacebookMini.ui
 {
