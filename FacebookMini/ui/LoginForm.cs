@@ -15,6 +15,8 @@ namespace FacebookMini.ui
 {
     public partial class LoginForm : Form
     {
+        private FacebookWrapper.LoginResult m_LoginResult;
+
         private readonly string[] r_RequestedPermissions =
             {   
                 "public_profile",
@@ -32,8 +34,6 @@ namespace FacebookMini.ui
             InitializeComponent();
             FacebookWrapper.FacebookService.s_CollectionLimit = 25;
         }
-
-        FacebookWrapper.LoginResult m_LoginResult;
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
@@ -99,6 +99,7 @@ namespace FacebookMini.ui
             Show();
             this.Enabled = true;
         }
+
         private void executeLogout()
         {
             try

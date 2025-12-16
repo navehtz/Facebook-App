@@ -8,8 +8,7 @@ namespace FacebookMini.Logic
     public class FacebookAppLogic : IFacebookAppLogic
     {
         private readonly User r_LoggedInUser;
-       
-
+        
         public FacebookAppLogic(User i_LoggedInUser)
         {
             r_LoggedInUser = i_LoggedInUser;
