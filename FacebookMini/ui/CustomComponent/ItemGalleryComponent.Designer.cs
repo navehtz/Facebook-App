@@ -1,4 +1,4 @@
-﻿namespace FacebookWinFormsApp.CustomComponent
+﻿namespace FacebookMini.CustomComponent
 {
     partial class ItemGalleryComponent
     {

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Facebook;
 using FacebookMini.Logic;
-using FacebookWinFormsApp.CustomComponent;
-using FacebookWinFormsApp.logic.postNotes;
-using FacebookWinFormsApp.logic.postTags;
+using FacebookMini.CustomComponent;
+using FacebookMini.logic.features.postNotes;
+using FacebookMini.logic.features.postTags;
 using FacebookWrapper.ObjectModel;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -84,7 +84,7 @@ namespace FacebookMini
                 Size = new Size(80, 80),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Location = new Point(10, 10),
-                Image = r_LoggedInUser.ImageNormal ?? FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1
+                Image = r_LoggedInUser.ImageNormal ?? FacebookMini.Properties.Resources.Facebook_default_male_avatar1
             };
 
             if (!string.IsNullOrEmpty(r_LoggedInUser.PictureNormalURL))

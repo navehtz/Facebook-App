@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FacebookWinFormsApp.logic.postNotes
+namespace FacebookMini.logic.features.postNotes
 {
     public interface IPostNotesManager
     {

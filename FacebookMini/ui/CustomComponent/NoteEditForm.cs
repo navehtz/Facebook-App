@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FacebookWinFormsApp.ui.CustomComponent
+namespace FacebookMini.ui.CustomComponent
 {
     public partial class NoteEditForm : Form
     {

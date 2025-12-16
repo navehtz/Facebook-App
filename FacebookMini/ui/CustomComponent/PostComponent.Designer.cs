@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace FacebookWinFormsApp.CustomComponent
+namespace FacebookMini.CustomComponent
 {
     partial class PostComponent
     {
@@ -61,7 +61,7 @@ namespace FacebookWinFormsApp.CustomComponent
 
             // NoteIcon
             this.NoteIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.NoteIcon.Image = global::FacebookWinFormsApp.Properties.Resources.note;
+            this.NoteIcon.Image = global::FacebookMini.Properties.Resources.note;
             this.NoteIcon.Location = new System.Drawing.Point(385, 15);
             this.NoteIcon.Name = "NoteIcon";
             this.NoteIcon.Size = new System.Drawing.Size(22, 22);
@@ -72,7 +72,7 @@ namespace FacebookWinFormsApp.CustomComponent
 
             // CommentsPictureBox
             this.CommentsPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CommentsPictureBox.Image = global::FacebookWinFormsApp.Properties.Resources.Comments;
+            this.CommentsPictureBox.Image = global::FacebookMini.Properties.Resources.Comments;
             this.CommentsPictureBox.Location = new System.Drawing.Point(110, 238);
             this.CommentsPictureBox.Name = "CommentsPictureBox";
             this.CommentsPictureBox.Size = new System.Drawing.Size(33, 33);
@@ -82,8 +82,8 @@ namespace FacebookWinFormsApp.CustomComponent
 
             // LikesPictureBox
             this.LikesPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LikesPictureBox.Image = global::FacebookWinFormsApp.Properties.Resources.Like;
-            this.LikesPictureBox.InitialImage = global::FacebookWinFormsApp.Properties.Resources.Like;
+            this.LikesPictureBox.Image = global::FacebookMini.Properties.Resources.Like;
+            this.LikesPictureBox.InitialImage = global::FacebookMini.Properties.Resources.Like;
             this.LikesPictureBox.Location = new System.Drawing.Point(11, 238);
             this.LikesPictureBox.Name = "LikesPictureBox";
             this.LikesPictureBox.Size = new System.Drawing.Size(38, 35);
@@ -92,8 +92,8 @@ namespace FacebookWinFormsApp.CustomComponent
             this.LikesPictureBox.TabStop = false;
 
             // ProfilePicPictureBox
-            this.ProfilePicPictureBox.ErrorImage = global::FacebookWinFormsApp.Properties.Resources.no_image;
-            this.ProfilePicPictureBox.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1;
+            this.ProfilePicPictureBox.ErrorImage = global::FacebookMini.Properties.Resources.no_image;
+            this.ProfilePicPictureBox.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar1;
             this.ProfilePicPictureBox.InitialImage = null;
             this.ProfilePicPictureBox.Location = new System.Drawing.Point(15, 15);
             this.ProfilePicPictureBox.Name = "ProfilePicPictureBox";
@@ -122,7 +122,7 @@ namespace FacebookWinFormsApp.CustomComponent
             this.MessagePanel.Size = new System.Drawing.Size(387, 140);
             this.MessagePanel.TabIndex = 10;
 
- 
+
             // CaptionBox (RichTextBox)
             this.CaptionBox = new System.Windows.Forms.RichTextBox();
             this.CaptionBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -189,7 +189,7 @@ namespace FacebookWinFormsApp.CustomComponent
 
             this.Name = "PostComponent";
             this.Size = new System.Drawing.Size(420, 280); // a bit bigger by default
-           
+
 
             ((System.ComponentModel.ISupportInitialize)(this.NoteIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CommentsPictureBox)).EndInit();

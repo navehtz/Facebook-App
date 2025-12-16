@@ -71,7 +71,7 @@
             // userPictureBoxTopBar
             // 
             this.userPictureBoxTopBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.userPictureBoxTopBar.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_default_male_avatar1;
+            this.userPictureBoxTopBar.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar1;
             this.userPictureBoxTopBar.Location = new System.Drawing.Point(1115, 13);
             this.userPictureBoxTopBar.Name = "userPictureBoxTopBar";
             this.userPictureBoxTopBar.Size = new System.Drawing.Size(64, 56);
@@ -92,7 +92,7 @@
             // 
             // pictureBoxLogo
             // 
-            this.pictureBoxLogo.Image = global::FacebookWinFormsApp.Properties.Resources.Facebook_logo__square_;
+            this.pictureBoxLogo.Image = global::FacebookMini.Properties.Resources.Facebook_logo__square_;
             this.pictureBoxLogo.Location = new System.Drawing.Point(25, 17);
             this.pictureBoxLogo.Name = "pictureBoxLogo";
             this.pictureBoxLogo.Size = new System.Drawing.Size(44, 44);

@@ -1,4 +1,4 @@
-﻿using FacebookWinFormsApp.logic;
+﻿using FacebookMini.logic;
 using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
 

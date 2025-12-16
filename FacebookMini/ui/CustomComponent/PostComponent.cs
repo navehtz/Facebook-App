@@ -8,12 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Facebook;
-using FacebookWinFormsApp.logic.postNotes;
-using FacebookWinFormsApp.logic.postTags;
-using FacebookWinFormsApp.ui.CustomComponent;
+using FacebookMini.logic.features.postTags;
+using FacebookMini.logic.features.postNotes;
+using FacebookMini.ui.CustomComponent;
 using FacebookWrapper.ObjectModel;
 
-namespace FacebookWinFormsApp.CustomComponent
+namespace FacebookMini.CustomComponent
 {
     public partial class PostComponent : UserControl
     {

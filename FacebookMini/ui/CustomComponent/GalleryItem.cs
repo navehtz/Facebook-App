@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace FacebookWinFormsApp.CustomComponent
+namespace FacebookMini.CustomComponent
 {
     public enum eGalleryItemType
     {

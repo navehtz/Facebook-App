@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FacebookMini.Logic;
-using FacebookWinFormsApp.utils;
+using FacebookMini.utils;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 
-namespace FacebookMini
+namespace FacebookMini.ui
 {
     public partial class LoginForm : Form
     {
