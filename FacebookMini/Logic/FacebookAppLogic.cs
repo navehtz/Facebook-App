@@ -31,10 +31,5 @@ namespace FacebookMini.Logic
         {
             return r_LoggedInUser.LikedPages;
         }
-
-        public IEnumerable<User> GetUserFriendsOrDummy()
-        {
-            return r_LoggedInUser.Friends;
-        }
     }
 }
