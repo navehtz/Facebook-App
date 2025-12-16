@@ -73,9 +73,9 @@
             // 
             this.userPictureBoxTopBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.userPictureBoxTopBar.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar;
-            this.userPictureBoxTopBar.Location = new System.Drawing.Point(1115, 13);
+            this.userPictureBoxTopBar.Location = new System.Drawing.Point(1118, 13);
             this.userPictureBoxTopBar.Name = "userPictureBoxTopBar";
-            this.userPictureBoxTopBar.Size = new System.Drawing.Size(64, 56);
+            this.userPictureBoxTopBar.Size = new System.Drawing.Size(60, 60);
             this.userPictureBoxTopBar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.userPictureBoxTopBar.TabIndex = 0;
             this.userPictureBoxTopBar.TabStop = false;
