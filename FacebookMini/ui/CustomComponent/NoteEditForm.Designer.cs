@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace FacebookWinFormsApp.ui.CustomComponent
+namespace FacebookMini.ui.CustomComponent
 {
     partial class NoteEditForm
     {
