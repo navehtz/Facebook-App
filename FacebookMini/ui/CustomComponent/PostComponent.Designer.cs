@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace FacebookMini.CustomComponent
+namespace FacebookMini.ui.CustomComponent
 {
     partial class PostComponent
     {

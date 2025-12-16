@@ -7,28 +7,26 @@ namespace FacebookMini.Logic
 {
     public class FacebookAppLogic : IFacebookAppLogic
     {
-        private readonly User r_LoggedInUser;
-        
         public FacebookAppLogic(User i_LoggedInUser)
         {
-            r_LoggedInUser = i_LoggedInUser;
+            LoggedInUser = i_LoggedInUser;
         }
 
-        public User LoggedInUser => r_LoggedInUser;
+        public User LoggedInUser { get; }
 
         public IEnumerable<Post> GetUserPosts()
         {
-            return r_LoggedInUser.Posts;
+            return LoggedInUser.Posts;
         }
 
         public IEnumerable<Album> GetUserAlbums()
         {
-            return r_LoggedInUser.Albums;
+            return LoggedInUser.Albums;
         }
 
         public IEnumerable<Page> GetUserLikedPages()
         {
-            return r_LoggedInUser.LikedPages;
+            return LoggedInUser.LikedPages;
         }
     }
 }
