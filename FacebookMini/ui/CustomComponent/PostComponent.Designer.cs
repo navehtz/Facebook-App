@@ -93,7 +93,7 @@ namespace FacebookMini.CustomComponent
 
             // ProfilePicPictureBox
             this.ProfilePicPictureBox.ErrorImage = global::FacebookMini.Properties.Resources.no_image;
-            this.ProfilePicPictureBox.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar1;
+            this.ProfilePicPictureBox.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar;
             this.ProfilePicPictureBox.InitialImage = null;
             this.ProfilePicPictureBox.Location = new System.Drawing.Point(15, 15);
             this.ProfilePicPictureBox.Name = "ProfilePicPictureBox";
