@@ -14,7 +14,6 @@ namespace FacebookWinFormsApp.CustomComponent
     public partial class ItemGalleryComponent : UserControl
     {
         private readonly FlowLayoutPanel m_Flow;
-        public event EventHandler AddToFavoritesClicked;
 
         public ItemGalleryComponent()
         {
