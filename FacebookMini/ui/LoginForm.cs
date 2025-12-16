@@ -51,10 +51,13 @@ namespace FacebookMini.ui
 
             try
             {
+                showLoadingUI("Logging in to Facebook...");
+
                 m_LoginResult = FacebookService.Login(textBoxAppID.Text, r_RequestedPermissions);
 
                 if (string.IsNullOrEmpty(m_LoginResult.AccessToken) == false)
                 {
+                    showLoadingUI("Opening main window...");
                     openMainForm(m_LoginResult.LoggedInUser);
                 }
                 else
@@ -68,20 +71,30 @@ namespace FacebookMini.ui
                 executeLogout();
                 this.Enabled = true;
             }
-
-
+            finally
+            {
+                hideLoadingUI();
+            }
         }
 
         private void buttonConnectAsDesig_Click(object sender, EventArgs e)
         {
             try
             {
+                showLoadingUI("Logging in to Facebook...");
                 m_LoginResult = FacebookService.Connect("EAAUm6cZC4eUEBPZCFs9rJRpwlUmdHcPvU1tUNkIyP37zRZCjSvfdHaW5t3xsOnUL0bEKHL8Snjk6AZC3O32KWEbaItglEnXWQ2zEMXHqsdfdv0ecXNs3hO69juHrZCfRN9FGvfuJZAXhP4Pm57DRRoDeB8De6ZABnfrRflh6zgPwnavpyHS3ZCYX1E6K1QLTHff5sAZDZD");
+                showLoadingUI("Opening main window...");
                 openMainForm(m_LoginResult.LoggedInUser);
             }
             catch 
             {
                 MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed");
+                executeLogout();
+                this.Enabled = true;
+            }
+            finally
+            {
+                hideLoadingUI();
             }
         }
 
@@ -112,9 +125,32 @@ namespace FacebookMini.ui
                 throw new Exception();
             }
         }
+
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void showLoadingUI(string i_Text)
+        {
+            labelLoading.Text = i_Text;
+            labelLoading.Visible = true;
+            progressBarLoading.Visible = true;
+
+            this.UseWaitCursor = true;
+
+            // Force paint NOW before the blocking work starts
+            labelLoading.Refresh();
+            progressBarLoading.Refresh();
+            this.Refresh();
+            Application.DoEvents();
+        }
+
+        private void hideLoadingUI()
+        {
+            this.UseWaitCursor = false;
+            progressBarLoading.Visible = false;
+            labelLoading.Visible = false;
         }
     }
 }

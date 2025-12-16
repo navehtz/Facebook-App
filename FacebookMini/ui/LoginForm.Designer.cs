@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.progressBarLoading = new System.Windows.Forms.ProgressBar();
+            this.labelLoading = new System.Windows.Forms.Label();
             this.buttonConnectAsDesig = new System.Windows.Forms.Button();
             this.pictureBoxProfile = new System.Windows.Forms.PictureBox();
             this.textBoxAppID = new System.Windows.Forms.TextBox();
@@ -43,6 +45,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.progressBarLoading);
+            this.tabPage1.Controls.Add(this.labelLoading);
             this.tabPage1.Controls.Add(this.buttonConnectAsDesig);
             this.tabPage1.Controls.Add(this.pictureBoxProfile);
             this.tabPage1.Controls.Add(this.textBoxAppID);
@@ -50,12 +54,34 @@
             this.tabPage1.Controls.Add(this.buttonLogout);
             this.tabPage1.Controls.Add(this.buttonLogin);
             this.tabPage1.Location = new System.Drawing.Point(4, 27);
-            this.tabPage1.Name = "Login";
+            this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(854, 339);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Login";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // progressBarLoading
+            // 
+            this.progressBarLoading.Location = new System.Drawing.Point(353, 262);
+            this.progressBarLoading.MarqueeAnimationSpeed = 30;
+            this.progressBarLoading.Name = "progressBarLoading";
+            this.progressBarLoading.Size = new System.Drawing.Size(412, 23);
+            this.progressBarLoading.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBarLoading.TabIndex = 58;
+            this.progressBarLoading.Visible = false;
+            // 
+            // labelLoading
+            // 
+            this.labelLoading.AutoSize = true;
+            this.labelLoading.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLoading.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.labelLoading.Location = new System.Drawing.Point(349, 239);
+            this.labelLoading.Name = "labelLoading";
+            this.labelLoading.Size = new System.Drawing.Size(73, 20);
+            this.labelLoading.TabIndex = 57;
+            this.labelLoading.Text = "Loading";
+            this.labelLoading.Visible = false;
             // 
             // buttonConnectAsDesig
             // 
@@ -158,6 +184,8 @@
         private System.Windows.Forms.Button buttonLogout;
         private System.Windows.Forms.Button buttonLogin;
         private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.Label labelLoading;
+        private System.Windows.Forms.ProgressBar progressBarLoading;
     }
 }
 
