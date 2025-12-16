@@ -40,6 +40,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserMainForm));
             this.panelHeader = new System.Windows.Forms.Panel();
             this.userPictureBoxTopBar = new System.Windows.Forms.PictureBox();
             this.labelTitle = new System.Windows.Forms.Label();
@@ -129,13 +130,13 @@
             this.buttonLogout.UseVisualStyleBackColor = true;
             this.buttonLogout.Click += new System.EventHandler(this.buttonLogout_Click);
             // 
-            // buttonFeature1
+            // buttonPostTagsAnalytics
             // 
             this.buttonPostTagsAnalytics.Dock = System.Windows.Forms.DockStyle.Top;
             this.buttonPostTagsAnalytics.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonPostTagsAnalytics.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.buttonPostTagsAnalytics.ForeColor = System.Drawing.Color.White;
-            this.buttonPostTagsAnalytics.Location = new System.Drawing.Point(0, 135);
+            this.buttonPostTagsAnalytics.Location = new System.Drawing.Point(0, 90);
             this.buttonPostTagsAnalytics.Name = "buttonPostTagsAnalytics";
             this.buttonPostTagsAnalytics.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.buttonPostTagsAnalytics.Size = new System.Drawing.Size(180, 45);
@@ -194,6 +195,7 @@
             this.Controls.Add(this.panelContent);
             this.Controls.Add(this.panelSideMenu);
             this.Controls.Add(this.panelHeader);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UserMainForm";
             this.Text = "Facebook Mini";
             this.Load += new System.EventHandler(this.UserMainForm_Load);
@@ -203,6 +205,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.panelSideMenu.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion

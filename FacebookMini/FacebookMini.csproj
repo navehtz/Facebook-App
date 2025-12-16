@@ -121,6 +121,9 @@
     <EmbeddedResource Include="ui\CustomComponent\ItemGalleryComponent.resx">
       <DependentUpon>ItemGalleryComponent.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ui\CustomComponent\NoteEditForm.resx">
+      <DependentUpon>NoteEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ui\CustomComponent\PostComponent.resx">
       <DependentUpon>PostComponent.cs</DependentUpon>
     </EmbeddedResource>
@@ -165,6 +168,7 @@
     <None Include="Resources\photos\Coments.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Facebook_icon.ico" />
     <Content Include="Resources\jsons\friends.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
