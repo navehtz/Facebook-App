@@ -67,6 +67,7 @@ namespace FacebookMini.CustomComponent
             this.NoteIcon.Size = new System.Drawing.Size(22, 22);
             this.NoteIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.NoteIcon.TabIndex = 9;
+            this.NoteIcon.Click += new System.EventHandler(this.btnNote_Click);
             this.NoteIcon.TabStop = false;
             this.NoteIcon.Visible = false;
 
