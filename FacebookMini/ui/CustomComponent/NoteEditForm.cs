@@ -14,10 +14,10 @@ namespace FacebookWinFormsApp.ui.CustomComponent
     {
         public string NoteText => textBoxNote.Text;
 
-        public NoteEditForm(string i_InitialText)
+        public NoteEditForm(string i_AllTags)
         {
             InitializeComponent();
-            textBoxNote.Text = i_InitialText ?? string.Empty;
+            textBoxNote.Text = i_AllTags ?? string.Empty;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)

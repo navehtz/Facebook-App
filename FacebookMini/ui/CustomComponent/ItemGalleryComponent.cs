@@ -76,13 +76,5 @@ namespace FacebookWinFormsApp.CustomComponent
 
             return panel;
         }
-
-        private void btnAddToFavorites_Click(object sender, EventArgs e)
-        {
-            // TODO: call logic
-
-            // or raise an event for the form to handle:
-            AddToFavoritesClicked?.Invoke(this, EventArgs.Empty);
-        }
     }
 }
