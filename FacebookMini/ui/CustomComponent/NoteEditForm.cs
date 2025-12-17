@@ -13,7 +13,7 @@ namespace FacebookMini.ui.CustomComponent
     public partial class NoteEditForm : Form
     {
         public string NoteText => textBoxNote.Text;
-
+        
         public NoteEditForm(string i_AllTags)
         {
             InitializeComponent();

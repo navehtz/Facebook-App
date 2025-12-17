@@ -28,7 +28,7 @@ namespace FacebookMini.ui.CustomComponent
 
         public IPostTagsManager PostTagsManager
         {
-            get { return m_PostTagsManager; }
+            get => m_PostTagsManager;
             set
             {
                 m_PostTagsManager = value;
@@ -71,10 +71,12 @@ namespace FacebookMini.ui.CustomComponent
             string captionText = !string.IsNullOrEmpty(i_Post.Message)
                                      ? i_Post.Message
                                      : i_Post.Caption;
+
             this.CaptionBox.Text = captionText ?? string.Empty;
 
             // Likes (real if available, otherwise random)
             int likesCount;
+
             try
             {
                 likesCount = i_Post.LikedBy?.Count ?? sr_Random.Next(5, 150);
@@ -83,10 +85,12 @@ namespace FacebookMini.ui.CustomComponent
             {
                 likesCount = sr_Random.Next(5, 150);
             }
+
             this.LikesLabel.Text = $"{likesCount} Likes";
 
             // Comments
             int commentsCount;
+
             try
             {
                 commentsCount = i_Post.Comments?.Count ?? sr_Random.Next(0, 50);
