@@ -18,8 +18,8 @@ namespace FacebookMini.ui
     {
         private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
-        private readonly IPostNotesManager r_PostNotesManager = new InMemoryPostNotesManager();
-        private readonly IPostTagsManager r_PostTagsManager = new InMemoryPostTagsManager();
+        private readonly IPostNotesManager r_PostNotesManager;
+        private readonly IPostTagsManager r_PostTagsManager;
 
         private Control m_ProfilePage;
         private Control m_FeedPage;
@@ -39,6 +39,8 @@ namespace FacebookMini.ui
         {
             r_AppLogic = i_AppLogic ?? throw new ArgumentNullException(nameof(i_AppLogic));
             r_LoggedInUser = r_AppLogic.LoggedInUser;
+            r_PostNotesManager = r_AppLogic.PostNotesManager;
+            r_PostTagsManager = r_AppLogic.PostTagsManager;
         }
 
         private void UserMainForm_Load(object sender, EventArgs e)
@@ -46,6 +48,7 @@ namespace FacebookMini.ui
             buildPages();
             showPage(m_ProfilePage); // default
         }
+
         private void buildPages()
         {
             m_ProfilePage = buildProfilePage();
@@ -115,14 +118,22 @@ namespace FacebookMini.ui
 
             if (r_LoggedInUser.Birthday != null)
             {
-                if (extraInfo.Length > 0) extraInfo += "   |   ";
+                if(extraInfo.Length > 0)
+                {
+                    extraInfo += "   |   ";
+                }
+
                 extraInfo += $"Birthday: {r_LoggedInUser.Birthday}";
             }
 
             if (r_LoggedInUser.Location != null &&
                 !string.IsNullOrEmpty(r_LoggedInUser.Location.Name))
             {
-                if (extraInfo.Length > 0) extraInfo += "   |   ";
+                if(extraInfo.Length > 0)
+                {
+                    extraInfo += "   |   ";
+                }
+
                 extraInfo += r_LoggedInUser.Location.Name;
             }
 
@@ -260,7 +271,7 @@ namespace FacebookMini.ui
             }
 
             // ===== fill albums (via logic) =====
-            var albumsItems = new System.Collections.Generic.List<GalleryItem>();
+            var albumsItems = new List<GalleryItem>();
             var albums = r_AppLogic.GetUserAlbums();
 
             if (albums != null)
@@ -273,7 +284,8 @@ namespace FacebookMini.ui
                     {
                         Title = album.Name,
                         Image = albumImage,
-                        Tag = album
+                        Tag = album,
+                        ItemType = eGalleryItemType.Album
                     });
                 }
             }
@@ -288,7 +300,7 @@ namespace FacebookMini.ui
             }
 
             // ===== fill pages (via logic) =====
-            var pagesItems = new System.Collections.Generic.List<GalleryItem>();
+            var pagesItems = new List<GalleryItem>();
             var likedPages = r_AppLogic.GetUserLikedPages();
 
             if (likedPages != null)
@@ -301,7 +313,8 @@ namespace FacebookMini.ui
                     {
                         Title = page.Name,
                         Image = pageImage,
-                        Tag = page
+                        Tag = page,
+                        ItemType = eGalleryItemType.Page
                     });
                 }
             }
@@ -340,23 +353,39 @@ namespace FacebookMini.ui
 
             if (r_LoggedInUser.Friends != null && r_LoggedInUser.Friends.Count > 0)
             {
-                foreach (User friend in r_LoggedInUser.Friends)
+                HashSet<KeyValuePair<Post, User>> friendsPosts = new HashSet<KeyValuePair<Post, User>>();
+
+                foreach(User friend in r_LoggedInUser.Friends)
                 {
-                    if (friend?.Posts == null) continue;
-
-                    foreach (Post post in friend.Posts)
+                    if(friend?.Posts == null)
                     {
-                        if (post == null) continue;
-
-                        var postControl = new PostComponent
-                        {
-                            Margin = new Padding(5, 5, 5, 15),
-                            PostNotesManager = r_PostNotesManager,
-                            PostTagsManager = r_PostTagsManager
-                        };
-                        postControl.SetPost(post, friend);
-                        postsFlowPanel.Controls.Add(postControl);
+                        continue;
                     }
+
+                    foreach(Post post in friend.Posts)
+                    {
+                        if(post == null)
+                        {
+                            continue;
+                        }
+
+                        KeyValuePair<Post,User> postOfFriend = new KeyValuePair<Post, User>(post, friend);
+
+                        friendsPosts.Add(postOfFriend);
+                    }
+                }
+
+                foreach (KeyValuePair<Post, User> postOfFriend in friendsPosts)
+                {
+                    var postControl = new PostComponent
+                                          {
+                                              Margin = new Padding(5, 5, 5, 15),
+                                              PostNotesManager = r_PostNotesManager,
+                                              PostTagsManager = r_PostTagsManager
+                                          };
+
+                    postControl.SetPost(postOfFriend.Key, postOfFriend.Value);
+                    postsFlowPanel.Controls.Add(postControl);
                 }
             }
 
@@ -366,15 +395,18 @@ namespace FacebookMini.ui
         private void showPage(Control i_Page)
         {
             panelContent.Controls.Clear();
+
             if (i_Page != null)
             {
                 panelContent.Controls.Add(i_Page);
             }
         }
+
         private void buttonProfile_Click(object sender, EventArgs e)
         {
             showPage(m_ProfilePage);
         }
+
         private void buttonFeed_Click(object sender, EventArgs e)
         {
             try
@@ -396,10 +428,10 @@ namespace FacebookMini.ui
 
                 showPage(m_FeedPage);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    @"An error occurred while loading the feed.{Environment.NewLine} {ex.Message}",
+                    $"An error occurred while loading the feed.{Environment.NewLine} {ex.Message}",
                     "Feed error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -479,9 +511,9 @@ namespace FacebookMini.ui
 
         private void updateAnalyticsPage() 
         {
-            bool chartReady = m_TagsChart != null && m_TagsInfoLabel != null;
+            bool isChartReady = m_TagsChart != null && m_TagsInfoLabel != null;
 
-            if (chartReady)
+            if (isChartReady)
             {
                 Series series = m_TagsChart.Series[0];
                 series.Points.Clear();

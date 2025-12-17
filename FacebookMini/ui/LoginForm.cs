@@ -51,13 +51,13 @@ namespace FacebookMini.ui
 
             try
             {
-                showLoadingUI("Logging in to Facebook...");
+                showLoadingUi("Logging in to Facebook...");
 
                 m_LoginResult = FacebookService.Login(textBoxAppID.Text, r_RequestedPermissions);
 
                 if (string.IsNullOrEmpty(m_LoginResult.AccessToken) == false)
                 {
-                    showLoadingUI("Opening main window...");
+                    showLoadingUi("Opening main window...");
                     openMainForm(m_LoginResult.LoggedInUser);
                 }
                 else
@@ -73,7 +73,7 @@ namespace FacebookMini.ui
             }
             finally
             {
-                hideLoadingUI();
+                hideLoadingUi();
             }
         }
 
@@ -81,9 +81,9 @@ namespace FacebookMini.ui
         {
             try
             {
-                showLoadingUI("Logging in to Facebook...");
+                showLoadingUi("Logging in to Facebook...");
                 m_LoginResult = FacebookService.Connect("EAAUm6cZC4eUEBPZCFs9rJRpwlUmdHcPvU1tUNkIyP37zRZCjSvfdHaW5t3xsOnUL0bEKHL8Snjk6AZC3O32KWEbaItglEnXWQ2zEMXHqsdfdv0ecXNs3hO69juHrZCfRN9FGvfuJZAXhP4Pm57DRRoDeB8De6ZABnfrRflh6zgPwnavpyHS3ZCYX1E6K1QLTHff5sAZDZD");
-                showLoadingUI("Opening main window...");
+                showLoadingUi("Opening main window...");
                 openMainForm(m_LoginResult.LoggedInUser);
             }
             catch 
@@ -94,7 +94,7 @@ namespace FacebookMini.ui
             }
             finally
             {
-                hideLoadingUI();
+                hideLoadingUi();
             }
         }
 
@@ -104,7 +104,7 @@ namespace FacebookMini.ui
 
             using (UserMainForm userMainForm = new UserMainForm(appLogic))
             {
-                userMainForm.Shown += ((i_Sender, i_Args) => this.Hide());
+                userMainForm.Shown += (i_Sender, i_Args) => this.Hide();
                 userMainForm.ShowDialog();
             }
 
@@ -131,7 +131,7 @@ namespace FacebookMini.ui
             this.Close();
         }
 
-        private void showLoadingUI(string i_Text)
+        private void showLoadingUi(string i_Text)
         {
             labelLoading.Text = i_Text;
             labelLoading.Visible = true;
@@ -146,7 +146,7 @@ namespace FacebookMini.ui
             Application.DoEvents();
         }
 
-        private void hideLoadingUI()
+        private void hideLoadingUi()
         {
             this.UseWaitCursor = false;
             progressBarLoading.Visible = false;
