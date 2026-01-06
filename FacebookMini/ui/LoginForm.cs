@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FacebookMini.Logic;
-using FacebookMini.utils;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 
