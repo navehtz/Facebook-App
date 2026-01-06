@@ -509,6 +509,7 @@ namespace FacebookMini.ui
             return mainPanel;
         }
 
+        // TODO: Separate ui from count total tags logic.
         private void updateAnalyticsPage() 
         {
             bool isChartReady = m_TagsChart != null && m_TagsInfoLabel != null;

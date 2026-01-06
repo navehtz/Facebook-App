@@ -4,17 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using FacebookMini.ui.CustomComponent;
 
-namespace FacebookMini.CustomComponent
+namespace FacebookMini.ui.CustomComponent
 {
-    public enum eGalleryItemType
-    {
-        Album,
-        Page,
-        Photo,
-        Other
-    }
-
     internal class GalleryItem
     {
         public Image Image { get; set; }
