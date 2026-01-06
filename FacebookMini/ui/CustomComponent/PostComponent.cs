@@ -139,11 +139,12 @@ namespace FacebookMini.ui.CustomComponent
 
             string currentNote = PostNotesManager.GetNoteForPost(PostId) ?? string.Empty;
 
-            using (var noteForm = new NoteEditForm(currentNote))
+            using (NoteEditForm noteForm = new NoteEditForm(currentNote))
             {
                 if (noteForm.ShowDialog() == DialogResult.OK)
                 {
                     string newNote = noteForm.NoteText;
+
                     if (string.IsNullOrEmpty(newNote))
                     {
                         PostNotesManager.RemoveNoteForPost(PostId);
@@ -208,7 +209,7 @@ namespace FacebookMini.ui.CustomComponent
 
                     tagsStringBuilder.Append(tagName);
                 }
-
+                // TODO: Separate ui from logic.
                 using (NoteEditForm dialog = new NoteEditForm(tagsStringBuilder.ToString()))
                 {
                     dialog.Text = "Edit tags (comma separated)";
