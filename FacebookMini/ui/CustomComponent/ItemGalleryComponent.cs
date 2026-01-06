@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FacebookMini.ui.CustomComponent;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FacebookMini.CustomComponent
