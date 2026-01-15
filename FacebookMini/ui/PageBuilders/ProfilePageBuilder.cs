@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using FacebookMini.ui.Adapters;
+
 
 namespace FacebookMini.ui.PageBuilder
 {
@@ -240,7 +242,9 @@ namespace FacebookMini.ui.PageBuilder
                     PostTagsManager = r_Context.TagsManager
                 };
 
-                postControl.SetPost(post, r_Context.LoggedInUser);
+                IPostData postData = new FacebookPostAdapter(post, r_Context.LoggedInUser);
+                postControl.SetPost(postData);
+
                 m_PostsFlowPanel.Controls.Add(postControl);
             }
         }

@@ -12,16 +12,16 @@ using FacebookMini.logic.features.postTags;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.ui.CustomComponent;
 using FacebookWrapper.ObjectModel;
+using FacebookMini.ui.Adapters;
 
 namespace FacebookMini.ui.CustomComponent
 {
     public partial class PostComponent : UserControl
     {
-        private Post m_Post;
         public string PostId { get; private set; }
         public IPostNotesManager PostNotesManager { get; set; }
         private IPostTagsManager m_PostTagsManager;
-        private static readonly Random sr_Random = new Random();
+        //private static readonly Random sr_Random = new Random();
 
         private Button m_TagsButton;
         private Label m_TagsLabel;
@@ -45,77 +45,36 @@ namespace FacebookMini.ui.CustomComponent
         /// <summary>
         /// Binds a Facebook Post object to this UI component.
         /// </summary>
-        public void SetPost(Post i_Post, User i_OwnerUser)
+        public void SetPost(IPostData i_PostData)
         {
-            if (i_Post == null)
+            if (i_PostData == null)
             {
-                throw new ArgumentNullException(nameof(i_Post));
+                throw new ArgumentNullException(nameof(i_PostData));
             }
 
-            if (i_OwnerUser == null)
+            NameLabel.Text = i_PostData.OwnerName;
+
+            DateTimeLabel.Text = i_PostData.CreatedTimeText;
+
+            CaptionBox.Text = i_PostData.CaptionText;
+
+            LikesLabel.Text = $"{i_PostData.LikesCount} Likes";
+            CommentsLabel.Text = $"{i_PostData.CommentsCount} Comments";
+
+            if (!string.IsNullOrEmpty(i_PostData.OwnerPictureUrl))
             {
-                throw new ArgumentNullException(nameof(i_OwnerUser));
-            }
-
-            m_Post = i_Post;
-
-            User displayUser = i_OwnerUser;
-
-            // Name
-            this.NameLabel.Text = displayUser.Name ?? string.Empty;
-
-            // Date / time
-            this.DateTimeLabel.Text = i_Post.CreatedTime?.ToString("g") ?? string.Empty;
-
-            // Caption / text
-            string captionText = !string.IsNullOrEmpty(i_Post.Message)
-                                     ? i_Post.Message
-                                     : i_Post.Caption;
-
-            this.CaptionBox.Text = captionText ?? string.Empty;
-
-            // Likes (real if available, otherwise random)
-            int likesCount;
-
-            try
-            {
-                likesCount = i_Post.LikedBy?.Count ?? sr_Random.Next(5, 150);
-            }
-            catch
-            {
-                likesCount = sr_Random.Next(5, 150);
-            }
-
-            this.LikesLabel.Text = $"{likesCount} Likes";
-
-            // Comments
-            int commentsCount;
-
-            try
-            {
-                commentsCount = i_Post.Comments?.Count ?? sr_Random.Next(0, 50);
-            }
-            catch
-            {
-                commentsCount = sr_Random.Next(0, 50);
-            }
-
-            this.CommentsLabel.Text = $"{commentsCount} Comments";
-
-            // Profile picture of the owner user
-            if (!string.IsNullOrEmpty(displayUser.PictureNormalURL))
-            {
-                try
-                {
-                    this.ProfilePicPictureBox.LoadAsync(displayUser.PictureNormalURL);
+                try 
+                { 
+                    ProfilePicPictureBox.LoadAsync(i_PostData.OwnerPictureUrl);
                 }
-                catch
+                catch 
                 {
                     // ignore – keep default avatar
                 }
             }
 
-            PostId = i_Post.Id;
+            PostId = i_PostData.Id;
+
             updateTagsLabel();
         }
 
