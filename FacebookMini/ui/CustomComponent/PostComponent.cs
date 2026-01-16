@@ -12,7 +12,7 @@ using FacebookMini.logic.features.postTags;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.ui.CustomComponent;
 using FacebookWrapper.ObjectModel;
-using FacebookMini.ui.Adapters;
+using FacebookMini.Adapters;
 
 namespace FacebookMini.ui.CustomComponent
 {

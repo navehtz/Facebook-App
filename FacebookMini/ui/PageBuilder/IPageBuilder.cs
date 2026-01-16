@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FacebookMini.ui
+namespace FacebookMini.ui.PageBuilder
 {
     public interface IPageBuilder
     {
