@@ -19,8 +19,8 @@ namespace FacebookMini.ui
     {
         private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
-        private readonly IPostNotesManager r_PostNotesManager;
-        private readonly IPostTagsManager r_PostTagsManager;
+        //private readonly IPostNotesManager r_PostNotesManager;      -Because inside appLogic-
+        //private readonly IPostTagsManager r_PostTagsManager;
 
         private Control m_ProfilePage;
         private Control m_FeedPage;
@@ -44,13 +44,13 @@ namespace FacebookMini.ui
         {
             r_AppLogic = i_AppLogic ?? throw new ArgumentNullException(nameof(i_AppLogic));
             r_LoggedInUser = r_AppLogic.LoggedInUser;
-            r_PostNotesManager = r_AppLogic.PostNotesManager;
-            r_PostTagsManager = r_AppLogic.PostTagsManager;
+            //r_PostNotesManager = r_AppLogic.PostNotesManager;
+            //r_PostTagsManager = r_AppLogic.PostTagsManager;
         }
 
         private void UserMainForm_Load(object sender, EventArgs e)
         {
-            m_Context = new PageBuildContext(r_AppLogic, r_PostNotesManager, r_PostTagsManager, userPictureBoxTopBar);
+            m_Context = new PageBuildContext(r_AppLogic, userPictureBoxTopBar);
             m_Composer = new PageComposer(m_Context);
 
             buildPages();

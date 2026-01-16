@@ -256,5 +256,11 @@ namespace FacebookMini.Logic
 
             PostTagsManager.SetPostTags(i_PostId, i_Tags);
         }
+
+        public ICollection<string> GetAllTags()
+        {
+            return PostTagsManager.GetAllTags();
+        }
     }
 }
+//TODO: update

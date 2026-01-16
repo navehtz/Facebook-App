@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Facebook;
+using FacebookMini.Logic;
 using FacebookMini.logic.features.postTags;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.ui.CustomComponent;
@@ -19,22 +20,23 @@ namespace FacebookMini.ui.CustomComponent
     public partial class PostComponent : UserControl
     {
         public string PostId { get; private set; }
-        public IPostNotesManager PostNotesManager { get; set; }
-        private IPostTagsManager m_PostTagsManager;
+        //public IPostNotesManager PostNotesManager { get; set; }
+        //private IPostTagsManager m_PostTagsManager;
         //private static readonly Random sr_Random = new Random();
+        public IFacebookAppLogic AppLogic { get; set; }
 
         private Button m_TagsButton;
         private Label m_TagsLabel;
 
-        public IPostTagsManager PostTagsManager
-        {
-            get => m_PostTagsManager;
-            set
-            {
-                m_PostTagsManager = value;
-                updateTagsLabel();
-            }
-        }
+        //public IPostTagsManager PostTagsManager
+        //{
+        //    get => m_PostTagsManager;
+        //    set
+        //    {
+        //        m_PostTagsManager = value;
+        //        updateTagsLabel();
+        //    }
+        //}
 
         public PostComponent()
         { 
@@ -91,12 +93,12 @@ namespace FacebookMini.ui.CustomComponent
 
         private void btnNote_Click(object sender, EventArgs e)
         {
-            if (PostNotesManager == null || string.IsNullOrEmpty(PostId))
+            if (AppLogic == null || string.IsNullOrEmpty(PostId))
             {
                 return;
             }
 
-            string currentNote = PostNotesManager.GetNoteForPost(PostId) ?? string.Empty;
+            string currentNote = AppLogic.GetNoteForPost(PostId) ?? string.Empty;
 
             using (NoteEditForm noteForm = new NoteEditForm(currentNote))
             {
@@ -106,13 +108,13 @@ namespace FacebookMini.ui.CustomComponent
 
                     if (string.IsNullOrEmpty(newNote))
                     {
-                        PostNotesManager.RemoveNoteForPost(PostId);
+                        AppLogic.RemoveNoteForPost(PostId);
                         btnNote.Text = "Add Note";
                         NoteIcon.Visible = false;
                     }
                     else
                     {
-                        PostNotesManager.SetNoteForPost(PostId, newNote);
+                        AppLogic.SetNoteForPost(PostId, newNote);
                         btnNote.Text = "Edit Note";
                         NoteIcon.Visible = !string.IsNullOrWhiteSpace(newNote);
                     }
@@ -149,9 +151,9 @@ namespace FacebookMini.ui.CustomComponent
 
         private void tagsButton_Click(object sender, EventArgs e)
         {
-            if (m_PostTagsManager != null && !string.IsNullOrEmpty(PostId))
+            if (AppLogic != null && !string.IsNullOrEmpty(PostId))
             {
-                ICollection<string> existingTags = m_PostTagsManager.GetPostTags(PostId);
+                ICollection<string> existingTags = AppLogic.GetTagsForPost(PostId);
                 StringBuilder tagsStringBuilder = new StringBuilder();
                 bool isFirstTag = true;
 
@@ -195,7 +197,7 @@ namespace FacebookMini.ui.CustomComponent
                             }
                         }
 
-                        m_PostTagsManager.SetPostTags(PostId, tagsList);
+                        AppLogic.SetTagsForPost(PostId, tagsList);
                         updateTagsLabel();
                     }
                 }
@@ -209,13 +211,13 @@ namespace FacebookMini.ui.CustomComponent
                 return;
             }
 
-            if (m_PostTagsManager == null || string.IsNullOrEmpty(PostId))
+            if (AppLogic == null || string.IsNullOrEmpty(PostId))
             {
                 m_TagsLabel.Visible = false;
             }
             else
             {
-                ICollection<string> existingTags = m_PostTagsManager.GetPostTags(PostId);
+                ICollection<string> existingTags = AppLogic.GetTagsForPost(PostId);
 
                 if (existingTags == null || existingTags.Count == 0)
                 {

@@ -15,23 +15,23 @@ namespace FacebookMini.ui.PageBuilder
     {
         public IFacebookAppLogic AppLogic { get; }
         //public User LoggedInUser { get; }
-        public IPostNotesManager NotesManager { get; }
-        public IPostTagsManager TagsManager { get; }
+        //public IPostNotesManager NotesManager { get; }
+        //public IPostTagsManager TagsManager { get; }
         public PictureBox UserPictureBoxTopBar { get; }
 
         public PageBuildContext(
             IFacebookAppLogic i_IAppLogic,
             //User i_LoggedInUser,
-            IPostNotesManager i_NotesManager,
-            IPostTagsManager i_TagsManager,
+            //IPostNotesManager i_NotesManager,
+            //IPostTagsManager i_TagsManager,
             PictureBox i_UserPictureBoxTopBar)
         {
             AppLogic = i_IAppLogic;
             //LoggedInUser = i_LoggedInUser;
-            NotesManager = i_NotesManager;
-            TagsManager = i_TagsManager;
+            //NotesManager = i_NotesManager;
+            //TagsManager = i_TagsManager;
             UserPictureBoxTopBar = i_UserPictureBoxTopBar;
         }
     }
-
+    //TODO: update
 }

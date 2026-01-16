@@ -93,7 +93,8 @@ namespace FacebookMini.ui.PageBuilder
             Series series = m_TagsChart.Series[0];
             series.Points.Clear();
 
-            ICollection<string> allTags = r_Context.TagsManager.GetAllTags();
+            ICollection<string> allTags = r_Context.AppLogic.GetAllTags();
+
             Dictionary<string, int> tagsCountDictionary =
                 new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             int total = 0;
