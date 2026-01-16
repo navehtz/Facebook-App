@@ -1,11 +1,10 @@
-﻿using FacebookMini.CustomComponent;
-using FacebookMini.ui.CustomComponent;
-using FacebookWrapper.ObjectModel;
+﻿using FacebookMini.ui.CustomComponent;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using FacebookMini.Adapters;
+using FacebookMini.shared.adapters;
+using FacebookMini.shared.galleryItem;
 
 
 namespace FacebookMini.ui.PageBuilder
@@ -230,43 +229,25 @@ namespace FacebookMini.ui.PageBuilder
 
         private void bindPosts()
         {
-            var posts = r_Context.AppLogic.GetUserPosts();
-            if (posts == null) return;
+            IEnumerable<IPostData> userPosts = r_Context.AppLogic.GetMyPostsData();
 
-            foreach (Post post in posts)
+            foreach (IPostData postData in userPosts)
             {
-                var postControl = new PostComponent
+                PostComponent postControl = new PostComponent
                 {
                     Margin = new Padding(5, 5, 5, 15),
                     PostNotesManager = r_Context.NotesManager,
                     PostTagsManager = r_Context.TagsManager
                 };
 
-                IPostData postData = new FacebookPostAdapter(post, r_Context.LoggedInUser);
                 postControl.SetPost(postData);
-
                 m_PostsFlowPanel.Controls.Add(postControl);
             }
         }
 
         private void bindAlbums()
         {
-            var albumsItems = new List<GalleryItem>();
-            var albums = r_Context.AppLogic.GetUserAlbums();
-
-            if (albums != null)
-            {
-                foreach (Album album in albums)
-                {
-                    albumsItems.Add(new GalleryItem
-                    {
-                        Title = album.Name,
-                        Image = album.ImageAlbum,
-                        Tag = album,
-                        ItemType = eGalleryItemType.Album
-                    });
-                }
-            }
+            List<GalleryItem> albumsItems = r_Context.AppLogic.GetAlbumsGalleryItems();
 
             m_AlbumsSection.SetItems(albumsItems);
 
@@ -280,22 +261,7 @@ namespace FacebookMini.ui.PageBuilder
 
         private void bindPages()
         {
-            var pagesItems = new List<GalleryItem>();
-            var likedPages = r_Context.AppLogic.GetUserLikedPages();
-
-            if (likedPages != null)
-            {
-                foreach (Page page in likedPages)
-                {
-                    pagesItems.Add(new GalleryItem
-                    {
-                        Title = page.Name,
-                        Image = page.ImageNormal,
-                        Tag = page,
-                        ItemType = eGalleryItemType.Page
-                    });
-                }
-            }
+            List<GalleryItem> pagesItems = r_Context.AppLogic.GetLikedPagesGalleryItems();
 
             m_PagesSection.SetItems(pagesItems);
         }

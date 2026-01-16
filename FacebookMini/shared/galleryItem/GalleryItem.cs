@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using System.Drawing;
 using FacebookMini.ui.CustomComponent;
 
-namespace FacebookMini.ui.CustomComponent
+namespace FacebookMini.shared.galleryItem
 {
-    internal class GalleryItem
+    public class GalleryItem
     {
         public Image Image { get; set; }
         public string Title { get; set; }
         public eGalleryItemType ItemType { get; set; }
-        public object Tag { get; set; }
+        public string Id { get; set; }
     }
 }

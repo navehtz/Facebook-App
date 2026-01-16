@@ -1,10 +1,10 @@
-﻿using FacebookMini.Adapters;
-using FacebookMini.logic;
-using FacebookMini.logic.features.postNotes;
+﻿using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
-using System.Linq;
+using FacebookMini.shared.adapters;
+using FacebookMini.shared.galleryItem;
+
 
 namespace FacebookMini.Logic
 {
@@ -82,6 +82,87 @@ namespace FacebookMini.Logic
             }
 
             return feedPosts;
+        }
+
+        public IEnumerable<IPostData> GetMyPostsData()
+        {
+            List<IPostData> postsData = new List<IPostData>();
+
+            if (LoggedInUser?.Posts == null)
+            {
+                return postsData;
+            }
+
+            foreach (Post post in LoggedInUser.Posts)
+            {
+                if (post != null)
+                {
+                    IPostData postData = new FacebookPostAdapter(post, LoggedInUser);
+                    postsData.Add(postData);
+                }
+            }
+
+            return postsData;
+        }
+
+        public List<GalleryItem> GetAlbumsGalleryItems()
+        {
+            List<GalleryItem> albumsAsGalleryItems = new List<GalleryItem>();
+
+            if (LoggedInUser?.Albums == null)
+            {
+                return albumsAsGalleryItems;
+            }
+
+            foreach (Album album in LoggedInUser.Albums)
+            {
+                if (album == null)
+                {
+                    continue;
+                }
+
+                GalleryItem item = new GalleryItem
+                {
+                   Title = album.Name,
+                   Image = album.ImageAlbum,
+                   ItemType = eGalleryItemType.Album,
+                   Id = album.Id
+                };
+
+                albumsAsGalleryItems.Add(item);
+            }
+
+            return albumsAsGalleryItems;
+        }
+
+        public List<GalleryItem> GetLikedPagesGalleryItems()
+        {
+            List<GalleryItem> pagesAsGalleryItems = new List<GalleryItem>();
+
+            if (LoggedInUser?.LikedPages == null)
+            {
+                return pagesAsGalleryItems;
+            }
+
+            foreach (Page page in LoggedInUser.LikedPages)
+            {
+                if (page == null)
+                {
+                    continue;
+                }
+
+                GalleryItem item = new GalleryItem
+                {
+                    Title = page.Name,
+                    Image = page.ImageNormal,
+                    ItemType = eGalleryItemType.Page,
+                    Id = page.Id
+                };
+
+                pagesAsGalleryItems.Add(item);
+            }
+
+            return pagesAsGalleryItems;
         }
     }
 }

@@ -82,10 +82,10 @@
     <Compile Include="logic\features\postNotes\IPostNotesManager.cs" />
     <Compile Include="logic\features\postTags\IPostTagsManager.cs" />
     <Compile Include="logic\features\postTags\InMemoryPostTagsManager.cs" />
-    <Compile Include="Adapters\FacebookPostAdapter.cs" />
-    <Compile Include="Adapters\IPostData.cs" />
-    <Compile Include="ui\CustomComponent\eGalleryItemType.cs" />
-    <Compile Include="ui\CustomComponent\GalleryItem.cs" />
+    <Compile Include="shared\adapters\FacebookPostAdapter.cs" />
+    <Compile Include="shared\adapters\IPostData.cs" />
+    <Compile Include="shared\galleryItem\eGalleryItemType.cs" />
+    <Compile Include="shared\galleryItem\GalleryItem.cs" />
     <Compile Include="ui\CustomComponent\NoteEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
