@@ -15,9 +15,6 @@ namespace FacebookMini.Logic
         User LoggedInUser { get; }
         IPostNotesManager PostNotesManager { get; }
         IPostTagsManager PostTagsManager { get; }
-        //IEnumerable<Post> GetUserPosts();
-        //IEnumerable<Album> GetUserAlbums();
-        //IEnumerable<Page> GetUserLikedPages();
         IEnumerable<IPostData> GetFriendsFeedPostsData();
         IEnumerable<IPostData> GetMyPostsData();
         UserProfileData GetLoggedInUserProfileData();
@@ -31,6 +28,5 @@ namespace FacebookMini.Logic
         ICollection<string> GetTagsForPost(string i_PostId);
         void SetTagsForPost(string i_PostId, ICollection<string> i_Tags);
         ICollection<string> GetAllTags();
-        //TODO: update
     }
 }
