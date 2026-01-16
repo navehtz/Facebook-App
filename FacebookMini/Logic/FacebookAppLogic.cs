@@ -24,21 +24,6 @@ namespace FacebookMini.Logic
 
         public IPostTagsManager PostTagsManager { get; }
 
-        //public IEnumerable<Post> GetUserPosts()
-        //{
-        //    return LoggedInUser.Posts;
-        //}
-
-        //public IEnumerable<Album> GetUserAlbums()
-        //{
-        //    return LoggedInUser.Albums;
-        //}
-
-        //public IEnumerable<Page> GetUserLikedPages()
-        //{
-        //    return LoggedInUser.LikedPages;
-        //}
-
         public IEnumerable<IPostData> GetFriendsFeedPostsData()
         {
 
@@ -263,4 +248,3 @@ namespace FacebookMini.Logic
         }
     }
 }
-//TODO: update

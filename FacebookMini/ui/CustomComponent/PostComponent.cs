@@ -20,23 +20,12 @@ namespace FacebookMini.ui.CustomComponent
     public partial class PostComponent : UserControl
     {
         public string PostId { get; private set; }
-        //public IPostNotesManager PostNotesManager { get; set; }
-        //private IPostTagsManager m_PostTagsManager;
         //private static readonly Random sr_Random = new Random();
+
         public IFacebookAppLogic AppLogic { get; set; }
 
         private Button m_TagsButton;
         private Label m_TagsLabel;
-
-        //public IPostTagsManager PostTagsManager
-        //{
-        //    get => m_PostTagsManager;
-        //    set
-        //    {
-        //        m_PostTagsManager = value;
-        //        updateTagsLabel();
-        //    }
-        //}
 
         public PostComponent()
         { 
@@ -80,7 +69,7 @@ namespace FacebookMini.ui.CustomComponent
             updateTagsLabel();
         }
 
-        // Optional: click handlers (you can raise events here later if you want)
+        //Optional - Maybe add later
         private void label1_Click(object sender, EventArgs e)
         {
             // For example: open profile of m_Post.From
@@ -170,6 +159,7 @@ namespace FacebookMini.ui.CustomComponent
 
                     tagsStringBuilder.Append(tagName);
                 }
+
                 // TODO: Separate ui from logic.
                 using (NoteEditForm dialog = new NoteEditForm(tagsStringBuilder.ToString()))
                 {
