@@ -50,7 +50,7 @@ namespace FacebookMini.ui
 
         private void UserMainForm_Load(object sender, EventArgs e)
         {
-            m_Context = new PageBuildContext(r_AppLogic, r_LoggedInUser, r_PostNotesManager, r_PostTagsManager, userPictureBoxTopBar);
+            m_Context = new PageBuildContext(r_AppLogic, r_PostNotesManager, r_PostTagsManager, userPictureBoxTopBar);
             m_Composer = new PageComposer(m_Context);
 
             buildPages();
