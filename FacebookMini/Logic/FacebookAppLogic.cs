@@ -1,7 +1,9 @@
-﻿using FacebookMini.logic.features.postNotes;
+﻿using System;
+using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
+using System.Text;
 using FacebookMini.shared.adapters;
 using FacebookMini.shared.galleryItem;
 using FacebookMini.shared.profileData;
@@ -245,6 +247,71 @@ namespace FacebookMini.Logic
         public ICollection<string> GetAllTags()
         {
             return PostTagsManager.GetAllTags();
+        }
+
+        public string GetTagsCommaSeparated(string i_PostId)
+        {
+            string result = string.Empty;
+
+            if (!string.IsNullOrEmpty(i_PostId))
+            {
+                ICollection<string> tags = GetTagsForPost(i_PostId);
+
+                if (tags != null && tags.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    bool isFirst = true;
+
+                    foreach (string tag in tags)
+                    {
+                        if (!string.IsNullOrWhiteSpace(tag))
+                        {
+                            if (!isFirst)
+                            {
+                                sb.Append(", ");
+                            }
+                            else
+                            {
+                                isFirst = false;
+                            }
+
+                            sb.Append(tag.Trim());
+                        }
+                    }
+
+                    result = sb.ToString();
+                }
+            }
+
+            return result;
+        }
+
+        public void SetTagsFromCommaSeparated(string i_PostId, string i_RawTagsText)
+        {
+            List<string> tagsList = new List<string>();
+
+            if (!string.IsNullOrEmpty(i_PostId))
+            {
+                if (!string.IsNullOrEmpty(i_RawTagsText))
+                {
+                    string[] parts = i_RawTagsText.Split(',');
+
+                    foreach (string part in parts)
+                    {
+                        if (part != null)
+                        {
+                            string tag = part.Trim();
+
+                            if (tag.Length > 0)
+                            {
+                                tagsList.Add(tag);
+                            }
+                        }
+                    }
+                }
+
+                SetTagsForPost(i_PostId, tagsList);
+            }
         }
     }
 }

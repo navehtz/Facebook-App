@@ -140,99 +140,43 @@ namespace FacebookMini.ui.CustomComponent
 
         private void tagsButton_Click(object sender, EventArgs e)
         {
-            if (AppLogic != null && !string.IsNullOrEmpty(PostId))
+            if(AppLogic == null || string.IsNullOrEmpty(PostId))
             {
-                ICollection<string> existingTags = AppLogic.GetTagsForPost(PostId);
-                StringBuilder tagsStringBuilder = new StringBuilder();
-                bool isFirstTag = true;
+                return;
+            }
 
-                foreach (string tagName in existingTags)
+            string existingTagsText = AppLogic.GetTagsCommaSeparated(PostId);
+
+            using (NoteEditForm dialog = new NoteEditForm(existingTagsText))
+            {
+                dialog.Text = @"Edit tags (comma separated)";
+
+                if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (!isFirstTag)
-                    {
-                        tagsStringBuilder.Append(", ");
-                    }
-                    else
-                    {
-                        isFirstTag = false;
-                    }
-
-                    tagsStringBuilder.Append(tagName);
-                }
-
-                // TODO: Separate ui from logic.
-                using (NoteEditForm dialog = new NoteEditForm(tagsStringBuilder.ToString()))
-                {
-                    dialog.Text = "Edit tags (comma separated)";
-
-                    if (dialog.ShowDialog(this) == DialogResult.OK)
-                    {
-                        string raw = dialog.NoteText;
-                        List<string> tagsList = new List<string>();
-
-                        if (!string.IsNullOrEmpty(raw))
-                        {
-                            string[] parts = raw.Split(',');
-
-                            foreach (string part in parts)
-                            {
-                                if (part != null)
-                                {
-                                    string tag = part.Trim();
-                                    if (tag.Length > 0)
-                                    {
-                                        tagsList.Add(tag);
-                                    }
-                                }
-                            }
-                        }
-
-                        AppLogic.SetTagsForPost(PostId, tagsList);
-                        updateTagsLabel();
-                    }
+                    AppLogic.SetTagsFromCommaSeparated(PostId, dialog.NoteText);
+                    updateTagsLabel();
                 }
             }
         }
 
         private void updateTagsLabel()
         {
-            if (m_TagsLabel == null)
+            string tagsText = string.Empty;
+
+            if(AppLogic != null && !string.IsNullOrEmpty(PostId))
             {
-                return;
+                tagsText = AppLogic.GetTagsCommaSeparated(PostId);
             }
 
-            if (AppLogic == null || string.IsNullOrEmpty(PostId))
+            if (m_TagsLabel != null)
             {
-                m_TagsLabel.Visible = false;
-            }
-            else
-            {
-                ICollection<string> existingTags = AppLogic.GetTagsForPost(PostId);
-
-                if (existingTags == null || existingTags.Count == 0)
+                if (string.IsNullOrEmpty(tagsText))
                 {
                     m_TagsLabel.Visible = false;
                 }
                 else
                 {
-                    StringBuilder tagsStringBuilder = new StringBuilder("Tags: ");
-                    bool isFirstTag = true;
-
-                    foreach (string tagName in existingTags)
-                    {
-                        if (!isFirstTag)
-                        {
-                            tagsStringBuilder.Append(", ");
-                        }
-                        else
-                        {
-                            isFirstTag = false;
-                        }
-
-                        tagsStringBuilder.Append(tagName);
-                    }
-
-                    m_TagsLabel.Text = tagsStringBuilder.ToString();
+                    m_TagsLabel.Text = @"Tags: " + tagsText;
                     m_TagsLabel.Visible = true;
                 }
             }

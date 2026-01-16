@@ -28,5 +28,7 @@ namespace FacebookMini.Logic
         ICollection<string> GetTagsForPost(string i_PostId);
         void SetTagsForPost(string i_PostId, ICollection<string> i_Tags);
         ICollection<string> GetAllTags();
+        string GetTagsCommaSeparated(string i_PostId);
+        void SetTagsFromCommaSeparated(string i_PostId, string i_RawTagsText);
     }
 }
