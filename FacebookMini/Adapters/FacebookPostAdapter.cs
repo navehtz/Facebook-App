@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FacebookMini.ui.Adapters
+namespace FacebookMini.Adapters
 {
     public class FacebookPostAdapter : IPostData
     {

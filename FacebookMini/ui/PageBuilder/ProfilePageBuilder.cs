@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using FacebookMini.ui.Adapters;
+using FacebookMini.Adapters;
 
 
 namespace FacebookMini.ui.PageBuilder
