@@ -67,20 +67,27 @@ namespace FacebookMini.ui.PageBuilder
                 Padding = new Padding(10, 5, 10, 5)
             };
 
-            var userPictureBox = new PictureBox
+            PictureBox userPictureBox = new PictureBox
             {
                 Size = new Size(80, 80),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Location = new Point(10, 10),
-                Image = FacebookMini.Properties.Resources.Facebook_default_male_avatar
+                Image = Properties.Resources.Facebook_default_male_avatar
             };
 
             if (!string.IsNullOrEmpty(userData.ProfilePictureUrl))
             {
                 try
                 {
+                    userPictureBox.LoadCompleted += (s, e) =>
+                        {
+                            if(userPictureBox.Image != null)
+                            {
+                                r_Context.UserPictureBoxTopBar.Image = userPictureBox.Image;
+                            }
+                        };
+
                     userPictureBox.LoadAsync(userData.ProfilePictureUrl);
-                    r_Context.UserPictureBoxTopBar.Image = userPictureBox.Image;
                 }
                 catch { }
             }
@@ -236,8 +243,7 @@ namespace FacebookMini.ui.PageBuilder
                 PostComponent postControl = new PostComponent
                 {
                     Margin = new Padding(5, 5, 5, 15),
-                    PostNotesManager = r_Context.NotesManager,
-                    PostTagsManager = r_Context.TagsManager
+                    AppLogic = r_Context.AppLogic,
                 };
 
                 postControl.SetPost(postData);
@@ -264,6 +270,13 @@ namespace FacebookMini.ui.PageBuilder
             List<GalleryItem> pagesItems = r_Context.AppLogic.GetLikedPagesGalleryItems();
 
             m_PagesSection.SetItems(pagesItems);
+
+            if (pagesItems.Count == 0)
+            {
+                m_PagesSection.Visible = false;
+                m_PagesTitleLabel.Visible = false;
+                m_PagesSection.Height = 0;
+            }
         }
 
         public Control GetResult()

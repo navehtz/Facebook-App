@@ -22,6 +22,7 @@ namespace FacebookMini.Logic
         IEnumerable<IPostData> GetMyPostsData();
         UserProfileData GetLoggedInUserProfileData();
         List<GalleryItem> GetAlbumsGalleryItems();
+        List<GalleryItem> GetLikedPagesGalleryItems();
 
         string GetNoteForPost(string i_PostId);
         void SetNoteForPost(string i_PostId, string i_NoteText);
@@ -29,6 +30,7 @@ namespace FacebookMini.Logic
 
         ICollection<string> GetTagsForPost(string i_PostId);
         void SetTagsForPost(string i_PostId, ICollection<string> i_Tags);
-
+        ICollection<string> GetAllTags();
+        //TODO: update
     }
 }

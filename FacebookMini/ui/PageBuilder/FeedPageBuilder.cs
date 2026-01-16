@@ -63,8 +63,7 @@ namespace FacebookMini.ui.PageBuilder
                 PostComponent postControl = new PostComponent
                 {
                     Margin = new Padding(5, 5, 5, 15),
-                    PostNotesManager = r_Context.NotesManager,
-                    PostTagsManager = r_Context.TagsManager
+                    AppLogic = r_Context.AppLogic
                 };
 
                 postControl.SetPost(postData);
