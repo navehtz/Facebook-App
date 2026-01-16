@@ -119,7 +119,5 @@ namespace FacebookMini.ui
         {
             this.Close();
         }
-
-        // TODO: Separate ui from count total tags logic.
     }
 }
