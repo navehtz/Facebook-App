@@ -1,5 +1,5 @@
 ﻿using Facebook;
-using FacebookMini.CustomComponent;
+using FacebookMini.ui.CustomComponent;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookMini.Logic;

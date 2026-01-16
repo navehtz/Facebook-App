@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FacebookMini.ui.CustomComponent
+namespace FacebookMini.shared.galleryItem
 {
-    internal enum eGalleryItemType
+    public enum eGalleryItemType
     {
         Album,
         Page,
