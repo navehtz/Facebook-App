@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using FacebookMini.shared.adapters;
 using FacebookMini.shared.galleryItem;
+using FacebookMini.shared.profileData;
 
 
 namespace FacebookMini.ui.PageBuilder
@@ -57,6 +58,8 @@ namespace FacebookMini.ui.PageBuilder
 
         private void buildUserInfoPanel()
         {
+            UserProfileData userData = r_Context.AppLogic.GetLoggedInUserProfileData();
+
             m_UserInfoPanel = new Panel
             {
                 Dock = DockStyle.Top,
@@ -69,15 +72,14 @@ namespace FacebookMini.ui.PageBuilder
                 Size = new Size(80, 80),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Location = new Point(10, 10),
-                Image = r_Context.LoggedInUser.ImageNormal
-                        ?? FacebookMini.Properties.Resources.Facebook_default_male_avatar
+                Image = FacebookMini.Properties.Resources.Facebook_default_male_avatar
             };
 
-            if (!string.IsNullOrEmpty(r_Context.LoggedInUser.PictureNormalURL))
+            if (!string.IsNullOrEmpty(userData.ProfilePictureUrl))
             {
                 try
                 {
-                    userPictureBox.LoadAsync(r_Context.LoggedInUser.PictureNormalURL);
+                    userPictureBox.LoadAsync(userData.ProfilePictureUrl);
                     r_Context.UserPictureBoxTopBar.Image = userPictureBox.Image;
                 }
                 catch { }
@@ -88,27 +90,26 @@ namespace FacebookMini.ui.PageBuilder
                 AutoSize = true,
                 Font = new Font("Segoe UI", 14F, FontStyle.Bold),
                 Location = new Point(110, 20),
-                Text = r_Context.LoggedInUser.Name
+                Text = userData.Name
             };
 
             string extraInfo = string.Empty;
 
-            if (!string.IsNullOrEmpty(r_Context.LoggedInUser.Email))
+            if (!string.IsNullOrEmpty(userData.Email))
             {
-                extraInfo += r_Context.LoggedInUser.Email;
+                extraInfo += userData.Email;
             }
 
-            if (r_Context.LoggedInUser.Birthday != null)
+            if (!string.IsNullOrEmpty(userData.Birthday))
             {
                 if (extraInfo.Length > 0) extraInfo += "   |   ";
-                extraInfo += $"Birthday: {r_Context.LoggedInUser.Birthday}";
+                extraInfo += $"Birthday: {userData.Birthday}";
             }
 
-            if (r_Context.LoggedInUser.Location != null &&
-                !string.IsNullOrEmpty(r_Context.LoggedInUser.Location.Name))
+            if (!string.IsNullOrEmpty(userData.LocationName))
             {
                 if (extraInfo.Length > 0) extraInfo += "   |   ";
-                extraInfo += r_Context.LoggedInUser.Location.Name;
+                extraInfo += userData.LocationName;
             }
 
             var userExtraLabel = new Label
@@ -124,7 +125,7 @@ namespace FacebookMini.ui.PageBuilder
             m_UserInfoPanel.Controls.Add(userExtraLabel);
 
             m_ProfilePanel.Controls.Add(m_UserInfoPanel);
-            m_ProfilePanel.Controls.SetChildIndex(m_UserInfoPanel, 0); // מתחת ל-header
+            m_ProfilePanel.Controls.SetChildIndex(m_UserInfoPanel, 0);
         }
 
         private void buildSplitContent()
@@ -209,7 +210,6 @@ namespace FacebookMini.ui.PageBuilder
             m_ProfilePanel.Controls.Add(m_SplitContainer);
             m_ProfilePanel.Controls.SetChildIndex(m_SplitContainer, 0); // Fill
 
-            // Same resize logic you had
             m_ProfilePanel.Resize += (sender, args) =>
             {
                 if (m_ProfilePanel.Width > 0)

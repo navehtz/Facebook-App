@@ -86,6 +86,7 @@
     <Compile Include="shared\adapters\IPostData.cs" />
     <Compile Include="shared\galleryItem\eGalleryItemType.cs" />
     <Compile Include="shared\galleryItem\GalleryItem.cs" />
+    <Compile Include="shared\profileData\UserProfileData.cs" />
     <Compile Include="ui\CustomComponent\NoteEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
