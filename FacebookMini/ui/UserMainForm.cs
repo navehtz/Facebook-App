@@ -3,6 +3,7 @@ using FacebookMini.ui.CustomComponent;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookMini.Logic;
+using FacebookMini.ui.Adapters;
 using FacebookMini.ui.CustomComponent;
 using FacebookMini.ui.PageBuilder;
 using FacebookWrapper.ObjectModel;
@@ -10,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -31,6 +34,9 @@ namespace FacebookMini.ui
         private PageComposer m_Composer;
         private PageBuildContext m_Context;
 
+        private bool m_ProfileLoaded = false;
+        private bool m_FeedLoaded = false;
+
         public UserMainForm()
         {
             InitializeComponent();
@@ -51,6 +57,8 @@ namespace FacebookMini.ui
 
             buildPages();
             showPage(m_ProfilePage);// defult
+
+            startProfileAsyncLoaders();
         }
 
         private void buildPages()
@@ -59,10 +67,181 @@ namespace FacebookMini.ui
             m_FeedPage = m_Composer.Compose(new FeedPageBuilder(m_Context));
         }
 
+
+        private void startProfileAsyncLoaders()
+        {
+            if (m_ProfileLoaded)
+            {
+                return;
+            }
+
+            m_ProfileLoaded = true;
+
+            new Thread(fetchProfilePostsAsync).Start();
+            new Thread(fetchAlbumsAsync).Start();
+            new Thread(fetchPagesAsync).Start();            
+        }
+
+        private void startFeedAsynceLoaders() 
+        {
+            if (m_FeedLoaded)
+            {
+                return;
+            }
+
+            m_FeedLoaded = true;
+
+            new Thread(fetchFeedPostsAsync).Start();
+        }
+
+        private void fetchProfilePostsAsync()
+        {
+            FlowLayoutPanel profilePagePostsFlow = m_ProfilePage.Controls.Find("ProfilePostsFlow", true).FirstOrDefault() as FlowLayoutPanel;
+           
+            if (profilePagePostsFlow == null)
+            {
+                return;
+            }
+
+            var profilePosts = r_AppLogic.GetUserPosts();
+            foreach (Post post in profilePosts)
+            {
+                if (post == null)
+                {
+                    continue;
+                }
+                profilePagePostsFlow.Invoke(new Action(() =>
+                {
+                    PostComponent postControl = new PostComponent
+                    {
+                        Margin = new Padding(5, 5, 5, 15),
+                        PostNotesManager = r_PostNotesManager,
+                        PostTagsManager = r_PostTagsManager
+                    };
+
+                    IPostData postData = new FacebookPostAdapter(post, r_LoggedInUser);
+                    postControl.SetPost(postData);
+
+                    profilePagePostsFlow.Controls.Add(postControl);
+                }));
+            }
+        }
+
+        private void fetchFeedPostsAsync() 
+        {
+            FlowLayoutPanel feedPagePostsFlow = m_FeedPage.Controls.Find("feedPostsFlow", true).FirstOrDefault() as FlowLayoutPanel;
+
+            if (feedPagePostsFlow == null)
+            {
+                return;
+            }
+
+            if (r_LoggedInUser.Friends == null || r_LoggedInUser.Friends.Count == 0)
+            {
+                return;
+            }
+
+            HashSet<KeyValuePair<Post, User>> friendsPosts = new HashSet<KeyValuePair<Post, User>>();
+
+            foreach (User friend in r_LoggedInUser.Friends)
+            {
+                if (friend?.Posts == null) continue;
+
+                foreach (Post post in friend.Posts)
+                {
+                    if (post == null) 
+                    {
+                        continue;
+                    }
+
+                    friendsPosts.Add(new KeyValuePair<Post, User>(post, friend));
+                }
+            }
+
+            foreach (KeyValuePair<Post, User> postOfFriend in friendsPosts)
+            {
+                feedPagePostsFlow.Invoke(new Action(() =>
+                {
+                    var postControl = new PostComponent
+                    {
+                        Margin = new Padding(5, 5, 5, 15),
+                        PostNotesManager = r_PostNotesManager,
+                        PostTagsManager = r_PostTagsManager
+                    };
+
+                    IPostData postData = new FacebookPostAdapter(postOfFriend.Key, postOfFriend.Value);
+                    postControl.SetPost(postData);
+
+                    feedPagePostsFlow.Controls.Add(postControl);
+                }));
+            }
+
+        }
+
+        private void fetchAlbumsAsync()
+        {
+            ItemGalleryComponent albumsGallery = m_ProfilePage.Controls.Find("ProfileAlbumsGallery", true).FirstOrDefault() as ItemGalleryComponent;
+
+            if (albumsGallery == null)
+            {
+                return;
+            }
+
+            var albums = r_AppLogic.GetUserAlbums();
+
+            if (albums != null)
+            {
+                foreach (Album album in albums)
+                {
+                    albumsGallery.Invoke(new Action(() =>
+                    {
+
+                        albumsGallery.SetItem(new GalleryItem
+                        {
+                            Title = album.Name,
+                            Image = album.ImageAlbum,
+                            Tag = album,
+                            ItemType = eGalleryItemType.Album
+                        });
+                    }));
+                }
+            }
+        }
+
+        private void fetchPagesAsync()
+        {
+            ItemGalleryComponent likedPagesGallery = m_ProfilePage.Controls.Find("ProfilePagesGallery", true).FirstOrDefault() as ItemGalleryComponent;
+
+            if (likedPagesGallery == null)
+            {
+                return;
+            }
+
+            var pages = r_AppLogic.GetUserLikedPages();
+
+            if (pages != null)
+            {
+                foreach (Page page in pages)
+                {
+                    likedPagesGallery.Invoke(new Action(() =>
+                    {
+
+                        likedPagesGallery.SetItem(new GalleryItem
+                        {
+                            Title = page.Name,
+                            Image = page.ImageNormal,
+                            Tag = page,
+                            ItemType = eGalleryItemType.Page
+                        });
+                    }));
+                }
+            }
+        }
+
         /// <summary>
         /// Profile page example: posts component + item gallery (albums / liked pages).
         /// </summary>
-      
+
         private void showPage(Control i_Page)
         {
             panelContent.Controls.Clear();
@@ -98,6 +277,7 @@ namespace FacebookMini.ui
                 }
 
                 showPage(m_FeedPage);
+                startFeedAsynceLoaders();
             }
             catch (Exception ex)
             {

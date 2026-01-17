@@ -47,6 +47,16 @@ namespace FacebookMini.ui.CustomComponent
             }
         }
 
+        public void SetItem(GalleryItem i_Item) 
+        {
+            if (i_Item == null)
+            {
+                return;
+            }
+
+            m_Flow.Controls.Add(createTile(i_Item));
+        }
+
         private Control createTile(GalleryItem i_Item)
         {
             Panel panel = new Panel
