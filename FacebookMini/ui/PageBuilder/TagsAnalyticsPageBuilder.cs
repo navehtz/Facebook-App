@@ -86,14 +86,17 @@ namespace FacebookMini.ui.PageBuilder
 
             m_MainPanel.Controls.Add(m_TagsChart);
             m_MainPanel.Controls.SetChildIndex(m_TagsChart, 2);
+
+            bindData();
         }
 
-        public void BindData()
+        private void bindData()
         {
             Series series = m_TagsChart.Series[0];
             series.Points.Clear();
 
-            ICollection<string> allTags = r_Context.TagsManager.GetAllTags();
+            ICollection<string> allTags = r_Context.AppLogic.GetAllTags();
+
             Dictionary<string, int> tagsCountDictionary =
                 new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             int total = 0;

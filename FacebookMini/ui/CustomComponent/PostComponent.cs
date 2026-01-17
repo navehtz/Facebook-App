@@ -8,33 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Facebook;
+using FacebookMini.Logic;
 using FacebookMini.logic.features.postTags;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.ui.CustomComponent;
 using FacebookWrapper.ObjectModel;
-using FacebookMini.ui.Adapters;
+using FacebookMini.shared.adapters;
 
 namespace FacebookMini.ui.CustomComponent
 {
     public partial class PostComponent : UserControl
     {
         public string PostId { get; private set; }
-        public IPostNotesManager PostNotesManager { get; set; }
-        private IPostTagsManager m_PostTagsManager;
         //private static readonly Random sr_Random = new Random();
+
+        public IFacebookAppLogic AppLogic { get; set; }
 
         private Button m_TagsButton;
         private Label m_TagsLabel;
-
-        public IPostTagsManager PostTagsManager
-        {
-            get => m_PostTagsManager;
-            set
-            {
-                m_PostTagsManager = value;
-                updateTagsLabel();
-            }
-        }
 
         public PostComponent()
         { 
@@ -78,7 +69,7 @@ namespace FacebookMini.ui.CustomComponent
             updateTagsLabel();
         }
 
-        // Optional: click handlers (you can raise events here later if you want)
+        //Optional - Maybe add later
         private void label1_Click(object sender, EventArgs e)
         {
             // For example: open profile of m_Post.From
@@ -91,12 +82,12 @@ namespace FacebookMini.ui.CustomComponent
 
         private void btnNote_Click(object sender, EventArgs e)
         {
-            if (PostNotesManager == null || string.IsNullOrEmpty(PostId))
+            if (AppLogic == null || string.IsNullOrEmpty(PostId))
             {
                 return;
             }
 
-            string currentNote = PostNotesManager.GetNoteForPost(PostId) ?? string.Empty;
+            string currentNote = AppLogic.GetNoteForPost(PostId) ?? string.Empty;
 
             using (NoteEditForm noteForm = new NoteEditForm(currentNote))
             {
@@ -106,13 +97,13 @@ namespace FacebookMini.ui.CustomComponent
 
                     if (string.IsNullOrEmpty(newNote))
                     {
-                        PostNotesManager.RemoveNoteForPost(PostId);
+                        AppLogic.RemoveNoteForPost(PostId);
                         btnNote.Text = "Add Note";
                         NoteIcon.Visible = false;
                     }
                     else
                     {
-                        PostNotesManager.SetNoteForPost(PostId, newNote);
+                        AppLogic.SetNoteForPost(PostId, newNote);
                         btnNote.Text = "Edit Note";
                         NoteIcon.Visible = !string.IsNullOrWhiteSpace(newNote);
                     }
@@ -149,98 +140,43 @@ namespace FacebookMini.ui.CustomComponent
 
         private void tagsButton_Click(object sender, EventArgs e)
         {
-            if (m_PostTagsManager != null && !string.IsNullOrEmpty(PostId))
+            if(AppLogic == null || string.IsNullOrEmpty(PostId))
             {
-                ICollection<string> existingTags = m_PostTagsManager.GetPostTags(PostId);
-                StringBuilder tagsStringBuilder = new StringBuilder();
-                bool isFirstTag = true;
+                return;
+            }
 
-                foreach (string tagName in existingTags)
+            string existingTagsText = AppLogic.GetTagsCommaSeparated(PostId);
+
+            using (NoteEditForm dialog = new NoteEditForm(existingTagsText))
+            {
+                dialog.Text = @"Edit tags (comma separated)";
+
+                if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (!isFirstTag)
-                    {
-                        tagsStringBuilder.Append(", ");
-                    }
-                    else
-                    {
-                        isFirstTag = false;
-                    }
-
-                    tagsStringBuilder.Append(tagName);
-                }
-                // TODO: Separate ui from logic.
-                using (NoteEditForm dialog = new NoteEditForm(tagsStringBuilder.ToString()))
-                {
-                    dialog.Text = "Edit tags (comma separated)";
-
-                    if (dialog.ShowDialog(this) == DialogResult.OK)
-                    {
-                        string raw = dialog.NoteText;
-                        List<string> tagsList = new List<string>();
-
-                        if (!string.IsNullOrEmpty(raw))
-                        {
-                            string[] parts = raw.Split(',');
-
-                            foreach (string part in parts)
-                            {
-                                if (part != null)
-                                {
-                                    string tag = part.Trim();
-                                    if (tag.Length > 0)
-                                    {
-                                        tagsList.Add(tag);
-                                    }
-                                }
-                            }
-                        }
-
-                        m_PostTagsManager.SetPostTags(PostId, tagsList);
-                        updateTagsLabel();
-                    }
+                    AppLogic.SetTagsFromCommaSeparated(PostId, dialog.NoteText);
+                    updateTagsLabel();
                 }
             }
         }
 
         private void updateTagsLabel()
         {
-            if (m_TagsLabel == null)
+            string tagsText = string.Empty;
+
+            if(AppLogic != null && !string.IsNullOrEmpty(PostId))
             {
-                return;
+                tagsText = AppLogic.GetTagsCommaSeparated(PostId);
             }
 
-            if (m_PostTagsManager == null || string.IsNullOrEmpty(PostId))
+            if (m_TagsLabel != null)
             {
-                m_TagsLabel.Visible = false;
-            }
-            else
-            {
-                ICollection<string> existingTags = m_PostTagsManager.GetPostTags(PostId);
-
-                if (existingTags == null || existingTags.Count == 0)
+                if (string.IsNullOrEmpty(tagsText))
                 {
                     m_TagsLabel.Visible = false;
                 }
                 else
                 {
-                    StringBuilder tagsStringBuilder = new StringBuilder("Tags: ");
-                    bool isFirstTag = true;
-
-                    foreach (string tagName in existingTags)
-                    {
-                        if (!isFirstTag)
-                        {
-                            tagsStringBuilder.Append(", ");
-                        }
-                        else
-                        {
-                            isFirstTag = false;
-                        }
-
-                        tagsStringBuilder.Append(tagName);
-                    }
-
-                    m_TagsLabel.Text = tagsStringBuilder.ToString();
+                    m_TagsLabel.Text = @"Tags: " + tagsText;
                     m_TagsLabel.Visible = true;
                 }
             }
