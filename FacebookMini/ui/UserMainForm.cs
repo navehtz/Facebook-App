@@ -3,7 +3,7 @@ using FacebookMini.ui.CustomComponent;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookMini.Logic;
-using FacebookMini.ui.Adapters;
+using FacebookMini.shared.adapters;
 using FacebookMini.ui.CustomComponent;
 using FacebookMini.ui.PageBuilder;
 using FacebookWrapper.ObjectModel;
@@ -15,6 +15,8 @@ using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using FacebookMini.shared.adapters;
+using FacebookMini.shared.galleryItem;
 
 namespace FacebookMini.ui
 {
@@ -103,25 +105,24 @@ namespace FacebookMini.ui
                 return;
             }
 
-            var profilePosts = r_AppLogic.GetUserPosts();
-            foreach (Post post in profilePosts)
+            IEnumerable<IPostData> profilePosts = r_AppLogic.GetMyPostsData();
+
+            foreach (IPostData postData in profilePosts)
             {
-                if (post == null)
+                if (postData == null)
                 {
                     continue;
                 }
+
                 profilePagePostsFlow.Invoke(new Action(() =>
                 {
                     PostComponent postControl = new PostComponent
                     {
                         Margin = new Padding(5, 5, 5, 15),
-                        PostNotesManager = r_PostNotesManager,
-                        PostTagsManager = r_PostTagsManager
+                        AppLogic = r_AppLogic
                     };
 
-                    IPostData postData = new FacebookPostAdapter(post, r_LoggedInUser);
                     postControl.SetPost(postData);
-
                     profilePagePostsFlow.Controls.Add(postControl);
                 }));
             }
@@ -141,41 +142,22 @@ namespace FacebookMini.ui
                 return;
             }
 
-            HashSet<KeyValuePair<Post, User>> friendsPosts = new HashSet<KeyValuePair<Post, User>>();
-
-            foreach (User friend in r_LoggedInUser.Friends)
-            {
-                if (friend?.Posts == null) continue;
-
-                foreach (Post post in friend.Posts)
-                {
-                    if (post == null) 
-                    {
-                        continue;
-                    }
-
-                    friendsPosts.Add(new KeyValuePair<Post, User>(post, friend));
-                }
-            }
-
-            foreach (KeyValuePair<Post, User> postOfFriend in friendsPosts)
+            IEnumerable<IPostData> friendsPosts = r_AppLogic.GetFriendsFeedPostsData();
+            
+            foreach (IPostData postOfFriend in friendsPosts)
             {
                 feedPagePostsFlow.Invoke(new Action(() =>
                 {
                     var postControl = new PostComponent
                     {
                         Margin = new Padding(5, 5, 5, 15),
-                        PostNotesManager = r_PostNotesManager,
-                        PostTagsManager = r_PostTagsManager
+                        AppLogic = r_AppLogic
                     };
 
-                    IPostData postData = new FacebookPostAdapter(postOfFriend.Key, postOfFriend.Value);
-                    postControl.SetPost(postData);
-
+                    postControl.SetPost(postOfFriend);
                     feedPagePostsFlow.Controls.Add(postControl);
                 }));
             }
-
         }
 
         private void fetchAlbumsAsync()
@@ -187,23 +169,16 @@ namespace FacebookMini.ui
                 return;
             }
 
-            var albums = r_AppLogic.GetUserAlbums();
+            List<GalleryItem> albumsItems = r_AppLogic.GetAlbumsGalleryItems();
 
-            if (albums != null)
+            if (albumsItems != null)
             {
-                foreach (Album album in albums)
+                foreach (GalleryItem album in albumsItems)
                 {
                     albumsGallery.Invoke(new Action(() =>
-                    {
-
-                        albumsGallery.SetItem(new GalleryItem
                         {
-                            Title = album.Name,
-                            Image = album.ImageAlbum,
-                            Tag = album,
-                            ItemType = eGalleryItemType.Album
-                        });
-                    }));
+                            albumsGallery.SetItem(album);
+                        }));
                 }
             }
         }
@@ -217,23 +192,16 @@ namespace FacebookMini.ui
                 return;
             }
 
-            var pages = r_AppLogic.GetUserLikedPages();
+            List<GalleryItem> pagesItems = r_AppLogic.GetLikedPagesGalleryItems();
 
-            if (pages != null)
+            if (pagesItems != null)
             {
-                foreach (Page page in pages)
+                foreach (GalleryItem page in pagesItems)
                 {
                     likedPagesGallery.Invoke(new Action(() =>
-                    {
-
-                        likedPagesGallery.SetItem(new GalleryItem
                         {
-                            Title = page.Name,
-                            Image = page.ImageNormal,
-                            Tag = page,
-                            ItemType = eGalleryItemType.Page
-                        });
-                    }));
+                            likedPagesGallery.SetItem(page);
+                        }));
                 }
             }
         }

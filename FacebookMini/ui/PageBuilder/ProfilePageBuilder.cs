@@ -235,51 +235,6 @@ namespace FacebookMini.ui.PageBuilder
             m_PagesSection.Name = "ProfilePagesGallery";
         }
 
-        private void bindPosts()
-        {
-            IEnumerable<IPostData> userPosts = r_Context.AppLogic.GetMyPostsData();
-
-            foreach (IPostData postData in userPosts)
-            {
-                PostComponent postControl = new PostComponent
-                {
-                    Margin = new Padding(5, 5, 5, 15),
-                    AppLogic = r_Context.AppLogic,
-                };
-
-                postControl.SetPost(postData);
-                m_PostsFlowPanel.Controls.Add(postControl);
-            }
-        }
-        
-        private void bindAlbums()
-        {
-            List<GalleryItem> albumsItems = r_Context.AppLogic.GetAlbumsGalleryItems();
-
-            m_AlbumsSection.SetItems(albumsItems);
-
-            if (albumsItems.Count == 0)
-            {
-                m_AlbumsSection.Visible = false;
-                m_AlbumsTitleLabel.Visible = false;
-                m_AlbumsSection.Height = 0;
-            }
-        }
-
-        private void bindPages()
-        {
-            List<GalleryItem> pagesItems = r_Context.AppLogic.GetLikedPagesGalleryItems();
-
-            m_PagesSection.SetItems(pagesItems);
-
-            if (pagesItems.Count == 0)
-            {
-                m_PagesSection.Visible = false;
-                m_PagesTitleLabel.Visible = false;
-                m_PagesSection.Height = 0;
-            }
-        }
-
         public Control GetResult()
         {
             return m_ProfilePanel;
