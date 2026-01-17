@@ -23,7 +23,6 @@ namespace FacebookMini.ui
             i_Builder.Reset();
             i_Builder.BuildHeader();
             i_Builder.BuildBody();
-            i_Builder.BindData();
             return i_Builder.GetResult();
         }
     }

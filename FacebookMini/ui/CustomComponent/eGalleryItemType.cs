@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FacebookMini.ui.CustomComponent
 {
-    internal enum eGalleryItemType
+    public enum eGalleryItemType
     {
         Album,
         Page,

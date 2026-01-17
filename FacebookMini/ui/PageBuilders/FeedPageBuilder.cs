@@ -53,6 +53,8 @@ namespace FacebookMini.ui.PageBuilder
 
             m_FeedPanel.Controls.Add(m_PostsFlowPanel);
             m_FeedPanel.Controls.SetChildIndex(m_PostsFlowPanel, 0);
+
+            m_PostsFlowPanel.Name = "feedPostsFlow";
         }
 
         public void BindData()

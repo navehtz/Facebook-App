@@ -8,7 +8,7 @@ using FacebookMini.ui.CustomComponent;
 
 namespace FacebookMini.ui.CustomComponent
 {
-    internal class GalleryItem
+    public class GalleryItem
     {
         public Image Image { get; set; }
         public string Title { get; set; }
