@@ -12,7 +12,6 @@ namespace FacebookMini.ui
         void Reset();
         void BuildHeader();
         void BuildBody();
-        void BindData();
         Control GetResult();
     }
 }

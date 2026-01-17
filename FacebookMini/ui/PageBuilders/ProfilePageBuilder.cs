@@ -54,6 +54,7 @@ namespace FacebookMini.ui.PageBuilder
         {
             buildUserInfoPanel();
             buildSplitContent();
+            namingSectionsAndPanels();
         }
 
         private void buildUserInfoPanel()
@@ -221,12 +222,19 @@ namespace FacebookMini.ui.PageBuilder
             };
         }
 
-        public void BindData()
+        private void namingSectionsAndPanels() 
         {
-            bindPosts();
-            bindAlbums();
-            bindPages();
+            m_PostsFlowPanel.Name = "ProfilePostsFlow";
+            m_AlbumsSection.Name = "ProfileAlbumsGallery";
+            m_PagesSection.Name = "ProfilePagesGallery";
         }
+
+        //public void BindData()
+        //{
+        //    bindPosts();
+        //    bindAlbums();
+        //    bindPages();
+        //}
 
         private void bindPosts()
         {
@@ -241,14 +249,14 @@ namespace FacebookMini.ui.PageBuilder
                     PostNotesManager = r_Context.NotesManager,
                     PostTagsManager = r_Context.TagsManager
                 };
-
+              
                 IPostData postData = new FacebookPostAdapter(post, r_Context.LoggedInUser);
                 postControl.SetPost(postData);
 
                 m_PostsFlowPanel.Controls.Add(postControl);
             }
         }
-
+        
         private void bindAlbums()
         {
             var albumsItems = new List<GalleryItem>();
