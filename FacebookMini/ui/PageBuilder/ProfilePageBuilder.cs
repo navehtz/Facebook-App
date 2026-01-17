@@ -54,6 +54,7 @@ namespace FacebookMini.ui.PageBuilder
         {
             buildUserInfoPanel();
             buildSplitContent();
+            namingSectionsAndPanels();
         }
 
         private void buildUserInfoPanel()
@@ -227,11 +228,11 @@ namespace FacebookMini.ui.PageBuilder
             };
         }
 
-        public void BindData()
+        private void namingSectionsAndPanels() 
         {
-            bindPosts();
-            bindAlbums();
-            bindPages();
+            m_PostsFlowPanel.Name = "ProfilePostsFlow";
+            m_AlbumsSection.Name = "ProfileAlbumsGallery";
+            m_PagesSection.Name = "ProfilePagesGallery";
         }
 
         private void bindPosts()
@@ -250,7 +251,7 @@ namespace FacebookMini.ui.PageBuilder
                 m_PostsFlowPanel.Controls.Add(postControl);
             }
         }
-
+        
         private void bindAlbums()
         {
             List<GalleryItem> albumsItems = r_Context.AppLogic.GetAlbumsGalleryItems();
