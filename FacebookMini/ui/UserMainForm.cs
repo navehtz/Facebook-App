@@ -65,8 +65,8 @@ namespace FacebookMini.ui
 
         private void buildPages()
         {
-            m_ProfilePage = m_Composer.Compose(new ProfilePageBuilder(m_Context));
-            m_FeedPage = m_Composer.Compose(new FeedPageBuilder(m_Context));
+            m_ProfilePage = m_Composer.Compose(new ProfilePageBuilder());
+            m_FeedPage = m_Composer.Compose(new FeedPageBuilder());
         }
 
 
@@ -259,7 +259,7 @@ namespace FacebookMini.ui
         
         private void buttonTagsAnalytics_Click(object sender, EventArgs e)
         {
-            m_TagsAnalyticsPage = m_Composer.Compose(new TagsAnalyticsPageBuilder(m_Context));
+            m_TagsAnalyticsPage = m_Composer.Compose(new TagsAnalyticsPageBuilder());
             showPage(m_TagsAnalyticsPage);
         }
 
