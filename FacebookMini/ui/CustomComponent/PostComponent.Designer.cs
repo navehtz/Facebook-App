@@ -20,6 +20,9 @@ namespace FacebookMini.ui.CustomComponent
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.Label NameLabel;
+            System.Windows.Forms.Label LikesLabel;
+            System.Windows.Forms.Label CommentsLabel;
             this.iPostDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.DateTimeLabel = new System.Windows.Forms.Label();
             this.btnNote = new System.Windows.Forms.Button();
@@ -29,9 +32,9 @@ namespace FacebookMini.ui.CustomComponent
             this.ProfilePicPictureBox = new System.Windows.Forms.PictureBox();
             this.MessagePanel = new System.Windows.Forms.Panel();
             this.CaptionBox = new System.Windows.Forms.RichTextBox();
-            this.NameLabel = new System.Windows.Forms.Label();
-            this.LikesLabel = new System.Windows.Forms.Label();
-            this.CommentsLabel = new System.Windows.Forms.Label();
+            NameLabel = new System.Windows.Forms.Label();
+            LikesLabel = new System.Windows.Forms.Label();
+            CommentsLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.iPostDataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NoteIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CommentsPictureBox)).BeginInit();
@@ -40,46 +43,9 @@ namespace FacebookMini.ui.CustomComponent
             this.MessagePanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // NameLabel
-            // 
-            NameLabel.AutoSize = true;
-            NameLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.iPostDataBindingSource, "OwnerName", true));
-            NameLabel.Location = new System.Drawing.Point(136, 37);
-            NameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            NameLabel.Name = "NameLabel";
-            NameLabel.Size = new System.Drawing.Size(51, 20);
-            NameLabel.TabIndex = 1;
-            NameLabel.Text = "Name";
-            NameLabel.Click += new System.EventHandler(this.label1_Click);
-            // 
             // iPostDataBindingSource
             // 
             this.iPostDataBindingSource.DataSource = typeof(FacebookMini.shared.adapters.IPostData);
-            // 
-            // LikesLabel
-            // 
-            LikesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            LikesLabel.AutoSize = true;
-            LikesLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.iPostDataBindingSource, "LikesCount", true));
-            LikesLabel.Location = new System.Drawing.Point(85, 380);
-            LikesLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            LikesLabel.Name = "LikesLabel";
-            LikesLabel.Size = new System.Drawing.Size(59, 20);
-            LikesLabel.TabIndex = 4;
-            LikesLabel.Text = "0 Likes";
-            // 
-            // CommentsLabel
-            // 
-            CommentsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            CommentsLabel.AutoSize = true;
-            CommentsLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.iPostDataBindingSource, "CommentsCount", true));
-            CommentsLabel.Location = new System.Drawing.Point(235, 380);
-            CommentsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            CommentsLabel.Name = "CommentsLabel";
-            CommentsLabel.Size = new System.Drawing.Size(99, 20);
-            CommentsLabel.TabIndex = 5;
-            CommentsLabel.Text = "0 Comments";
-            CommentsLabel.Click += new System.EventHandler(this.CommentsLabel_Click);
             // 
             // DateTimeLabel
             // 
@@ -150,9 +116,9 @@ namespace FacebookMini.ui.CustomComponent
             // 
             // ProfilePicPictureBox
             // 
-            this.ProfilePicPictureBox.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.iPostDataBindingSource, "OwnerPictureUrl", true));
+            this.ProfilePicPictureBox.DataBindings.Add(new System.Windows.Forms.Binding("ImageLocation", this.iPostDataBindingSource, "OwnerPictureUrl", true));
             this.ProfilePicPictureBox.ErrorImage = global::FacebookMini.Properties.Resources.no_image;
-            this.ProfilePicPictureBox.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar;
+            this.ProfilePicPictureBox.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar1;
             this.ProfilePicPictureBox.InitialImage = null;
             this.ProfilePicPictureBox.Location = new System.Drawing.Point(22, 23);
             this.ProfilePicPictureBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -195,6 +161,43 @@ namespace FacebookMini.ui.CustomComponent
             this.CaptionBox.TabStop = false;
             this.CaptionBox.Text = "";
             // 
+            // NameLabel
+            // 
+            NameLabel.AutoSize = true;
+            NameLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.iPostDataBindingSource, "OwnerName", true));
+            NameLabel.Location = new System.Drawing.Point(136, 37);
+            NameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            NameLabel.Name = "NameLabel";
+            NameLabel.Size = new System.Drawing.Size(51, 20);
+            NameLabel.TabIndex = 1;
+            NameLabel.Text = "Name";
+            NameLabel.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // LikesLabel
+            // 
+            LikesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            LikesLabel.AutoSize = true;
+            LikesLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.iPostDataBindingSource, "LikesCount", true));
+            LikesLabel.Location = new System.Drawing.Point(85, 380);
+            LikesLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            LikesLabel.Name = "LikesLabel";
+            LikesLabel.Size = new System.Drawing.Size(59, 20);
+            LikesLabel.TabIndex = 4;
+            LikesLabel.Text = "0 Likes";
+            // 
+            // CommentsLabel
+            // 
+            CommentsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            CommentsLabel.AutoSize = true;
+            CommentsLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.iPostDataBindingSource, "CommentsCount", true));
+            CommentsLabel.Location = new System.Drawing.Point(235, 380);
+            CommentsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            CommentsLabel.Name = "CommentsLabel";
+            CommentsLabel.Size = new System.Drawing.Size(99, 20);
+            CommentsLabel.TabIndex = 5;
+            CommentsLabel.Text = "0 Comments";
+            CommentsLabel.Click += new System.EventHandler(this.CommentsLabel_Click);
+            // 
             // PostComponent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -233,9 +236,6 @@ namespace FacebookMini.ui.CustomComponent
         private System.Windows.Forms.PictureBox CommentsPictureBox;
         private System.Windows.Forms.Button btnNote;
         private System.Windows.Forms.PictureBox NoteIcon;
-        private System.Windows.Forms.Label NameLabel;
-        private System.Windows.Forms.Label LikesLabel;
-        private System.Windows.Forms.Label CommentsLabel;
 
         // NEW
         private System.Windows.Forms.Panel MessagePanel;
