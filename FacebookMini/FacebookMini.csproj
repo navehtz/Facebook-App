@@ -152,6 +152,8 @@
     <EmbeddedResource Include="ui\UserMainForm.resx">
       <DependentUpon>UserMainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Properties\DataSources\FacebookMini.shared.adapters.IPostData.datasource" />
+    <None Include="Properties\DataSources\FacebookWrapper.ObjectModel.Post.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -199,5 +201,6 @@
   <ItemGroup>
     <None Include="Resources\photos\Old Facebook Like, Cornered - 1106x1008.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
