@@ -4,6 +4,7 @@ using FacebookMini.logic.features.postTags;
 using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using FacebookMini.shared.adapters;
 using FacebookMini.shared.galleryItem;
 using FacebookMini.shared.profileData;
@@ -28,7 +29,6 @@ namespace FacebookMini.Logic
 
         public IEnumerable<IPostData> GetFriendsFeedPostsData()
         {
-
             List<IPostData> feedPosts = new List<IPostData>();
 
             if(LoggedInUser?.Friends != null)
@@ -56,9 +56,9 @@ namespace FacebookMini.Logic
                             continue;
                         }
 
-                        IPostData postData = new FacebookPostAdapter(post, friend);
+                        FacebookPostAdapter postAdapter = new FacebookPostAdapter(post, friend);
 
-                        feedPosts.Add(postData);
+                        feedPosts.Add(postAdapter.ToSnapshot());
 
                         if(!string.IsNullOrEmpty(postId))
                         {
@@ -79,12 +79,14 @@ namespace FacebookMini.Logic
             {
                 foreach(Post post in LoggedInUser.Posts)
                 {
-                    if(post != null)
+                    if(post == null)
                     {
-                        IPostData postData = new FacebookPostAdapter(post, LoggedInUser);
-
-                        postsData.Add(postData);
+                        continue;
                     }
+
+                    FacebookPostAdapter postAdapter = new FacebookPostAdapter(post, LoggedInUser);
+
+                    postsData.Add(postAdapter.ToSnapshot());
                 }
             }
 
