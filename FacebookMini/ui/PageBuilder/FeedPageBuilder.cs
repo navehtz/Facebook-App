@@ -38,6 +38,7 @@ namespace FacebookMini.ui.PageBuilder
 
             m_FeedPanel.Controls.Add(m_HeaderLabel);
         }
+
         public void BuildBody()
         {
             m_PostsFlowPanel = new FlowLayoutPanel
@@ -54,6 +55,7 @@ namespace FacebookMini.ui.PageBuilder
 
             m_PostsFlowPanel.Name = "feedPostsFlow";
         }
+
         public Control GetResult()
         {
             return m_FeedPanel;

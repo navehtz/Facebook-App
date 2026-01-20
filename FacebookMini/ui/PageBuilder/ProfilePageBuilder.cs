@@ -93,13 +93,13 @@ namespace FacebookMini.ui.PageBuilder
                 catch { }
             }
 
-            var userNameLabel = new Label
-            {
-                AutoSize = true,
-                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                Location = new Point(110, 20),
-                Text = userData.Name
-            };
+            Label userNameLabel = new Label
+                  {
+                      AutoSize = true,
+                      Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+                      Location = new Point(110, 20),
+                      Text = userData.Name
+                  };
 
             string extraInfo = string.Empty;
 
@@ -120,7 +120,7 @@ namespace FacebookMini.ui.PageBuilder
                 extraInfo += userData.LocationName;
             }
 
-            var userExtraLabel = new Label
+            Label userExtraLabel = new Label
             {
                 AutoSize = true,
                 Font = new Font("Segoe UI", 9F),
@@ -147,7 +147,7 @@ namespace FacebookMini.ui.PageBuilder
             // LEFT: posts
             var postsSectionPanel = new Panel { Dock = DockStyle.Fill };
 
-            var postsTitleLabel = new Label
+            Label postsTitleLabel = new Label
             {
                 Text = "Posts",
                 Dock = DockStyle.Top,
@@ -170,7 +170,7 @@ namespace FacebookMini.ui.PageBuilder
             m_SplitContainer.Panel1.Controls.Add(postsSectionPanel);
 
             // RIGHT: albums + pages
-            var tlpRight = new TableLayoutPanel
+            TableLayoutPanel tlpRight = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 1,
@@ -192,7 +192,7 @@ namespace FacebookMini.ui.PageBuilder
             };
             m_AlbumsSection = new ItemGalleryComponent { Dock = DockStyle.Fill };
 
-            var albumsContainer = new Panel { Dock = DockStyle.Fill };
+            Panel albumsContainer = new Panel { Dock = DockStyle.Fill };
             albumsContainer.Controls.Add(m_AlbumsSection);
             albumsContainer.Controls.Add(m_AlbumsTitleLabel);
 
