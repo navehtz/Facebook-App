@@ -63,6 +63,16 @@ namespace FacebookMini.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Coments {
+            get {
+                object obj = ResourceManager.GetObject("Coments", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Comments {
             get {
                 object obj = ResourceManager.GetObject("Comments", resourceCulture);
@@ -81,12 +91,12 @@ namespace FacebookMini.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Icon Facebook_icon {
+        internal static System.Drawing.Bitmap Facebook_default_male_avatar1 {
             get {
-                object obj = ResourceManager.GetObject("Facebook_icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                object obj = ResourceManager.GetObject("Facebook_default_male_avatar1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -126,6 +136,16 @@ namespace FacebookMini.Properties {
         internal static System.Drawing.Bitmap note {
             get {
                 object obj = ResourceManager.GetObject("note", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Old_Facebook_Like__Cornered___1106x1008 {
+            get {
+                object obj = ResourceManager.GetObject("Old_Facebook_Like__Cornered___1106x1008", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -21,6 +21,7 @@ namespace FacebookMini.ui.PageBuilder
         public Control Compose(IPageBuilder i_Builder)
         {
             i_Builder.Reset();
+            i_Builder.DeliverContext(r_Context);
             i_Builder.BuildHeader();
             i_Builder.BuildBody();
             return i_Builder.GetResult();
