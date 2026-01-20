@@ -7,139 +7,94 @@ using System.Threading.Tasks;
 
 namespace FacebookMini.shared.adapters
 {
-    public class FacebookPostAdapter : IPostData
+    public class FacebookPostAdapter
     {
         private readonly Post r_Post;
         private readonly User r_Owner;
+
         private static readonly Random sr_Random = new Random();
 
         public FacebookPostAdapter(Post i_Post, User i_Owner)
         {
-            r_Post = i_Post ?? throw new ArgumentNullException(nameof(i_Post));
-            r_Owner = i_Owner ?? throw new ArgumentNullException(nameof(i_Owner));
+            r_Post = i_Post;
+            r_Owner = i_Owner;
         }
 
-        public string Id
+        public PostDataSnapshot ToSnapshot()
         {
-            get
+            PostDataSnapshot postDataSnapshot = new PostDataSnapshot
+                                            {
+                                                Id = r_Post.Id ?? string.Empty,
+                                                OwnerName = r_Owner.Name ?? string.Empty,
+                                                OwnerPictureUrl = r_Owner.PictureNormalURL ?? string.Empty
+                                            };
+
+            if (r_Post.CreatedTime != null)
             {
-                string result = string.Empty;
-
-                if (r_Post.Id != null)
-                {
-                    result = r_Post.Id;
-                }
-
-                return result;
+                postDataSnapshot.CreatedTimeText = r_Post.CreatedTime.Value.ToString("g");
             }
+            else
+            {
+                postDataSnapshot.CreatedTimeText = string.Empty;
+            }
+
+            if (!string.IsNullOrEmpty(r_Post.Message))
+            {
+                postDataSnapshot.CaptionText = r_Post.Message;
+            }
+            else if (!string.IsNullOrEmpty(r_Post.Caption))
+            {
+                postDataSnapshot.CaptionText = r_Post.Caption;
+            }
+            else
+            {
+                postDataSnapshot.CaptionText = string.Empty;
+            }
+
+            postDataSnapshot.LikesCount = getLikesCount();
+
+            postDataSnapshot.CommentsCount = getCommentsCount();
+
+            return postDataSnapshot;
         }
 
-        public string OwnerName
+        private int getLikesCount()
         {
-            get
+            int count = 0;
+
+            try
             {
-                string result = string.Empty;
-
-                if (r_Owner.Name != null)
+                if (r_Post.LikedBy != null)
                 {
-                    result = r_Owner.Name;
+                    count = r_Post.LikedBy.Count;
                 }
-
-                return result;
             }
+            catch
+            {
+                count = sr_Random.Next(5, 150);
+            }
+
+            return count;
         }
 
-        public string OwnerPictureUrl
+        private int getCommentsCount()
         {
-            get
+            int count = 0;
+
+            try
             {
-                string result = string.Empty;
-
-                if (!string.IsNullOrEmpty(r_Owner.PictureNormalURL))
+                if (r_Post.Comments != null)
                 {
-                    result = r_Owner.PictureNormalURL;
+                    count = r_Post.Comments.Count;
                 }
-
-                return result;
             }
+            catch
+            {
+                count = sr_Random.Next(0, 50);
+            }
+
+            return count;
         }
 
-        public string CreatedTimeText
-        {
-            get
-            {
-                string result = string.Empty;
-
-                if (r_Post.CreatedTime != null)
-                {
-                    result = r_Post.CreatedTime.Value.ToString("g");
-                }
-
-                return result;
-            }
-        }
-
-        public string CaptionText
-        {
-            get
-            {
-                string result = string.Empty;
-
-                if (!string.IsNullOrEmpty(r_Post.Message))
-                {
-                    result = r_Post.Message;
-                }
-                else if (!string.IsNullOrEmpty(r_Post.Caption))
-                {
-                    result = r_Post.Caption;
-                }
-
-                return result;
-            }
-        }
-
-        public int LikesCount
-        {
-            get
-            {
-                int result = 0;
-
-                try
-                {
-                    if (r_Post.LikedBy != null)
-                    {
-                        result = r_Post.LikedBy.Count;
-                    }
-                }
-                catch
-                {
-                    result = sr_Random.Next(5, 150);
-                }
-
-                return result;
-            }
-        }
-
-        public int CommentsCount
-        {
-            get
-            {
-                int result = 0;
-
-                try
-                {
-                    if (r_Post.Comments != null)
-                    {
-                        result = r_Post.Comments.Count;
-                    }
-                }
-                catch
-                {
-                    result = sr_Random.Next(0, 50);
-                }
-
-                return result;
-            }
-        }
     }
 }

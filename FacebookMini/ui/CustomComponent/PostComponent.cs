@@ -20,6 +20,9 @@ namespace FacebookMini.ui.CustomComponent
     public partial class PostComponent : UserControl
     {
         public string PostId { get; private set; }
+
+        private  IPostData m_PostData;
+        private bool m_IsLikedByUser = false;
         //private static readonly Random sr_Random = new Random();
 
         public IFacebookAppLogic AppLogic { get; set; }
@@ -38,31 +41,10 @@ namespace FacebookMini.ui.CustomComponent
         /// </summary>
         public void SetPost(IPostData i_PostData)
         {
-            if (i_PostData == null)
-            {
-                throw new ArgumentNullException(nameof(i_PostData));
-            }
+            m_PostData = i_PostData ?? throw new ArgumentNullException(nameof(i_PostData));
 
-            NameLabel.Text = i_PostData.OwnerName;
+            iPostDataBindingSource.DataSource = m_PostData;
 
-            DateTimeLabel.Text = i_PostData.CreatedTimeText;
-
-            CaptionBox.Text = i_PostData.CaptionText;
-
-            LikesLabel.Text = $"{i_PostData.LikesCount} Likes";
-            CommentsLabel.Text = $"{i_PostData.CommentsCount} Comments";
-
-            if (!string.IsNullOrEmpty(i_PostData.OwnerPictureUrl))
-            {
-                try 
-                { 
-                    ProfilePicPictureBox.LoadAsync(i_PostData.OwnerPictureUrl);
-                }
-                catch 
-                {
-                    // ignore – keep default avatar
-                }
-            }
 
             PostId = i_PostData.Id;
 
@@ -98,13 +80,13 @@ namespace FacebookMini.ui.CustomComponent
                     if (string.IsNullOrEmpty(newNote))
                     {
                         AppLogic.RemoveNoteForPost(PostId);
-                        btnNote.Text = "Add Note";
+                        btnNote.Text = @"Add Note";
                         NoteIcon.Visible = false;
                     }
                     else
                     {
                         AppLogic.SetNoteForPost(PostId, newNote);
-                        btnNote.Text = "Edit Note";
+                        btnNote.Text = @"Edit Note";
                         NoteIcon.Visible = !string.IsNullOrWhiteSpace(newNote);
                     }
                 }
@@ -115,7 +97,7 @@ namespace FacebookMini.ui.CustomComponent
         {
             // "Tags" button – next to the Note button
             m_TagsButton = new Button();
-            m_TagsButton.Text = "Tags";
+            m_TagsButton.Text = @"Tags";
             m_TagsButton.Width = 60;
             m_TagsButton.Height = 26;
             m_TagsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -176,9 +158,44 @@ namespace FacebookMini.ui.CustomComponent
                 }
                 else
                 {
-                    m_TagsLabel.Text = @"Tags: " + tagsText;
+                    m_TagsLabel.Text = $@"Tags: {tagsText}";
                     m_TagsLabel.Visible = true;
                 }
+            }
+        }
+
+        private void LikesPictureBox_Click(object sender, EventArgs e)
+        {
+            if (m_PostData == null)
+            {
+                return;
+            }
+
+            if (m_IsLikedByUser)
+            {
+                m_IsLikedByUser = false;
+                LikesPictureBox.BackColor = Color.Transparent;
+                m_PostData.LikesCount -= 1;
+            }
+            else
+            {
+                m_IsLikedByUser = true;
+                m_PostData.LikesCount += 1;
+            }
+
+            LikesLabel.Text = $@"{m_PostData.LikesText}";
+        }
+
+        private void LikesPictureBox_MouseEnter(object sender, EventArgs e)
+        {
+            LikesPictureBox.BackColor = Color.LightGray;
+        }
+
+        private void LikesPictureBox_MouseLeave(object sender, EventArgs e)
+        {
+            if(!m_IsLikedByUser)
+            {
+                LikesPictureBox.BackColor = Color.Transparent;
             }
         }
     }
