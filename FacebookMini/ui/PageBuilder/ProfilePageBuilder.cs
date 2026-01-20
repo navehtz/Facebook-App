@@ -48,6 +48,7 @@ namespace FacebookMini.ui.PageBuilder
             };
 
             m_ProfilePanel.Controls.Add(m_LabelHeader);
+            m_LabelHeader.Name = "ProfileHeaderLabel";
         }
 
         public void BuildBody()

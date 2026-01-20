@@ -30,5 +30,7 @@ namespace FacebookMini.Logic
         ICollection<string> GetAllTags();
         string GetTagsCommaSeparated(string i_PostId);
         void SetTagsFromCommaSeparated(string i_PostId, string i_RawTagsText);
+
+        bool IsUserFriendsAccessibleAndHasFriends();
     }
 }
