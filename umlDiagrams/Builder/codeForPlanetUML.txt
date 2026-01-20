@@ -1,0 +1,31 @@
+@startuml
+title Build Profile Page using Builder (Product created during construction)
+
+participant ":UserMainForm" as Client
+participant ":PageComposer" as Director
+participant ":ProfilePageBuilder" as Builder
+
+Client -> Director : Compose(ProfilePageBuilder)
+activate Director
+
+Director -> Builder : Reset()
+activate Builder
+
+' Product is created inside Reset() (m_ProfilePanel = new Panel ...)
+create "Profile Page\n:Control" as Product
+Builder -> Product : new Panel()
+
+Director -> Builder : DeliverContext(context)
+Director -> Builder : BuildHeader()
+Director -> Builder : BuildBody()
+Director -> Builder : GetResult()
+
+Builder --> Director : Product
+deactivate Builder
+
+Director --> Client : Product
+deactivate Director
+
+Client -> Client : showPage(Product)
+
+@enduml

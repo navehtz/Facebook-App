@@ -15,11 +15,6 @@ namespace FacebookMini.ui.PageBuilder
         private Label m_HeaderLabel;
         private FlowLayoutPanel m_PostsFlowPanel;
 
-        //public FeedPageBuilder(PageBuildContext i_Context)
-        //{
-        //    m_Context = i_Context;
-        //}
-
         public void Reset()
         {
             m_FeedPanel = new Panel { Dock = DockStyle.Fill };
@@ -41,7 +36,6 @@ namespace FacebookMini.ui.PageBuilder
 
             m_FeedPanel.Controls.Add(m_HeaderLabel);
         }
-
         public void BuildBody()
         {
             m_PostsFlowPanel = new FlowLayoutPanel
@@ -58,24 +52,6 @@ namespace FacebookMini.ui.PageBuilder
 
             m_PostsFlowPanel.Name = "feedPostsFlow";
         }
-
-        public void BindData()
-        {
-            IEnumerable<IPostData> feedPosts = m_Context.AppLogic.GetFriendsFeedPostsData();
-
-            foreach (IPostData postData in feedPosts)
-            {
-                PostComponent postControl = new PostComponent
-                {
-                    Margin = new Padding(5, 5, 5, 15),
-                    AppLogic = m_Context.AppLogic
-                };
-
-                postControl.SetPost(postData);
-                m_PostsFlowPanel.Controls.Add(postControl);
-            }
-        }
-
         public Control GetResult()
         {
             return m_FeedPanel;
