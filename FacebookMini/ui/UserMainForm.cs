@@ -3,7 +3,6 @@ using FacebookMini.ui.CustomComponent;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookMini.Logic;
-using FacebookMini.shared.adapters;
 using FacebookMini.ui.CustomComponent;
 using FacebookMini.ui.PageBuilder;
 using FacebookWrapper.ObjectModel;
@@ -15,8 +14,10 @@ using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using CefSharp;
 using FacebookMini.shared.adapters;
 using FacebookMini.shared.galleryItem;
+using IPostData = FacebookMini.shared.adapters.IPostData;
 
 namespace FacebookMini.ui
 {
@@ -114,7 +115,7 @@ namespace FacebookMini.ui
                     continue;
                 }
 
-                profilePagePostsFlow.Invoke(new Action(() =>
+                profilePagePostsFlow.BeginInvoke(new Action(() =>
                 {
                     PostComponent postControl = new PostComponent
                     {
@@ -146,17 +147,17 @@ namespace FacebookMini.ui
             
             foreach (IPostData postOfFriend in friendsPosts)
             {
-                feedPagePostsFlow.Invoke(new Action(() =>
-                {
-                    var postControl = new PostComponent
+                feedPagePostsFlow.BeginInvoke(
+                    new Action(() =>
                     {
-                        Margin = new Padding(5, 5, 5, 15),
-                        AppLogic = r_AppLogic
-                    };
+                        var postControl = new PostComponent
+                              {
+                                  Margin = new Padding(5, 5, 5, 15), AppLogic = r_AppLogic
+                              };
 
-                    postControl.SetPost(postOfFriend);
-                    feedPagePostsFlow.Controls.Add(postControl);
-                }));
+                        postControl.SetPost(postOfFriend);
+                        feedPagePostsFlow.Controls.Add(postControl);
+                    }));
             }
         }
 
@@ -175,7 +176,7 @@ namespace FacebookMini.ui
             {
                 foreach (GalleryItem album in albumsItems)
                 {
-                    albumsGallery.Invoke(new Action(() =>
+                    albumsGallery.BeginInvoke(new Action(() =>
                         {
                             albumsGallery.SetItem(album);
                         }));
@@ -198,7 +199,7 @@ namespace FacebookMini.ui
             {
                 foreach (GalleryItem page in pagesItems)
                 {
-                    likedPagesGallery.Invoke(new Action(() =>
+                    likedPagesGallery.BeginInvoke(new Action(() =>
                         {
                             likedPagesGallery.SetItem(page);
                         }));
