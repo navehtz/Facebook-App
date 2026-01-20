@@ -19,10 +19,12 @@ namespace FacebookMini.ui.PageBuilder
         {
             m_FeedPanel = new Panel { Dock = DockStyle.Fill };
         }
+
         public void DeliverContext(PageBuildContext i_Context) 
         {
             m_Context = i_Context;
         }
+
         public void BuildHeader()
         {
             m_HeaderLabel = new Label
