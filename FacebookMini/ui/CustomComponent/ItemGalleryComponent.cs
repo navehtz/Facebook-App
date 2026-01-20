@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FacebookMini.shared.galleryItem;
 using FacebookMini.ui.CustomComponent;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace FacebookMini.CustomComponent
+namespace FacebookMini.ui.CustomComponent
 {
     public partial class ItemGalleryComponent : UserControl
     {
@@ -58,31 +59,31 @@ namespace FacebookMini.CustomComponent
 
         private Control createTile(GalleryItem i_Item)
         {
-            var panel = new Panel
-                            {
-                                Width = 160,
-                                Height = 120,
-                                Margin = new Padding(3)
-                            };
+            Panel panel = new Panel
+                              {
+                                  Width = 160,
+                                  Height = 120,
+                                  Margin = new Padding(3)
+                              };
 
-            var pic = new PictureBox
-                          {
-                              Image = i_Item.Image,
-                              Dock = DockStyle.Top,
-                              Height = 80,
-                              SizeMode = PictureBoxSizeMode.Zoom
-                          };
+            PictureBox pic = new PictureBox
+                                 {
+                                     Image = i_Item.Image,
+                                     Dock = DockStyle.Top,
+                                     Height = 80,
+                                     SizeMode = PictureBoxSizeMode.Zoom
+                                 };
 
-            var label = new Label
-                            {
-                                Text = i_Item.Title,
-                                Dock = DockStyle.Fill,
-                                TextAlign = ContentAlignment.TopCenter
-                            };
+            Label label = new Label
+                              {
+                                  Text = i_Item.Title,
+                                  Dock = DockStyle.Fill,
+                                  TextAlign = ContentAlignment.TopCenter
+                              };
 
             panel.Controls.Add(label);
             panel.Controls.Add(pic);
-            panel.Tag = i_Item.Tag;
+            panel.Tag = i_Item.Id;
 
             return panel;
         }

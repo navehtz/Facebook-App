@@ -1,31 +1,33 @@
 ﻿using FacebookMini.ui.CustomComponent;
-using FacebookWrapper.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using FacebookMini.ui.Adapters;
+using FacebookMini.shared.adapters;
 
 namespace FacebookMini.ui.PageBuilder
 {
     public class FeedPageBuilder : IPageBuilder
     {
-        private readonly PageBuildContext r_Context;
+        private PageBuildContext m_Context;
 
         private Panel m_FeedPanel;
         private Label m_HeaderLabel;
         private FlowLayoutPanel m_PostsFlowPanel;
 
-        public FeedPageBuilder(PageBuildContext i_Context)
-        {
-            r_Context = i_Context;
-        }
+        //public FeedPageBuilder(PageBuildContext i_Context)
+        //{
+        //    m_Context = i_Context;
+        //}
 
         public void Reset()
         {
             m_FeedPanel = new Panel { Dock = DockStyle.Fill };
         }
-
+        public void DeliverContext(PageBuildContext i_Context) 
+        {
+            m_Context = i_Context;
+        }
         public void BuildHeader()
         {
             m_HeaderLabel = new Label
@@ -59,36 +61,17 @@ namespace FacebookMini.ui.PageBuilder
 
         public void BindData()
         {
-            if (r_Context.LoggedInUser.Friends == null || r_Context.LoggedInUser.Friends.Count == 0)
+            IEnumerable<IPostData> feedPosts = m_Context.AppLogic.GetFriendsFeedPostsData();
+
+            foreach (IPostData postData in feedPosts)
             {
-                return; 
-            }
-
-            HashSet<KeyValuePair<Post, User>> friendsPosts = new HashSet<KeyValuePair<Post, User>>();
-
-            foreach (User friend in r_Context.LoggedInUser.Friends)
-            {
-                if (friend?.Posts == null) continue;
-
-                foreach (Post post in friend.Posts)
-                {
-                    if (post == null) continue;
-                    friendsPosts.Add(new KeyValuePair<Post, User>(post, friend));
-                }
-            }
-
-            foreach (KeyValuePair<Post, User> postOfFriend in friendsPosts)
-            {
-                var postControl = new PostComponent
+                PostComponent postControl = new PostComponent
                 {
                     Margin = new Padding(5, 5, 5, 15),
-                    PostNotesManager = r_Context.NotesManager,
-                    PostTagsManager = r_Context.TagsManager
+                    AppLogic = m_Context.AppLogic
                 };
 
-                IPostData postData = new FacebookPostAdapter(postOfFriend.Key, postOfFriend.Value);
                 postControl.SetPost(postData);
-
                 m_PostsFlowPanel.Controls.Add(postControl);
             }
         }
