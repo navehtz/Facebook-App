@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FacebookMini.ui
+namespace FacebookMini.ui.PageBuilder
 {
     public class PageComposer
     {
@@ -21,6 +21,7 @@ namespace FacebookMini.ui
         public Control Compose(IPageBuilder i_Builder)
         {
             i_Builder.Reset();
+            i_Builder.DeliverContext(r_Context);
             i_Builder.BuildHeader();
             i_Builder.BuildBody();
             return i_Builder.GetResult();

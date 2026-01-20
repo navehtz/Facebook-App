@@ -1,18 +1,18 @@
-﻿using FacebookMini.CustomComponent;
-using FacebookMini.ui.CustomComponent;
-using FacebookWrapper.ObjectModel;
+﻿using FacebookMini.ui.CustomComponent;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using FacebookMini.ui.Adapters;
+using FacebookMini.shared.adapters;
+using FacebookMini.shared.galleryItem;
+using FacebookMini.shared.profileData;
 
 
 namespace FacebookMini.ui.PageBuilder
 {
     public class ProfilePageBuilder : IPageBuilder
     {
-        private readonly PageBuildContext r_Context;
+        private PageBuildContext m_Context;
 
         private Panel m_ProfilePanel;
         private Label m_LabelHeader;
@@ -26,14 +26,14 @@ namespace FacebookMini.ui.PageBuilder
         private Label m_AlbumsTitleLabel;
         private Label m_PagesTitleLabel;
 
-        public ProfilePageBuilder(PageBuildContext i_Context)
-        {
-            r_Context = i_Context;
-        }
-
         public void Reset()
         {
             m_ProfilePanel = new Panel { Dock = DockStyle.Fill };
+        }
+
+        public void DeliverContext(PageBuildContext i_Context)
+        {
+            m_Context = i_Context;
         }
 
         public void BuildHeader()
@@ -59,6 +59,8 @@ namespace FacebookMini.ui.PageBuilder
 
         private void buildUserInfoPanel()
         {
+            UserProfileData userData = m_Context.AppLogic.GetLoggedInUserProfileData();
+
             m_UserInfoPanel = new Panel
             {
                 Dock = DockStyle.Top,
@@ -66,21 +68,27 @@ namespace FacebookMini.ui.PageBuilder
                 Padding = new Padding(10, 5, 10, 5)
             };
 
-            var userPictureBox = new PictureBox
+            PictureBox userPictureBox = new PictureBox
             {
                 Size = new Size(80, 80),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Location = new Point(10, 10),
-                Image = r_Context.LoggedInUser.ImageNormal
-                        ?? FacebookMini.Properties.Resources.Facebook_default_male_avatar
+                Image = Properties.Resources.Facebook_default_male_avatar
             };
 
-            if (!string.IsNullOrEmpty(r_Context.LoggedInUser.PictureNormalURL))
+            if (!string.IsNullOrEmpty(userData.ProfilePictureUrl))
             {
                 try
                 {
-                    userPictureBox.LoadAsync(r_Context.LoggedInUser.PictureNormalURL);
-                    r_Context.UserPictureBoxTopBar.Image = userPictureBox.Image;
+                    userPictureBox.LoadCompleted += (s, e) =>
+                        {
+                            if(userPictureBox.Image != null)
+                            {
+                                m_Context.UserPictureBoxTopBar.Image = userPictureBox.Image;
+                            }
+                        };
+
+                    userPictureBox.LoadAsync(userData.ProfilePictureUrl);
                 }
                 catch { }
             }
@@ -90,27 +98,26 @@ namespace FacebookMini.ui.PageBuilder
                 AutoSize = true,
                 Font = new Font("Segoe UI", 14F, FontStyle.Bold),
                 Location = new Point(110, 20),
-                Text = r_Context.LoggedInUser.Name
+                Text = userData.Name
             };
 
             string extraInfo = string.Empty;
 
-            if (!string.IsNullOrEmpty(r_Context.LoggedInUser.Email))
+            if (!string.IsNullOrEmpty(userData.Email))
             {
-                extraInfo += r_Context.LoggedInUser.Email;
+                extraInfo += userData.Email;
             }
 
-            if (r_Context.LoggedInUser.Birthday != null)
+            if (!string.IsNullOrEmpty(userData.Birthday))
             {
                 if (extraInfo.Length > 0) extraInfo += "   |   ";
-                extraInfo += $"Birthday: {r_Context.LoggedInUser.Birthday}";
+                extraInfo += $"Birthday: {userData.Birthday}";
             }
 
-            if (r_Context.LoggedInUser.Location != null &&
-                !string.IsNullOrEmpty(r_Context.LoggedInUser.Location.Name))
+            if (!string.IsNullOrEmpty(userData.LocationName))
             {
                 if (extraInfo.Length > 0) extraInfo += "   |   ";
-                extraInfo += r_Context.LoggedInUser.Location.Name;
+                extraInfo += userData.LocationName;
             }
 
             var userExtraLabel = new Label
@@ -126,7 +133,7 @@ namespace FacebookMini.ui.PageBuilder
             m_UserInfoPanel.Controls.Add(userExtraLabel);
 
             m_ProfilePanel.Controls.Add(m_UserInfoPanel);
-            m_ProfilePanel.Controls.SetChildIndex(m_UserInfoPanel, 0); // מתחת ל-header
+            m_ProfilePanel.Controls.SetChildIndex(m_UserInfoPanel, 0);
         }
 
         private void buildSplitContent()
@@ -211,7 +218,6 @@ namespace FacebookMini.ui.PageBuilder
             m_ProfilePanel.Controls.Add(m_SplitContainer);
             m_ProfilePanel.Controls.SetChildIndex(m_SplitContainer, 0); // Fill
 
-            // Same resize logic you had
             m_ProfilePanel.Resize += (sender, args) =>
             {
                 if (m_ProfilePanel.Width > 0)
@@ -227,85 +233,6 @@ namespace FacebookMini.ui.PageBuilder
             m_PostsFlowPanel.Name = "ProfilePostsFlow";
             m_AlbumsSection.Name = "ProfileAlbumsGallery";
             m_PagesSection.Name = "ProfilePagesGallery";
-        }
-
-        //public void BindData()
-        //{
-        //    bindPosts();
-        //    bindAlbums();
-        //    bindPages();
-        //}
-
-        private void bindPosts()
-        {
-            var posts = r_Context.AppLogic.GetUserPosts();
-            if (posts == null) return;
-
-            foreach (Post post in posts)
-            {
-                var postControl = new PostComponent
-                {
-                    Margin = new Padding(5, 5, 5, 15),
-                    PostNotesManager = r_Context.NotesManager,
-                    PostTagsManager = r_Context.TagsManager
-                };
-              
-                IPostData postData = new FacebookPostAdapter(post, r_Context.LoggedInUser);
-                postControl.SetPost(postData);
-
-                m_PostsFlowPanel.Controls.Add(postControl);
-            }
-        }
-        
-        private void bindAlbums()
-        {
-            var albumsItems = new List<GalleryItem>();
-            var albums = r_Context.AppLogic.GetUserAlbums();
-
-            if (albums != null)
-            {
-                foreach (Album album in albums)
-                {
-                    albumsItems.Add(new GalleryItem
-                    {
-                        Title = album.Name,
-                        Image = album.ImageAlbum,
-                        Tag = album,
-                        ItemType = eGalleryItemType.Album
-                    });
-                }
-            }
-
-            m_AlbumsSection.SetItems(albumsItems);
-
-            if (albumsItems.Count == 0)
-            {
-                m_AlbumsSection.Visible = false;
-                m_AlbumsTitleLabel.Visible = false;
-                m_AlbumsSection.Height = 0;
-            }
-        }
-
-        private void bindPages()
-        {
-            var pagesItems = new List<GalleryItem>();
-            var likedPages = r_Context.AppLogic.GetUserLikedPages();
-
-            if (likedPages != null)
-            {
-                foreach (Page page in likedPages)
-                {
-                    pagesItems.Add(new GalleryItem
-                    {
-                        Title = page.Name,
-                        Image = page.ImageNormal,
-                        Tag = page,
-                        ItemType = eGalleryItemType.Page
-                    });
-                }
-            }
-
-            m_PagesSection.SetItems(pagesItems);
         }
 
         public Control GetResult()

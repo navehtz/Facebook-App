@@ -1,9 +1,8 @@
 ﻿using Facebook;
-using FacebookMini.CustomComponent;
+using FacebookMini.ui.CustomComponent;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookMini.Logic;
-using FacebookMini.ui.Adapters;
 using FacebookMini.ui.CustomComponent;
 using FacebookMini.ui.PageBuilder;
 using FacebookWrapper.ObjectModel;
@@ -15,6 +14,10 @@ using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using CefSharp;
+using FacebookMini.shared.adapters;
+using FacebookMini.shared.galleryItem;
+using IPostData = FacebookMini.shared.adapters.IPostData;
 
 namespace FacebookMini.ui
 {
@@ -22,8 +25,6 @@ namespace FacebookMini.ui
     {
         private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
-        private readonly IPostNotesManager r_PostNotesManager;
-        private readonly IPostTagsManager r_PostTagsManager;
 
         private Control m_ProfilePage;
         private Control m_FeedPage;
@@ -50,13 +51,11 @@ namespace FacebookMini.ui
         {
             r_AppLogic = i_AppLogic ?? throw new ArgumentNullException(nameof(i_AppLogic));
             r_LoggedInUser = r_AppLogic.LoggedInUser;
-            r_PostNotesManager = r_AppLogic.PostNotesManager;
-            r_PostTagsManager = r_AppLogic.PostTagsManager;
         }
 
         private void UserMainForm_Load(object sender, EventArgs e)
         {
-            m_Context = new PageBuildContext(r_AppLogic, r_LoggedInUser, r_PostNotesManager, r_PostTagsManager, userPictureBoxTopBar);
+            m_Context = new PageBuildContext(r_AppLogic, userPictureBoxTopBar);
             m_Composer = new PageComposer(m_Context);
 
             buildPages();
@@ -67,8 +66,8 @@ namespace FacebookMini.ui
 
         private void buildPages()
         {
-            m_ProfilePage = m_Composer.Compose(new ProfilePageBuilder(m_Context));
-            m_FeedPage = m_Composer.Compose(new FeedPageBuilder(m_Context));
+            m_ProfilePage = m_Composer.Compose(new ProfilePageBuilder());
+            m_FeedPage = m_Composer.Compose(new FeedPageBuilder());
         }
 
 
@@ -107,25 +106,24 @@ namespace FacebookMini.ui
                 return;
             }
 
-            var profilePosts = r_AppLogic.GetUserPosts();
-            foreach (Post post in profilePosts)
+            IEnumerable<IPostData> profilePosts = r_AppLogic.GetMyPostsData();
+
+            foreach (IPostData postData in profilePosts)
             {
-                if (post == null)
+                if (postData == null)
                 {
                     continue;
                 }
-                profilePagePostsFlow.Invoke(new Action(() =>
+
+                profilePagePostsFlow.BeginInvoke(new Action(() =>
                 {
                     PostComponent postControl = new PostComponent
                     {
                         Margin = new Padding(5, 5, 5, 15),
-                        PostNotesManager = r_PostNotesManager,
-                        PostTagsManager = r_PostTagsManager
+                        AppLogic = r_AppLogic
                     };
 
-                    IPostData postData = new FacebookPostAdapter(post, r_LoggedInUser);
                     postControl.SetPost(postData);
-
                     profilePagePostsFlow.Controls.Add(postControl);
                 }));
             }
@@ -145,41 +143,22 @@ namespace FacebookMini.ui
                 return;
             }
 
-            HashSet<KeyValuePair<Post, User>> friendsPosts = new HashSet<KeyValuePair<Post, User>>();
-
-            foreach (User friend in r_LoggedInUser.Friends)
+            IEnumerable<IPostData> friendsPosts = r_AppLogic.GetFriendsFeedPostsData();
+            
+            foreach (IPostData postOfFriend in friendsPosts)
             {
-                if (friend?.Posts == null) continue;
-
-                foreach (Post post in friend.Posts)
-                {
-                    if (post == null) 
+                feedPagePostsFlow.BeginInvoke(
+                    new Action(() =>
                     {
-                        continue;
-                    }
+                        var postControl = new PostComponent
+                              {
+                                  Margin = new Padding(5, 5, 5, 15), AppLogic = r_AppLogic
+                              };
 
-                    friendsPosts.Add(new KeyValuePair<Post, User>(post, friend));
-                }
+                        postControl.SetPost(postOfFriend);
+                        feedPagePostsFlow.Controls.Add(postControl);
+                    }));
             }
-
-            foreach (KeyValuePair<Post, User> postOfFriend in friendsPosts)
-            {
-                feedPagePostsFlow.Invoke(new Action(() =>
-                {
-                    var postControl = new PostComponent
-                    {
-                        Margin = new Padding(5, 5, 5, 15),
-                        PostNotesManager = r_PostNotesManager,
-                        PostTagsManager = r_PostTagsManager
-                    };
-
-                    IPostData postData = new FacebookPostAdapter(postOfFriend.Key, postOfFriend.Value);
-                    postControl.SetPost(postData);
-
-                    feedPagePostsFlow.Controls.Add(postControl);
-                }));
-            }
-
         }
 
         private void fetchAlbumsAsync()
@@ -191,23 +170,16 @@ namespace FacebookMini.ui
                 return;
             }
 
-            var albums = r_AppLogic.GetUserAlbums();
+            List<GalleryItem> albumsItems = r_AppLogic.GetAlbumsGalleryItems();
 
-            if (albums != null)
+            if (albumsItems != null)
             {
-                foreach (Album album in albums)
+                foreach (GalleryItem album in albumsItems)
                 {
-                    albumsGallery.Invoke(new Action(() =>
-                    {
-
-                        albumsGallery.SetItem(new GalleryItem
+                    albumsGallery.BeginInvoke(new Action(() =>
                         {
-                            Title = album.Name,
-                            Image = album.ImageAlbum,
-                            Tag = album,
-                            ItemType = eGalleryItemType.Album
-                        });
-                    }));
+                            albumsGallery.SetItem(album);
+                        }));
                 }
             }
         }
@@ -221,23 +193,16 @@ namespace FacebookMini.ui
                 return;
             }
 
-            var pages = r_AppLogic.GetUserLikedPages();
+            List<GalleryItem> pagesItems = r_AppLogic.GetLikedPagesGalleryItems();
 
-            if (pages != null)
+            if (pagesItems != null)
             {
-                foreach (Page page in pages)
+                foreach (GalleryItem page in pagesItems)
                 {
-                    likedPagesGallery.Invoke(new Action(() =>
-                    {
-
-                        likedPagesGallery.SetItem(new GalleryItem
+                    likedPagesGallery.BeginInvoke(new Action(() =>
                         {
-                            Title = page.Name,
-                            Image = page.ImageNormal,
-                            Tag = page,
-                            ItemType = eGalleryItemType.Page
-                        });
-                    }));
+                            likedPagesGallery.SetItem(page);
+                        }));
                 }
             }
         }
@@ -295,7 +260,7 @@ namespace FacebookMini.ui
         
         private void buttonTagsAnalytics_Click(object sender, EventArgs e)
         {
-            m_TagsAnalyticsPage = m_Composer.Compose(new TagsAnalyticsPageBuilder(m_Context));
+            m_TagsAnalyticsPage = m_Composer.Compose(new TagsAnalyticsPageBuilder());
             showPage(m_TagsAnalyticsPage);
         }
 
@@ -303,7 +268,5 @@ namespace FacebookMini.ui
         {
             this.Close();
         }
-
-        // TODO: Separate ui from count total tags logic.
     }
 }

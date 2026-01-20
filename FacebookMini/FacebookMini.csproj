@@ -82,10 +82,16 @@
     <Compile Include="logic\features\postNotes\IPostNotesManager.cs" />
     <Compile Include="logic\features\postTags\IPostTagsManager.cs" />
     <Compile Include="logic\features\postTags\InMemoryPostTagsManager.cs" />
-    <Compile Include="ui\Adapters\FacebookPostAdapter.cs" />
-    <Compile Include="ui\Adapters\IPostData.cs" />
-    <Compile Include="ui\CustomComponent\eGalleryItemType.cs" />
-    <Compile Include="ui\CustomComponent\GalleryItem.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="shared\adapters\FacebookPostAdapter.cs" />
+    <Compile Include="shared\adapters\IPostData.cs" />
+    <Compile Include="shared\galleryItem\eGalleryItemType.cs" />
+    <Compile Include="shared\galleryItem\GalleryItem.cs" />
+    <Compile Include="shared\profileData\UserProfileData.cs" />
     <Compile Include="ui\CustomComponent\NoteEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,8 +112,8 @@
     </Compile>
     <Compile Include="logic\FacebookAppLogic.cs" />
     <Compile Include="logic\IFacebookAppLogic.cs" />
-    <Compile Include="ui\PageBuilders\FeedPageBuilder.cs" />
-    <Compile Include="ui\PageBuilders\IPageBuilder.cs" />
+    <Compile Include="ui\PageBuilder\FeedPageBuilder.cs" />
+    <Compile Include="ui\PageBuilder\IPageBuilder.cs" />
     <Compile Include="ui\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,10 +122,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ui\PageBuilders\PageBuildContext.cs" />
-    <Compile Include="ui\PageBuilders\PageComposer.cs" />
-    <Compile Include="ui\PageBuilders\ProfilePageBuilder.cs" />
-    <Compile Include="ui\PageBuilders\TagsAnalyticsPageBuilder.cs" />
+    <Compile Include="ui\PageBuilder\PageBuildContext.cs" />
+    <Compile Include="ui\PageBuilder\PageComposer.cs" />
+    <Compile Include="ui\PageBuilder\ProfilePageBuilder.cs" />
+    <Compile Include="ui\PageBuilder\TagsAnalyticsPageBuilder.cs" />
     <Compile Include="ui\UserMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,17 +146,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="ui\UserMainForm.resx">
       <DependentUpon>UserMainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Properties\DataSources\FacebookMini.shared.adapters.IPostData.datasource" />
+    <None Include="Properties\DataSources\FacebookWrapper.ObjectModel.Post.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -194,6 +197,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\photos\Facebook_logo_%28square%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\photos\Old Facebook Like, Cornered - 1106x1008.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

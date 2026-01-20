@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FacebookMini.ui.Adapters
+namespace FacebookMini.shared.adapters
 {
     public interface IPostData
     {
@@ -13,7 +13,7 @@ namespace FacebookMini.ui.Adapters
         string OwnerPictureUrl { get; }
         string CreatedTimeText { get; }
         string CaptionText { get; }
-        int LikesCount { get; }
+        int LikesCount { get; set; }
         int CommentsCount { get; }
     }
 }

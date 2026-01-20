@@ -5,13 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FacebookMini.ui.Adapters
+namespace FacebookMini.shared.adapters
 {
     public class FacebookPostAdapter : IPostData
     {
         private readonly Post r_Post;
         private readonly User r_Owner;
         private static readonly Random sr_Random = new Random();
+        private int m_LikesCount;
+        private bool m_IsLikesInitialized = false;
 
         public FacebookPostAdapter(Post i_Post, User i_Owner)
         {
@@ -102,21 +104,37 @@ namespace FacebookMini.ui.Adapters
         {
             get
             {
-                int result = 0;
-
-                try
+                if (!m_IsLikesInitialized)
                 {
-                    if (r_Post.LikedBy != null)
+                    int initialLikes = 0;
+
+                    try
                     {
-                        result = r_Post.LikedBy.Count;
+                        if (r_Post.LikedBy != null)
+                        {
+                            initialLikes = r_Post.LikedBy.Count;
+                        }
                     }
+                    catch
+                    {
+                        initialLikes = sr_Random.Next(5, 150);
+                    }
+
+                    m_LikesCount = initialLikes;
+                    m_IsLikesInitialized = true;
                 }
-                catch
+                
+                return m_LikesCount;
+            }
+            set
+            {
+                if(value < 0)
                 {
-                    result = sr_Random.Next(5, 150);
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 }
 
-                return result;
+                m_LikesCount = value;
+                m_IsLikesInitialized = true;
             }
         }
 
