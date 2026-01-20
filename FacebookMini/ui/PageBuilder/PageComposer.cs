@@ -12,19 +12,22 @@ namespace FacebookMini.ui.PageBuilder
     public class PageComposer
     {
         private readonly PageBuildContext r_Context;
+        public IPageBuilder Builder { get; set; }
 
-        public PageComposer(PageBuildContext i_Context)
+
+        public PageComposer(PageBuildContext i_Context, IPageBuilder i_Builder)
         {
             r_Context = i_Context;
+            Builder = i_Builder;
         }
 
-        public Control Compose(IPageBuilder i_Builder)
+        public Control Compose()
         {
-            i_Builder.Reset();
-            i_Builder.DeliverContext(r_Context);
-            i_Builder.BuildHeader();
-            i_Builder.BuildBody();
-            return i_Builder.GetResult();
+            Builder.Reset();
+            Builder.DeliverContext(r_Context);
+            Builder.BuildHeader();
+            Builder.BuildBody();
+            return Builder.GetResult();
         }
     }
 }

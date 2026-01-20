@@ -56,7 +56,7 @@ namespace FacebookMini.ui
         private void UserMainForm_Load(object sender, EventArgs e)
         {
             m_Context = new PageBuildContext(r_AppLogic, userPictureBoxTopBar);
-            m_Composer = new PageComposer(m_Context);
+            m_Composer = new PageComposer(m_Context, new ProfilePageBuilder());
 
             buildPages();
             showPage(m_ProfilePage);// defult
@@ -66,8 +66,10 @@ namespace FacebookMini.ui
 
         private void buildPages()
         {
-            m_ProfilePage = m_Composer.Compose(new ProfilePageBuilder());
-            m_FeedPage = m_Composer.Compose(new FeedPageBuilder());
+            m_ProfilePage = m_Composer.Compose();
+
+            m_Composer.Builder = new FeedPageBuilder();
+            m_FeedPage = m_Composer.Compose();
         }
 
 
@@ -260,7 +262,8 @@ namespace FacebookMini.ui
         
         private void buttonTagsAnalytics_Click(object sender, EventArgs e)
         {
-            m_TagsAnalyticsPage = m_Composer.Compose(new TagsAnalyticsPageBuilder());
+            m_Composer.Builder = new TagsAnalyticsPageBuilder();
+            m_TagsAnalyticsPage = m_Composer.Compose();
             showPage(m_TagsAnalyticsPage);
         }
 
