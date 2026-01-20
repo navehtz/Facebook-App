@@ -45,6 +45,7 @@ namespace FacebookMini.ui.CustomComponent
 
             iPostDataBindingSource.DataSource = m_PostData;
 
+
             PostId = i_PostData.Id;
 
             updateTagsLabel();
@@ -173,6 +174,7 @@ namespace FacebookMini.ui.CustomComponent
             if (m_IsLikedByUser)
             {
                 m_IsLikedByUser = false;
+                LikesPictureBox.BackColor = Color.Transparent;
                 m_PostData.LikesCount -= 1;
             }
             else
@@ -181,7 +183,7 @@ namespace FacebookMini.ui.CustomComponent
                 m_PostData.LikesCount += 1;
             }
 
-            LikesLabel.Text = $@"{m_PostData.LikesCount} Likes";
+            LikesLabel.Text = $@"{m_PostData.LikesText}";
         }
 
         private void LikesPictureBox_MouseEnter(object sender, EventArgs e)
@@ -191,7 +193,10 @@ namespace FacebookMini.ui.CustomComponent
 
         private void LikesPictureBox_MouseLeave(object sender, EventArgs e)
         {
-            LikesPictureBox.BackColor = Color.Transparent;
+            if(!m_IsLikedByUser)
+            {
+                LikesPictureBox.BackColor = Color.Transparent;
+            }
         }
     }
 }
