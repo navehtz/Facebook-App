@@ -27,6 +27,7 @@ namespace FacebookMini.ui.PageBuilder
             Builder.DeliverContext(r_Context);
             Builder.BuildHeader();
             Builder.BuildBody();
+
             return Builder.GetResult();
         }
     }
