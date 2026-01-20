@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="shared\adapters\FacebookPostAdapter.cs" />
     <Compile Include="shared\adapters\IPostData.cs" />
+    <Compile Include="shared\adapters\PostDataSnapshot.cs" />
     <Compile Include="shared\galleryItem\eGalleryItemType.cs" />
     <Compile Include="shared\galleryItem\GalleryItem.cs" />
     <Compile Include="shared\profileData\UserProfileData.cs" />
