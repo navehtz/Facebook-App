@@ -12,7 +12,7 @@ namespace FacebookMini.ui.PageBuilder
 {
     public class ProfilePageBuilder : IPageBuilder
     {
-        private readonly PageBuildContext r_Context;
+        private PageBuildContext m_Context;
 
         private Panel m_ProfilePanel;
         private Label m_LabelHeader;
@@ -26,14 +26,14 @@ namespace FacebookMini.ui.PageBuilder
         private Label m_AlbumsTitleLabel;
         private Label m_PagesTitleLabel;
 
-        public ProfilePageBuilder(PageBuildContext i_Context)
-        {
-            r_Context = i_Context;
-        }
-
         public void Reset()
         {
             m_ProfilePanel = new Panel { Dock = DockStyle.Fill };
+        }
+
+        public void DeliverContext(PageBuildContext i_Context)
+        {
+            m_Context = i_Context;
         }
 
         public void BuildHeader()
@@ -59,7 +59,7 @@ namespace FacebookMini.ui.PageBuilder
 
         private void buildUserInfoPanel()
         {
-            UserProfileData userData = r_Context.AppLogic.GetLoggedInUserProfileData();
+            UserProfileData userData = m_Context.AppLogic.GetLoggedInUserProfileData();
 
             m_UserInfoPanel = new Panel
             {
@@ -84,7 +84,7 @@ namespace FacebookMini.ui.PageBuilder
                         {
                             if(userPictureBox.Image != null)
                             {
-                                r_Context.UserPictureBoxTopBar.Image = userPictureBox.Image;
+                                m_Context.UserPictureBoxTopBar.Image = userPictureBox.Image;
                             }
                         };
 

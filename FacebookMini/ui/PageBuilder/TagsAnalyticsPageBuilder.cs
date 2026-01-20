@@ -7,25 +7,27 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
+
+
 namespace FacebookMini.ui.PageBuilder
 {
     public class TagsAnalyticsPageBuilder : IPageBuilder
     {
-        private readonly PageBuildContext r_Context;
+        private PageBuildContext m_Context;
 
         private Panel m_MainPanel;
         private Label m_HeaderLabel;
         private Label m_InfoLabel;
         private Chart m_TagsChart;
 
-        public TagsAnalyticsPageBuilder(PageBuildContext i_Context)
-        {
-            r_Context = i_Context;
-        }
-
         public void Reset()
         {
             m_MainPanel = new Panel { Dock = DockStyle.Fill };
+        }
+
+        public void DeliverContext(PageBuildContext i_Context)
+        {
+            m_Context = i_Context;
         }
 
         public void BuildHeader()
@@ -95,7 +97,7 @@ namespace FacebookMini.ui.PageBuilder
             Series series = m_TagsChart.Series[0];
             series.Points.Clear();
 
-            ICollection<string> allTags = r_Context.AppLogic.GetAllTags();
+            ICollection<string> allTags = m_Context.AppLogic.GetAllTags();
 
             Dictionary<string, int> tagsCountDictionary =
                 new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
