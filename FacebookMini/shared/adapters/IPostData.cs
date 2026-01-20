@@ -15,5 +15,8 @@ namespace FacebookMini.shared.adapters
         string CaptionText { get; }
         int LikesCount { get; set; }
         int CommentsCount { get; }
+
+        string LikesText { get; }
+        string CommentsText { get; }
     }
 }
