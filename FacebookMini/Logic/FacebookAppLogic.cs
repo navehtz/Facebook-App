@@ -315,5 +315,10 @@ namespace FacebookMini.Logic
                 SetTagsForPost(i_PostId, tagsList);
             }
         }
+
+        public bool IsUserFriendsAccessibleAndHasFriends()
+        {
+            return LoggedInUser?.Friends != null && LoggedInUser.Friends.Count > 0;
+        }
     }
 }

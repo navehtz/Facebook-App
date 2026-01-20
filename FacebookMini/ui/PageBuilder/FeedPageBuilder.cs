@@ -37,6 +37,7 @@ namespace FacebookMini.ui.PageBuilder
             };
 
             m_FeedPanel.Controls.Add(m_HeaderLabel);
+            m_HeaderLabel.Name = "feedHeaderLabel";
         }
 
         public void BuildBody()

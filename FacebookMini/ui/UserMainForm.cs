@@ -102,10 +102,16 @@ namespace FacebookMini.ui
         private void fetchProfilePostsAsync()
         {
             FlowLayoutPanel profilePagePostsFlow = m_ProfilePage.Controls.Find("ProfilePostsFlow", true).FirstOrDefault() as FlowLayoutPanel;
-           
+            Label profileHeaderLabel = m_ProfilePage.Controls.Find("ProfileHeaderLabel", true).FirstOrDefault() as Label;
+
             if (profilePagePostsFlow == null)
             {
                 return;
+            }
+
+            if(profileHeaderLabel != null)
+            {
+                profileHeaderLabel.BeginInvoke(new Action(() => { profileHeaderLabel.Text = @"Profile - Loading..."; }));
             }
 
             IEnumerable<IPostData> profilePosts = r_AppLogic.GetMyPostsData();
@@ -129,20 +135,26 @@ namespace FacebookMini.ui
                     profilePagePostsFlow.Controls.Add(postControl);
                 }));
             }
+
+            if (profileHeaderLabel != null)
+            {
+                profileHeaderLabel.BeginInvoke(new Action(() => { profileHeaderLabel.Text = @"Profile"; }));
+            }
         }
 
         private void fetchFeedPostsAsync() 
         {
             FlowLayoutPanel feedPagePostsFlow = m_FeedPage.Controls.Find("feedPostsFlow", true).FirstOrDefault() as FlowLayoutPanel;
+            Label feedHeaderLabel = m_FeedPage.Controls.Find("feedHeaderLabel", true).FirstOrDefault() as Label;
 
-            if (feedPagePostsFlow == null)
+            if (feedPagePostsFlow == null || !r_AppLogic.IsUserFriendsAccessibleAndHasFriends())
             {
                 return;
             }
 
-            if (r_LoggedInUser.Friends == null || r_LoggedInUser.Friends.Count == 0)
+            if(feedHeaderLabel != null)
             {
-                return;
+                feedHeaderLabel.BeginInvoke(new Action(() => { feedHeaderLabel.Text = @"Feed - Loading..."; }));
             }
 
             IEnumerable<IPostData> friendsPosts = r_AppLogic.GetFriendsFeedPostsData();
@@ -160,6 +172,11 @@ namespace FacebookMini.ui
                         postControl.SetPost(postOfFriend);
                         feedPagePostsFlow.Controls.Add(postControl);
                     }));
+            }
+
+            if(feedHeaderLabel != null)
+            {
+                feedHeaderLabel.BeginInvoke(new Action(() => { feedHeaderLabel.Text = @"Feed"; }));
             }
         }
 
@@ -232,7 +249,7 @@ namespace FacebookMini.ui
         {
             try
             {
-                if (r_LoggedInUser.Friends == null || r_LoggedInUser.Friends.Count == 0)
+                if (!r_AppLogic.IsUserFriendsAccessibleAndHasFriends())
                 {
                     MessageBox.Show(
                     @"No friends are available to display in the feed.
