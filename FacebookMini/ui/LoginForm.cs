@@ -9,6 +9,7 @@ namespace FacebookMini.ui
     public partial class LoginForm : Form
     {
         private FacebookWrapper.LoginResult m_LoginResult;
+        private const int k_CollectionLimit = 25;
 
         private readonly string[] r_RequestedPermissions =
             {   
@@ -25,7 +26,7 @@ namespace FacebookMini.ui
         public LoginForm()
         {
             InitializeComponent();
-            FacebookWrapper.FacebookService.s_CollectionLimit = 25;
+            FacebookWrapper.FacebookService.s_CollectionLimit = k_CollectionLimit;
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)

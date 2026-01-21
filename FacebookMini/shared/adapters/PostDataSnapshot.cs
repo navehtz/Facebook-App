@@ -28,7 +28,6 @@ namespace FacebookMini.shared.adapters
         public int CommentsCount { get; set; }
 
         public string LikesText => $"{LikesCount} Likes";
-
         public string CommentsText => $"{CommentsCount} Comments";
     }
 }

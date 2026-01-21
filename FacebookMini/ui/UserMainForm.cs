@@ -1,23 +1,15 @@
 ﻿using Facebook;
 using FacebookMini.ui.CustomComponent;
-//using FacebookMini.logic.features.postNotes;
-//using FacebookMini.logic.features.postTags;
 using FacebookMini.Logic;
-//using FacebookMini.ui.CustomComponent;
 using FacebookMini.ui.PageBuilder;
-//using FacebookWrapper.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-//using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using CefSharp;
-//using FacebookMini.shared.adapters;
 using FacebookMini.shared.galleryItem;
-using IPostData = FacebookMini.shared.adapters.IPostData;
+using FacebookMini.shared.adapters;
 
 namespace FacebookMini.ui
 {
@@ -80,7 +72,7 @@ namespace FacebookMini.ui
             new Thread(fetchPagesAsync).Start();            
         }
 
-        private void startFeedAsynceLoaders() 
+        private void startFeedAsyncLoaders() 
         {
             if (m_FeedLoaded)
             {
@@ -275,7 +267,7 @@ namespace FacebookMini.ui
                 }
 
                 showPage(m_FeedPage);
-                startFeedAsynceLoaders();
+                startFeedAsyncLoaders();
             }
             catch (Exception ex)
             {

@@ -12,7 +12,6 @@ namespace FacebookMini.ui.CustomComponent
 
         private  IPostData m_PostData;
         private bool m_IsLikedByUser = false;
-        //private static readonly Random sr_Random = new Random();
 
         public IFacebookAppLogic AppLogic { get; set; }
 
@@ -34,21 +33,9 @@ namespace FacebookMini.ui.CustomComponent
 
             iPostDataBindingSource.DataSource = m_PostData;
 
-
             PostId = i_PostData.Id;
 
             updateTagsLabel();
-        }
-
-        //Optional - Maybe add later
-        private void label1_Click(object sender, EventArgs e)
-        {
-            // For example: open profile of m_Post.From
-        }
-
-        private void CommentsLabel_Click(object sender, EventArgs e)
-        {
-            // For example: open comments of m_Post
         }
 
         private void btnNote_Click(object sender, EventArgs e)

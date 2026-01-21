@@ -8,9 +8,7 @@ namespace FacebookMini.ui.PageBuilder
         public IFacebookAppLogic AppLogic { get; }
         public PictureBox UserPictureBoxTopBar { get; }
 
-        public PageBuildContext(
-            IFacebookAppLogic i_IAppLogic,
-            PictureBox i_UserPictureBoxTopBar)
+        public PageBuildContext(IFacebookAppLogic i_IAppLogic, PictureBox i_UserPictureBoxTopBar)
         {
             AppLogic = i_IAppLogic;
             UserPictureBoxTopBar = i_UserPictureBoxTopBar;

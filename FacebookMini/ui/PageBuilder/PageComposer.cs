@@ -7,7 +7,6 @@ namespace FacebookMini.ui.PageBuilder
         private readonly PageBuildContext r_Context;
         public IPageBuilder Builder { get; set; }
 
-
         public PageComposer(PageBuildContext i_Context, IPageBuilder i_Builder)
         {
             r_Context = i_Context;

@@ -168,7 +168,6 @@ namespace FacebookMini.ui.CustomComponent
             NameLabel.Size = new System.Drawing.Size(51, 20);
             NameLabel.TabIndex = 1;
             NameLabel.Text = "Name";
-            NameLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // LikesLabel
             // 
@@ -193,7 +192,6 @@ namespace FacebookMini.ui.CustomComponent
             CommentsLabel.Size = new System.Drawing.Size(99, 20);
             CommentsLabel.TabIndex = 5;
             CommentsLabel.Text = "0 Comments";
-            CommentsLabel.Click += new System.EventHandler(this.CommentsLabel_Click);
             // 
             // PostComponent
             // 
