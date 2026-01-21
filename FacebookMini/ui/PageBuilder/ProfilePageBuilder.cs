@@ -142,7 +142,7 @@ namespace FacebookMini.ui.PageBuilder
             };
 
             // LEFT: posts
-            var postsSectionPanel = new Panel { Dock = DockStyle.Fill };
+            Panel postsSectionPanel = new Panel { Dock = DockStyle.Fill };
 
             Label postsTitleLabel = new Label
             {
@@ -204,7 +204,7 @@ namespace FacebookMini.ui.PageBuilder
             };
             m_PagesSection = new ItemGalleryComponent { Dock = DockStyle.Fill };
 
-            var pagesContainer = new Panel { Dock = DockStyle.Fill };
+            Panel pagesContainer = new Panel { Dock = DockStyle.Fill };
             pagesContainer.Controls.Add(m_PagesSection);
             pagesContainer.Controls.Add(m_PagesTitleLabel);
 

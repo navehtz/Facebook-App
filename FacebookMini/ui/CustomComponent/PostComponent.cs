@@ -169,6 +169,7 @@ namespace FacebookMini.ui.CustomComponent
             else
             {
                 m_IsLikedByUser = true;
+                LikesPictureBox.BackColor = Color.LightGray;
                 m_PostData.LikesCount += 1;
             }
 
