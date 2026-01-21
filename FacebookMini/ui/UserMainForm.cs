@@ -23,7 +23,6 @@ namespace FacebookMini.ui
 {
     public partial class UserMainForm : Form
     {
-        private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
 
         private Control m_ProfilePage;
@@ -50,7 +49,6 @@ namespace FacebookMini.ui
             : this() // calls the parameterless ctor (InitializeComponent)
         {
             r_AppLogic = i_AppLogic ?? throw new ArgumentNullException(nameof(i_AppLogic));
-            r_LoggedInUser = r_AppLogic.LoggedInUser;
         }
 
         private void UserMainForm_Load(object sender, EventArgs e)

@@ -1,0 +1,37 @@
+@startuml
+title Adapter Sequence - Load profile posts (async) using IPostData
+
+participant ":UserMainForm" as UM
+participant ":Thread(fetchProfilePostsAsync)" as T
+participant ":IFacebookAppLogic(facade)" as L
+participant ":FacebookWrapper.ObjectModel.User" as U
+participant ":FacebookWrapper.ObjectModel.Post" as P
+participant ":FacebookPostAdapter" as A
+participant ":PostDataSnapshot" as S
+
+UM -> T : Start()
+activate T
+
+T -> L : GetMyPostsData()
+activate L
+
+L -> U : Posts (iterate)
+activate U
+
+loop for each Post in LoggedInUser.Posts
+  U --> L : P
+  L -> A : new FacebookPostAdapter(P, U)
+  activate A
+  L -> A : ToSnapshot()
+  A -> S : create + fill fields\n(Message/Caption, CreatedTime, Likes, Comments)
+  A --> L : S (as IPostData)
+  deactivate A
+  deactivate U
+end
+
+
+L --> T : IEnumerable<IPostData>
+deactivate L
+
+deactivate T
+@enduml
