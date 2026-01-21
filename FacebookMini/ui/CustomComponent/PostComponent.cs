@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Facebook;
 using FacebookMini.Logic;
-using FacebookMini.logic.features.postTags;
-using FacebookMini.logic.features.postNotes;
-using FacebookMini.ui.CustomComponent;
-using FacebookWrapper.ObjectModel;
 using FacebookMini.shared.adapters;
 
 namespace FacebookMini.ui.CustomComponent

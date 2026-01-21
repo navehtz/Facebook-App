@@ -1,10 +1,8 @@
-﻿using System;
-using FacebookMini.logic.features.postNotes;
+﻿using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using FacebookMini.shared.adapters;
 using FacebookMini.shared.galleryItem;
 using FacebookMini.shared.profileData;

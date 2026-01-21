@@ -1,9 +1,5 @@
-﻿using FacebookMini.ui.CustomComponent;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using FacebookMini.shared.adapters;
 
 namespace FacebookMini.ui.PageBuilder
 {

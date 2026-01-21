@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FacebookMini.shared.adapters
+﻿namespace FacebookMini.shared.adapters
 {
     public interface IPostData
     {
@@ -15,7 +9,6 @@ namespace FacebookMini.shared.adapters
         string CaptionText { get; }
         int LikesCount { get; set; }
         int CommentsCount { get; }
-
         string LikesText { get; }
         string CommentsText { get; }
     }

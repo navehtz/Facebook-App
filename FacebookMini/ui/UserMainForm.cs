@@ -1,21 +1,21 @@
 ﻿using Facebook;
 using FacebookMini.ui.CustomComponent;
-using FacebookMini.logic.features.postNotes;
-using FacebookMini.logic.features.postTags;
+//using FacebookMini.logic.features.postNotes;
+//using FacebookMini.logic.features.postTags;
 using FacebookMini.Logic;
-using FacebookMini.ui.CustomComponent;
+//using FacebookMini.ui.CustomComponent;
 using FacebookMini.ui.PageBuilder;
-using FacebookWrapper.ObjectModel;
+//using FacebookWrapper.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
+//using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using CefSharp;
-using FacebookMini.shared.adapters;
+//using FacebookMini.shared.adapters;
 using FacebookMini.shared.galleryItem;
 using IPostData = FacebookMini.shared.adapters.IPostData;
 
@@ -26,13 +26,10 @@ namespace FacebookMini.ui
         private readonly IFacebookAppLogic r_AppLogic;
 
         private Control m_ProfilePage;
-        private Control m_FeedPage;
-        
+        private Control m_FeedPage;        
         private Control m_TagsAnalyticsPage;
-        private Chart m_TagsChart;
-        private Label m_TagsInfoLabel;
-
-
+        //private Chart m_TagsChart;
+        //private Label m_TagsInfoLabel;
         private PageComposer m_Composer;
         private PageBuildContext m_Context;
 

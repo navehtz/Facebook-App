@@ -1,12 +1,10 @@
-﻿using FacebookMini.logic;
-using FacebookWrapper.ObjectModel;
+﻿using FacebookWrapper.ObjectModel;
 using System.Collections.Generic;
 using FacebookMini.shared.adapters;
 using FacebookMini.logic.features.postNotes;
 using FacebookMini.logic.features.postTags;
 using FacebookMini.shared.galleryItem;
 using FacebookMini.shared.profileData;
-using FacebookMini.ui.CustomComponent;
 
 namespace FacebookMini.Logic
 {
