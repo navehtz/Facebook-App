@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FacebookMini.shared.adapters
 {
     public class PostDataSnapshot : IPostData
     {
         private int m_LikesCount;
-
         public string Id { get; set; }
         public string OwnerName { get; set; }
         public string OwnerPictureUrl { get; set; }

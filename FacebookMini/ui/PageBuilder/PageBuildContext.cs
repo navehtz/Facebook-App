@@ -1,12 +1,4 @@
-﻿using FacebookMini.logic.features.postNotes;
-using FacebookMini.logic.features.postTags;
-using FacebookMini.Logic;
-//using FacebookWrapper.ObjectModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FacebookMini.Logic;
 using System.Windows.Forms;
 
 namespace FacebookMini.ui.PageBuilder
