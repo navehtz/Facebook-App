@@ -28,8 +28,6 @@ namespace FacebookMini.ui
         private Control m_ProfilePage;
         private Control m_FeedPage;        
         private Control m_TagsAnalyticsPage;
-        //private Chart m_TagsChart;
-        //private Label m_TagsInfoLabel;
         private PageComposer m_Composer;
         private PageBuildContext m_Context;
 
@@ -106,35 +104,46 @@ namespace FacebookMini.ui
 
             if(profileHeaderLabel != null)
             {
-                profileHeaderLabel.BeginInvoke(new Action(() => { profileHeaderLabel.Text = @"Profile - Loading..."; }));
+                try
+                {
+                    profileHeaderLabel.BeginInvoke(new Action(() => { profileHeaderLabel.Text = @"Profile - Loading..."; }));
+                }
+                catch{ } // If the form is closed before loading completes - Ignore then it goes back to login page
             }
 
-            IEnumerable<IPostData> profilePosts = r_AppLogic.GetMyPostsData();
-
-            foreach (IPostData postData in profilePosts)
+            try
             {
-                if (postData == null)
+                IEnumerable<IPostData> profilePosts = r_AppLogic.GetMyPostsData();
+
+                foreach(IPostData postData in profilePosts)
                 {
-                    continue;
+                    if(postData == null)
+                    {
+                        continue;
+                    }
+
+
+                    profilePagePostsFlow.BeginInvoke(
+                        new Action(() =>
+                            {
+                                PostComponent postControl = new PostComponent
+                                                                {
+                                                                    Margin = new Padding(5, 5, 5, 15),
+                                                                    AppLogic = r_AppLogic
+                                                                };
+
+                                postControl.SetPost(postData);
+                                profilePagePostsFlow.Controls.Add(postControl);
+                            }));
                 }
 
-                profilePagePostsFlow.BeginInvoke(new Action(() =>
+
+                if(profileHeaderLabel != null)
                 {
-                    PostComponent postControl = new PostComponent
-                    {
-                        Margin = new Padding(5, 5, 5, 15),
-                        AppLogic = r_AppLogic
-                    };
-
-                    postControl.SetPost(postData);
-                    profilePagePostsFlow.Controls.Add(postControl);
-                }));
+                    profileHeaderLabel.BeginInvoke(new Action(() => { profileHeaderLabel.Text = @"Profile"; }));
+                }
             }
-
-            if (profileHeaderLabel != null)
-            {
-                profileHeaderLabel.BeginInvoke(new Action(() => { profileHeaderLabel.Text = @"Profile"; }));
-            }
+            catch { } // If the form is closed before loading completes - Ignore then it goes back to login page
         }
 
         private void fetchFeedPostsAsync() 
@@ -147,32 +156,36 @@ namespace FacebookMini.ui
                 return;
             }
 
-            if(feedHeaderLabel != null)
+            try
             {
-                feedHeaderLabel.BeginInvoke(new Action(() => { feedHeaderLabel.Text = @"Feed - Loading..."; }));
-            }
+                if(feedHeaderLabel != null)
+                {
+                    feedHeaderLabel.BeginInvoke(new Action(() => { feedHeaderLabel.Text = @"Feed - Loading..."; }));
+                }
 
-            IEnumerable<IPostData> friendsPosts = r_AppLogic.GetFriendsFeedPostsData();
-            
-            foreach (IPostData postOfFriend in friendsPosts)
-            {
-                feedPagePostsFlow.BeginInvoke(
-                    new Action(() =>
-                    {
-                        var postControl = new PostComponent
-                              {
-                                  Margin = new Padding(5, 5, 5, 15), AppLogic = r_AppLogic
-                              };
+                IEnumerable<IPostData> friendsPosts = r_AppLogic.GetFriendsFeedPostsData();
 
-                        postControl.SetPost(postOfFriend);
-                        feedPagePostsFlow.Controls.Add(postControl);
-                    }));
-            }
+                foreach(IPostData postOfFriend in friendsPosts)
+                {
+                    feedPagePostsFlow.BeginInvoke(
+                        new Action(() =>
+                            {
+                                PostComponent postControl = new PostComponent
+                                            {
+                                                Margin = new Padding(5, 5, 5, 15), AppLogic = r_AppLogic
+                                            };
 
-            if(feedHeaderLabel != null)
-            {
-                feedHeaderLabel.BeginInvoke(new Action(() => { feedHeaderLabel.Text = @"Feed"; }));
+                                postControl.SetPost(postOfFriend);
+                                feedPagePostsFlow.Controls.Add(postControl);
+                            }));
+                }
+
+                if(feedHeaderLabel != null)
+                {
+                    feedHeaderLabel.BeginInvoke(new Action(() => { feedHeaderLabel.Text = @"Feed"; }));
+                }
             }
+            catch { } // If the form is closed before loading completes - Ignore then it goes back to login page
         }
 
         private void fetchAlbumsAsync()
@@ -184,18 +197,19 @@ namespace FacebookMini.ui
                 return;
             }
 
-            List<GalleryItem> albumsItems = r_AppLogic.GetAlbumsGalleryItems();
-
-            if (albumsItems != null)
+            try
             {
-                foreach (GalleryItem album in albumsItems)
+                List<GalleryItem> albumsItems = r_AppLogic.GetAlbumsGalleryItems();
+
+                if(albumsItems != null)
                 {
-                    albumsGallery.BeginInvoke(new Action(() =>
-                        {
-                            albumsGallery.SetItem(album);
-                        }));
+                    foreach(GalleryItem album in albumsItems)
+                    {
+                        albumsGallery.BeginInvoke(new Action(() => { albumsGallery.SetItem(album); }));
+                    }
                 }
             }
+            catch { } // If the form is closed before loading completes - Ignore then it goes back to login page
         }
 
         private void fetchPagesAsync()
@@ -207,18 +221,19 @@ namespace FacebookMini.ui
                 return;
             }
 
-            List<GalleryItem> pagesItems = r_AppLogic.GetLikedPagesGalleryItems();
-
-            if (pagesItems != null)
+            try
             {
-                foreach (GalleryItem page in pagesItems)
+                List<GalleryItem> pagesItems = r_AppLogic.GetLikedPagesGalleryItems();
+
+                if(pagesItems != null)
                 {
-                    likedPagesGallery.BeginInvoke(new Action(() =>
-                        {
-                            likedPagesGallery.SetItem(page);
-                        }));
+                    foreach(GalleryItem page in pagesItems)
+                    {
+                        likedPagesGallery.BeginInvoke(new Action(() => { likedPagesGallery.SetItem(page); }));
+                    }
                 }
             }
+            catch { } // If the form is closed before loading completes - Ignore then it goes back to login page
         }
 
         /// <summary>
