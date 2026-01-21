@@ -48,7 +48,6 @@ namespace FacebookMini.shared.adapters
             }
 
             postDataSnapshot.LikesCount = getLikesCount();
-
             postDataSnapshot.CommentsCount = getCommentsCount();
 
             return postDataSnapshot;
@@ -91,6 +90,5 @@ namespace FacebookMini.shared.adapters
 
             return count;
         }
-
     }
 }

@@ -92,13 +92,13 @@ namespace FacebookMini.ui.PageBuilder
         private void bindData()
         {
             Series series = m_TagsChart.Series[0];
+
             series.Points.Clear();
 
             ICollection<string> allTags = m_Context.AppLogic.GetAllTags();
 
-            Dictionary<string, int> tagsCountDictionary =
-                new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            int total = 0;
+            Dictionary<string, int> tagsCountDictionary = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            int totalCountedTags = 0;
 
             if (allTags != null)
             {
@@ -106,19 +106,19 @@ namespace FacebookMini.ui.PageBuilder
                 {
                     if (!string.IsNullOrEmpty(tag))
                     {
-                        tagsCountDictionary[tag] = tagsCountDictionary.TryGetValue(tag, out int c) ? c + 1 : 1;
-                        total++;
+                        tagsCountDictionary[tag] = tagsCountDictionary.TryGetValue(tag, out int value) ? value + 1 : 1;
+                        totalCountedTags++;
                     }
                 }
             }
 
-            if (total == 0)
+            if (totalCountedTags == 0)
             {
-                m_InfoLabel.Text = "No tags to display yet. Add tags to your posts first.";
+                m_InfoLabel.Text = @"No tags to display yet. Add tags to your posts first.";
                 return;
             }
 
-            m_InfoLabel.Text = "Showing distribution of all tags by percentage.";
+            m_InfoLabel.Text = @"Showing distribution of all tags by percentage.";
 
             foreach (KeyValuePair<string, int> pair in tagsCountDictionary)
             {
