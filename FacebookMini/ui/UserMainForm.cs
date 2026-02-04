@@ -1,32 +1,30 @@
-﻿using System;
+﻿using Facebook;
+using FacebookMini.ui.CustomComponent;
+using FacebookMini.Logic;
+using FacebookMini.ui.PageBuilder;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
-using Facebook;
-using FacebookMini.Logic;
-using FacebookMini.CustomComponent;
-using FacebookMini.logic.features.postNotes;
-using FacebookMini.logic.features.postTags;
-using FacebookWrapper.ObjectModel;
-using System.Windows.Forms.DataVisualization.Charting;
-using FacebookMini.ui.CustomComponent;
+using FacebookMini.shared.galleryItem;
+using FacebookMini.shared.adapters;
 
 namespace FacebookMini.ui
 {
     public partial class UserMainForm : Form
     {
-        private readonly User r_LoggedInUser;
         private readonly IFacebookAppLogic r_AppLogic;
-        private readonly IPostNotesManager r_PostNotesManager;
-        private readonly IPostTagsManager r_PostTagsManager;
 
         private Control m_ProfilePage;
-        private Control m_FeedPage;
-        
+        private Control m_FeedPage;        
         private Control m_TagsAnalyticsPage;
-        private Chart m_TagsChart;
-        private Label m_TagsInfoLabel;
+        private PageComposer m_Composer;
+        private PageBuildContext m_Context;
+
+        private bool m_ProfileLoaded = false;
+        private bool m_FeedLoaded = false;
 
         public UserMainForm()
         {
@@ -38,359 +36,201 @@ namespace FacebookMini.ui
             : this() // calls the parameterless ctor (InitializeComponent)
         {
             r_AppLogic = i_AppLogic ?? throw new ArgumentNullException(nameof(i_AppLogic));
-            r_LoggedInUser = r_AppLogic.LoggedInUser;
-            r_PostNotesManager = r_AppLogic.PostNotesManager;
-            r_PostTagsManager = r_AppLogic.PostTagsManager;
         }
 
         private void UserMainForm_Load(object sender, EventArgs e)
         {
+            m_Context = new PageBuildContext(r_AppLogic, userPictureBoxTopBar);
+            m_Composer = new PageComposer(m_Context, new ProfilePageBuilder());
+
             buildPages();
-            showPage(m_ProfilePage); // default
+            showPage(m_ProfilePage);// defult
+
+            startProfileAsyncLoaders();
         }
 
         private void buildPages()
         {
-            m_ProfilePage = buildProfilePage();
-            m_FeedPage = buildFriendsFeedPage();
-            m_TagsAnalyticsPage = buildTagsAnalyticsPage();
+            m_ProfilePage = m_Composer.Compose();
 
-            updateAnalyticsPage();
+            m_Composer.Builder = new FeedPageBuilder();
+            m_FeedPage = m_Composer.Compose();
+        }
+
+
+        private void startProfileAsyncLoaders()
+        {
+            if (m_ProfileLoaded)
+            {
+                return;
+            }
+
+            m_ProfileLoaded = true;
+
+            new Thread(fetchProfilePostsAsync).Start();
+            new Thread(fetchAlbumsAsync).Start();
+            new Thread(fetchPagesAsync).Start();            
+        }
+
+        private void startFeedAsyncLoaders() 
+        {
+            if (m_FeedLoaded)
+            {
+                return;
+            }
+
+            m_FeedLoaded = true;
+
+            new Thread(fetchFeedPostsAsync).Start();
+        }
+
+        private void fetchProfilePostsAsync()
+        {
+            FlowLayoutPanel profilePagePostsFlow = m_ProfilePage.Controls.Find("ProfilePostsFlow", true).FirstOrDefault() as FlowLayoutPanel;
+            Label profileHeaderLabel = m_ProfilePage.Controls.Find("ProfileHeaderLabel", true).FirstOrDefault() as Label;
+
+            if (profilePagePostsFlow == null)
+            {
+                return;
+            }
+
+            if(profileHeaderLabel != null)
+            {
+                try
+                {
+                    profileHeaderLabel.BeginInvoke(new Action(() => { profileHeaderLabel.Text = @"Profile - Loading..."; }));
+                }
+                catch{ } // If the form is closed before loading completes - Ignore then it goes back to login page
+            }
+
+            try
+            {
+                IEnumerable<IPostData> profilePosts = r_AppLogic.GetMyPostsData();
+
+                foreach(IPostData postData in profilePosts)
+                {
+                    if(postData == null)
+                    {
+                        continue;
+                    }
+
+
+                    profilePagePostsFlow.BeginInvoke(
+                        new Action(() =>
+                            {
+                                PostComponent postControl = new PostComponent
+                                                                {
+                                                                    Margin = new Padding(5, 5, 5, 15),
+                                                                    AppLogic = r_AppLogic
+                                                                };
+
+                                postControl.SetPost(postData);
+                                profilePagePostsFlow.Controls.Add(postControl);
+                            }));
+                }
+
+
+                if(profileHeaderLabel != null)
+                {
+                    profileHeaderLabel.BeginInvoke(new Action(() => { profileHeaderLabel.Text = @"Profile"; }));
+                }
+            }
+            catch { } // If the form is closed before loading completes - Ignore then it goes back to login page
+        }
+
+        private void fetchFeedPostsAsync() 
+        {
+            FlowLayoutPanel feedPagePostsFlow = m_FeedPage.Controls.Find("feedPostsFlow", true).FirstOrDefault() as FlowLayoutPanel;
+            Label feedHeaderLabel = m_FeedPage.Controls.Find("feedHeaderLabel", true).FirstOrDefault() as Label;
+
+            if (feedPagePostsFlow == null || !r_AppLogic.IsUserFriendsAccessibleAndHasFriends())
+            {
+                return;
+            }
+
+            try
+            {
+                if(feedHeaderLabel != null)
+                {
+                    feedHeaderLabel.BeginInvoke(new Action(() => { feedHeaderLabel.Text = @"Feed - Loading..."; }));
+                }
+
+                IEnumerable<IPostData> friendsPosts = r_AppLogic.GetFriendsFeedPostsData();
+
+                foreach(IPostData postOfFriend in friendsPosts)
+                {
+                    feedPagePostsFlow.BeginInvoke(
+                        new Action(() =>
+                            {
+                                PostComponent postControl = new PostComponent
+                                            {
+                                                Margin = new Padding(5, 5, 5, 15), AppLogic = r_AppLogic
+                                            };
+
+                                postControl.SetPost(postOfFriend);
+                                feedPagePostsFlow.Controls.Add(postControl);
+                            }));
+                }
+
+                if(feedHeaderLabel != null)
+                {
+                    feedHeaderLabel.BeginInvoke(new Action(() => { feedHeaderLabel.Text = @"Feed"; }));
+                }
+            }
+            catch { } // If the form is closed before loading completes - Ignore then it goes back to login page
+        }
+
+        private void fetchAlbumsAsync()
+        {
+            ItemGalleryComponent albumsGallery = m_ProfilePage.Controls.Find("ProfileAlbumsGallery", true).FirstOrDefault() as ItemGalleryComponent;
+
+            if (albumsGallery == null)
+            {
+                return;
+            }
+
+            try
+            {
+                List<GalleryItem> albumsItems = r_AppLogic.GetAlbumsGalleryItems();
+
+                if(albumsItems != null)
+                {
+                    foreach(GalleryItem album in albumsItems)
+                    {
+                        albumsGallery.BeginInvoke(new Action(() => { albumsGallery.SetItem(album); }));
+                    }
+                }
+            }
+            catch { } // If the form is closed before loading completes - Ignore then it goes back to login page
+        }
+
+        private void fetchPagesAsync()
+        {
+            ItemGalleryComponent likedPagesGallery = m_ProfilePage.Controls.Find("ProfilePagesGallery", true).FirstOrDefault() as ItemGalleryComponent;
+
+            if (likedPagesGallery == null)
+            {
+                return;
+            }
+
+            try
+            {
+                List<GalleryItem> pagesItems = r_AppLogic.GetLikedPagesGalleryItems();
+
+                if(pagesItems != null)
+                {
+                    foreach(GalleryItem page in pagesItems)
+                    {
+                        likedPagesGallery.BeginInvoke(new Action(() => { likedPagesGallery.SetItem(page); }));
+                    }
+                }
+            }
+            catch { } // If the form is closed before loading completes - Ignore then it goes back to login page
         }
 
         /// <summary>
         /// Profile page example: posts component + item gallery (albums / liked pages).
         /// </summary>
-        private Control buildProfilePage()
-        {
-            var profilePanel = new Panel { Dock = DockStyle.Fill };
-
-            // ===== top "Profile" title =====
-            var labelHeader = new Label
-            {
-                Text = "Profile",
-                Dock = DockStyle.Top,
-                Height = 40,
-                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
-                Padding = new Padding(10, 5, 0, 5)
-            };
-
-            // ===== user info section (full width) =====
-            var userInfoPanel = new Panel
-            {
-                Dock = DockStyle.Top,
-                Height = 110,
-                Padding = new Padding(10, 5, 10, 5)
-            };
-
-            var userPictureBox = new PictureBox
-            {
-                Size = new Size(80, 80),
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Location = new Point(10, 10),
-                Image = r_LoggedInUser.ImageNormal ?? FacebookMini.Properties.Resources.Facebook_default_male_avatar
-            };
-
-            if (!string.IsNullOrEmpty(r_LoggedInUser.PictureNormalURL))
-            {
-                try 
-                { 
-                    userPictureBox.LoadAsync(r_LoggedInUser.PictureNormalURL); 
-                    userPictureBoxTopBar.Image = userPictureBox.Image;
-                }
-                catch { }
-            }
-
-            var userNameLabel = new Label
-            {
-                AutoSize = true,
-                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                Location = new Point(110, 20),
-                Text = r_LoggedInUser.Name
-            };
-
-            string extraInfo = string.Empty;
-
-            if (!string.IsNullOrEmpty(r_LoggedInUser.Email))
-            {
-                extraInfo += r_LoggedInUser.Email;
-            }
-
-            if (r_LoggedInUser.Birthday != null)
-            {
-                if(extraInfo.Length > 0)
-                {
-                    extraInfo += "   |   ";
-                }
-
-                extraInfo += $"Birthday: {r_LoggedInUser.Birthday}";
-            }
-
-            if (r_LoggedInUser.Location != null &&
-                !string.IsNullOrEmpty(r_LoggedInUser.Location.Name))
-            {
-                if(extraInfo.Length > 0)
-                {
-                    extraInfo += "   |   ";
-                }
-
-                extraInfo += r_LoggedInUser.Location.Name;
-            }
-
-            var userExtraLabel = new Label
-            {
-                AutoSize = true,
-                Font = new Font("Segoe UI", 9F),
-                Location = new Point(110, 55),
-                Text = extraInfo
-            };
-
-            userInfoPanel.Controls.Add(userPictureBox);
-            userInfoPanel.Controls.Add(userNameLabel);
-            userInfoPanel.Controls.Add(userExtraLabel);
-
-            // ===== split container: left = posts, right = albums/pages =====
-            var splitContainer = new SplitContainer
-            {
-                Dock = DockStyle.Fill,
-                Orientation = Orientation.Vertical
-            };
-
-            // ----- LEFT: posts section -----
-            var postsSectionPanel = new Panel { Dock = DockStyle.Fill };
-
-            var postsTitleLabel = new Label
-            {
-                Text = "Posts",
-                Dock = DockStyle.Top,
-                Height = 30,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                Padding = new Padding(5, 5, 0, 0)
-            };
-
-            var postsFlowPanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                FlowDirection = FlowDirection.TopDown,
-                WrapContents = false,
-                Padding = new Padding(10, 5, 10, 10)
-            };
-
-            postsSectionPanel.Controls.Add(postsFlowPanel);
-            postsSectionPanel.Controls.Add(postsTitleLabel);
-            splitContainer.Panel1.Controls.Add(postsSectionPanel);
-
-            // ----- RIGHT: albums (top) + pages (bottom) 50/50 -----
-            var tlpRight = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 1,
-                RowCount = 2,
-                Margin = new Padding(0),
-                Padding = new Padding(0)
-            };
-            tlpRight.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
-            tlpRight.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
-
-            // --- ALBUMS ---
-            var albumsTitleLabel = new Label
-            {
-                Text = "Albums",
-                Dock = DockStyle.Top,
-                Height = 25,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Padding = new Padding(5, 2, 0, 0)
-            };
-            var albumsSection = new ItemGalleryComponent { Dock = DockStyle.Fill };
-
-            var albumsContainer = new Panel { Dock = DockStyle.Fill };
-            albumsContainer.Controls.Add(albumsSection);      // Fill
-            albumsContainer.Controls.Add(albumsTitleLabel);   // Top
-
-            // --- PAGES ---
-            var pagesTitleLabel = new Label
-            {
-                Text = "Pages you like",
-                Dock = DockStyle.Top,
-                Height = 25,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Padding = new Padding(5, 2, 0, 0)
-            };
-            var pagesSection = new ItemGalleryComponent { Dock = DockStyle.Fill };
-
-            var pagesContainer = new Panel { Dock = DockStyle.Fill };
-            pagesContainer.Controls.Add(pagesSection);        // Fill
-            pagesContainer.Controls.Add(pagesTitleLabel);     // Top
-
-            tlpRight.Controls.Add(albumsContainer, 0, 0);
-            tlpRight.Controls.Add(pagesContainer, 0, 1);
-
-            splitContainer.Panel2.Controls.Add(tlpRight);
-
-            // add to main panel
-            profilePanel.SuspendLayout();
-            profilePanel.Controls.Add(splitContainer);   // Fill
-            profilePanel.Controls.Add(userInfoPanel);    // Top
-            profilePanel.Controls.Add(labelHeader);      // Top
-            profilePanel.ResumeLayout();
-
-            profilePanel.Resize += (sender, args) =>
-            {
-                if (profilePanel.Width > 0)
-                {
-                    try
-                    {
-                        splitContainer.SplitterDistance = (int)(profilePanel.Width * 0.6);
-                    }
-                    catch
-                    {
-                        // do nothing
-                    }
-                }
-            };
-
-            // ===== fill posts (via logic) =====
-            var posts = r_AppLogic.GetUserPosts();
-
-            if (posts != null)
-            {
-                foreach (Post post in posts)
-                {
-                    PostComponent postControl = new PostComponent
-                    {
-                        Margin = new Padding(5, 5, 5, 15),
-                        PostNotesManager = r_PostNotesManager,
-                        PostTagsManager = r_PostTagsManager
-                    };
-
-                    // still uses Facebook types – but the data comes from logic
-                    postControl.SetPost(post, r_LoggedInUser);
-                    postsFlowPanel.Controls.Add(postControl);
-                }
-            }
-
-            // ===== fill albums (via logic) =====
-            var albumsItems = new List<GalleryItem>();
-            var albums = r_AppLogic.GetUserAlbums();
-
-            if (albums != null)
-            {
-                foreach (Album album in albums)
-                {
-                    Image albumImage = album.ImageAlbum;
-
-                    albumsItems.Add(new GalleryItem
-                    {
-                        Title = album.Name,
-                        Image = albumImage,
-                        Tag = album,
-                        ItemType = eGalleryItemType.Album
-                    });
-                }
-            }
-
-            albumsSection.SetItems(albumsItems);
-
-            if (albumsItems.Count == 0)
-            {
-                albumsSection.Visible = false;
-                albumsTitleLabel.Visible = false;
-                albumsSection.Height = 0;
-            }
-
-            // ===== fill pages (via logic) =====
-            var pagesItems = new List<GalleryItem>();
-            var likedPages = r_AppLogic.GetUserLikedPages();
-
-            if (likedPages != null)
-            {
-                foreach (Page page in likedPages)
-                {
-                    Image pageImage = page.ImageNormal;
-
-                    pagesItems.Add(new GalleryItem
-                    {
-                        Title = page.Name,
-                        Image = pageImage,
-                        Tag = page,
-                        ItemType = eGalleryItemType.Page
-                    });
-                }
-            }
-
-            pagesSection.SetItems(pagesItems);
-
-            return profilePanel;
-        }
-        
-        private Control buildFriendsFeedPage()
-        {
-            var feedPanel = new Panel { Dock = DockStyle.Fill };
-
-            var headerLabel = new Label
-            {
-                Text = "Feed",
-                Dock = DockStyle.Top,
-                Height = 45,
-                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
-                Padding = new Padding(10, 5, 0, 5)
-            };
-
-            var postsFlowPanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                FlowDirection = FlowDirection.TopDown,
-                WrapContents = false,
-                Padding = new Padding(10, 5, 10, 10) 
-            };
-
-            feedPanel.SuspendLayout();
-            feedPanel.Controls.Add(postsFlowPanel); // Fill
-            feedPanel.Controls.Add(headerLabel);    // Top
-            feedPanel.ResumeLayout();
-
-            if (r_LoggedInUser.Friends != null && r_LoggedInUser.Friends.Count > 0)
-            {
-                HashSet<KeyValuePair<Post, User>> friendsPosts = new HashSet<KeyValuePair<Post, User>>();
-
-                foreach(User friend in r_LoggedInUser.Friends)
-                {
-                    if(friend?.Posts == null)
-                    {
-                        continue;
-                    }
-
-                    foreach(Post post in friend.Posts)
-                    {
-                        if(post == null)
-                        {
-                            continue;
-                        }
-
-                        KeyValuePair<Post,User> postOfFriend = new KeyValuePair<Post, User>(post, friend);
-
-                        friendsPosts.Add(postOfFriend);
-                    }
-                }
-
-                foreach (KeyValuePair<Post, User> postOfFriend in friendsPosts)
-                {
-                    var postControl = new PostComponent
-                                          {
-                                              Margin = new Padding(5, 5, 5, 15),
-                                              PostNotesManager = r_PostNotesManager,
-                                              PostTagsManager = r_PostTagsManager
-                                          };
-
-                    postControl.SetPost(postOfFriend.Key, postOfFriend.Value);
-                    postsFlowPanel.Controls.Add(postControl);
-                }
-            }
-
-            return feedPanel;
-        }
 
         private void showPage(Control i_Page)
         {
@@ -411,7 +251,7 @@ namespace FacebookMini.ui
         {
             try
             {
-                if (r_LoggedInUser.Friends == null || r_LoggedInUser.Friends.Count == 0)
+                if (!r_AppLogic.IsUserFriendsAccessibleAndHasFriends())
                 {
                     MessageBox.Show(
                     @"No friends are available to display in the feed.
@@ -427,6 +267,7 @@ namespace FacebookMini.ui
                 }
 
                 showPage(m_FeedPage);
+                startFeedAsyncLoaders();
             }
             catch (Exception ex)
             {
@@ -440,134 +281,14 @@ namespace FacebookMini.ui
         
         private void buttonTagsAnalytics_Click(object sender, EventArgs e)
         {
-            updateAnalyticsPage();
+            m_Composer.Builder = new TagsAnalyticsPageBuilder();
+            m_TagsAnalyticsPage = m_Composer.Compose();
             showPage(m_TagsAnalyticsPage);
         }
 
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private Control buildTagsAnalyticsPage()
-        {
-            Panel mainPanel = new Panel();
-            mainPanel.Dock = DockStyle.Fill;
-
-            // Header
-            Label headerLabel = new Label();
-            headerLabel.Text = "Tags Analytics";
-            headerLabel.Dock = DockStyle.Top;
-            headerLabel.Height = 40;
-            headerLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            headerLabel.Padding = new Padding(10, 5, 0, 0);
-            mainPanel.Controls.Add(headerLabel);
-
-            // Info label
-            Label infoLabel = new Label();
-            infoLabel.Dock = DockStyle.Top;
-            infoLabel.Height = 30;
-            infoLabel.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
-            infoLabel.Padding = new Padding(10, 5, 0, 0);
-            mainPanel.Controls.Add(infoLabel);
-            mainPanel.Controls.SetChildIndex(infoLabel, 1);   // under header
-
-            // Chart
-            Chart tagsChart = new Chart();
-            tagsChart.Width = 500;
-            tagsChart.Height = 350;
-            tagsChart.Anchor = AnchorStyles.Top;
-            tagsChart.Top = 80;
-
-            tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
-            mainPanel.Resize += delegate
-                {
-                    tagsChart.Left = (mainPanel.Width - tagsChart.Width) / 2;
-                };
-
-            ChartArea chartArea = new ChartArea("TagsArea");
-            tagsChart.ChartAreas.Add(chartArea);
-
-            Series series = new Series("Tags");
-            series.ChartType = SeriesChartType.Pie;
-            series.YValueType = ChartValueType.Int32;
-
-            series.IsValueShownAsLabel = true;
-            series.Label = "#AXISLABEL (#PERCENT{P0})";
-            series["PieLabelStyle"] = "Outside";
-            series["PieLineColor"] = "Black";
-
-            tagsChart.Series.Add(series);
-
-            mainPanel.Controls.Add(tagsChart);
-            mainPanel.Controls.SetChildIndex(tagsChart, 2);
-
-            // keep references for later updates
-            m_TagsChart = tagsChart;
-            m_TagsInfoLabel = infoLabel;
-
-            return mainPanel;
-        }
-
-        // TODO: Separate ui from count total tags logic.
-        private void updateAnalyticsPage() 
-        {
-            bool isChartReady = m_TagsChart != null && m_TagsInfoLabel != null;
-
-            if (isChartReady)
-            {
-                Series series = m_TagsChart.Series[0];
-                series.Points.Clear();
-
-                ICollection<string> allTags = r_PostTagsManager.GetAllTags();
-                Dictionary<string, int> tagsCountDictionary =
-                    new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                int total = 0;
-
-                if (allTags != null)
-                {
-                    foreach (string tag in allTags)
-                    {
-                        if (!string.IsNullOrEmpty(tag))
-                        {
-                            int currentTagCount;
-
-                            if (tagsCountDictionary.TryGetValue(tag, out currentTagCount))
-                            {
-                                tagsCountDictionary[tag] = currentTagCount + 1;
-                            }
-                            else
-                            {
-                                tagsCountDictionary[tag] = 1;
-                            }
-
-                            total++;
-                        }
-                    }
-                }
-
-                if (total == 0)
-                {
-                    m_TagsInfoLabel.Text =
-                        "No tags to display yet. Add tags to your posts first.";
-                }
-                else
-                {
-                    m_TagsInfoLabel.Text =
-                        "Showing distribution of all tags by percentage.";
-
-                    foreach (KeyValuePair<string, int> pair in tagsCountDictionary)
-                    {
-                        string tagName = pair.Key;
-                        int count = pair.Value;
-
-                        DataPoint point = new DataPoint();
-                        point.YValues = new double[] { count };
-                        point.AxisLabel = tagName;
-                        series.Points.Add(point);
-                    }
-                }
-            }
         }
     }
 }

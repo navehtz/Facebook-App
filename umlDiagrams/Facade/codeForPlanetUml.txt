@@ -1,0 +1,108 @@
+@startuml
+title UI logic uses Facade (Builder + async loaders)
+
+participant ":FacebookAppLogic\n(Facade)" as F
+participant ":UserMainForm" as UM
+participant ":PageBuildContext" as Ctx
+participant ":PageComposer" as PC
+participant ":ProfilePageBuilder" as PPB
+
+participant ":ProfilePostsFlow\n(FlowLayoutPanel)" as ProfileFlow
+participant "AlbumsGallery\n:ItemGalleryComponent" as AlbumsGallery
+participant "PagesGallery\n:ItemGalleryComponent" as PagesGallery
+
+participant "PostsLoaderThread" as TPosts
+participant "AlbumsLoaderThread" as TAlbums
+participant "PagesLoaderThread" as TPages
+
+note over UM
+Assume: Login succeeded, token is valid.
+end note
+
+activate UM
+
+== Build Profile page (Builder) ==
+UM -> Ctx : new PageBuildContext(AppLogic)
+note right of Ctx
+Context holds reference to the Facade (AppLogic),
+so builders access data indirectly via Facade.
+end note
+
+UM -> PC : new PageComposer(Ctx)
+UM -> PC : Compose(ProfilePageBuilder)
+activate PC
+activate PPB
+ref over PC, PPB
+Build Profile page structure (details hidden):
+- Header
+- Posts section (ProfilePostsFlow)
+- AlbumsGallery + PagesGallery
+end ref
+PPB --> PC : profilePage (Control)
+deactivate PPB
+PC --> UM : profilePage
+deactivate PC
+
+UM -> UM : showPage(profilePage)
+
+== Start async loaders ==
+create TPosts
+UM ->> TPosts : Start(fetchProfilePostsAsync)
+
+create TAlbums
+UM ->> TAlbums : Start(fetchAlbumsAsync)
+
+create TPages
+UM ->> TPages : Start(fetchPagesAsync)
+
+note over TPosts, TPages
+The following three groups represent work done concurrently
+(on separate background threads), each updating UI via Invoke.
+end note
+
+group Posts loader thread (runs concurrently)
+  TPosts -> F : GetMyPostsData()
+  activate F
+  F --> TPosts : IEnumerable<IPostData>
+  deactivate F
+
+  loop for each postData
+    TPosts -> ProfileFlow : Invoke(Add PostComponent)
+    activate ProfileFlow
+    ProfileFlow -> ProfileFlow : Controls.Add(PostComponent)
+    deactivate ProfileFlow
+  end
+end
+
+group Albums loader thread (runs concurrently)
+ 
+  TAlbums -> F : GetAlbumsGalleryItems()
+  activate F
+  F --> TAlbums : List<GalleryItem>
+  deactivate F
+
+  loop for each albumItem
+    TAlbums -> AlbumsGallery : Invoke(SetItem(albumItem))
+    activate AlbumsGallery
+    AlbumsGallery -> AlbumsGallery : SetItem(albumItem)
+    deactivate AlbumsGallery
+  end
+  deactivate TAlbums
+end
+
+group Pages loader thread (runs concurrently)
+  TPages -> F : GetLikedPagesGalleryItems()
+  activate F
+  F --> TPages : List<GalleryItem>
+  deactivate F
+
+  loop for each pageItem
+    TPages -> PagesGallery : Invoke(SetItem(pageItem))
+    activate PagesGallery
+    PagesGallery -> PagesGallery : SetItem(pageItem)
+    deactivate PagesGallery
+  end
+end
+
+deactivate UM
+@enduml

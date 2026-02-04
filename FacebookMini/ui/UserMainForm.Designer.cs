@@ -65,17 +65,19 @@
             this.panelHeader.Controls.Add(this.pictureBoxLogo);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
+            this.panelHeader.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(1195, 86);
+            this.panelHeader.Size = new System.Drawing.Size(1792, 132);
             this.panelHeader.TabIndex = 0;
             // 
             // userPictureBoxTopBar
             // 
             this.userPictureBoxTopBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.userPictureBoxTopBar.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar;
-            this.userPictureBoxTopBar.Location = new System.Drawing.Point(1118, 13);
+            this.userPictureBoxTopBar.Image = global::FacebookMini.Properties.Resources.Facebook_default_male_avatar1;
+            this.userPictureBoxTopBar.Location = new System.Drawing.Point(1677, 20);
+            this.userPictureBoxTopBar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.userPictureBoxTopBar.Name = "userPictureBoxTopBar";
-            this.userPictureBoxTopBar.Size = new System.Drawing.Size(60, 60);
+            this.userPictureBoxTopBar.Size = new System.Drawing.Size(90, 92);
             this.userPictureBoxTopBar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.userPictureBoxTopBar.TabIndex = 0;
             this.userPictureBoxTopBar.TabStop = false;
@@ -85,18 +87,20 @@
             this.labelTitle.AutoSize = true;
             this.labelTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTitle.ForeColor = System.Drawing.Color.White;
-            this.labelTitle.Location = new System.Drawing.Point(75, 23);
+            this.labelTitle.Location = new System.Drawing.Point(112, 35);
+            this.labelTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(119, 32);
+            this.labelTitle.Size = new System.Drawing.Size(175, 48);
             this.labelTitle.TabIndex = 1;
             this.labelTitle.Text = "facebook";
             // 
             // pictureBoxLogo
             // 
             this.pictureBoxLogo.Image = global::FacebookMini.Properties.Resources.Facebook_logo__square_;
-            this.pictureBoxLogo.Location = new System.Drawing.Point(25, 17);
+            this.pictureBoxLogo.Location = new System.Drawing.Point(38, 26);
+            this.pictureBoxLogo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBoxLogo.Name = "pictureBoxLogo";
-            this.pictureBoxLogo.Size = new System.Drawing.Size(44, 44);
+            this.pictureBoxLogo.Size = new System.Drawing.Size(66, 68);
             this.pictureBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxLogo.TabIndex = 0;
             this.pictureBoxLogo.TabStop = false;
@@ -109,21 +113,24 @@
             this.panelSideMenu.Controls.Add(this.buttonFeed);
             this.panelSideMenu.Controls.Add(this.buttonProfile);
             this.panelSideMenu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelSideMenu.Location = new System.Drawing.Point(0, 86);
+            this.panelSideMenu.Location = new System.Drawing.Point(0, 132);
+            this.panelSideMenu.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelSideMenu.Name = "panelSideMenu";
-            this.panelSideMenu.Size = new System.Drawing.Size(180, 687);
+            this.panelSideMenu.Size = new System.Drawing.Size(270, 1057);
             this.panelSideMenu.TabIndex = 1;
             // 
             // buttonLogout
             // 
+            this.buttonLogout.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonLogout.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonLogout.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.buttonLogout.ForeColor = System.Drawing.Color.White;
-            this.buttonLogout.Location = new System.Drawing.Point(0, 642);
+            this.buttonLogout.Location = new System.Drawing.Point(0, 988);
+            this.buttonLogout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonLogout.Name = "buttonLogout";
-            this.buttonLogout.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.buttonLogout.Size = new System.Drawing.Size(180, 45);
+            this.buttonLogout.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+            this.buttonLogout.Size = new System.Drawing.Size(270, 69);
             this.buttonLogout.TabIndex = 5;
             this.buttonLogout.Text = "Logout";
             this.buttonLogout.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -132,14 +139,16 @@
             // 
             // buttonPostTagsAnalytics
             // 
+            this.buttonPostTagsAnalytics.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonPostTagsAnalytics.Dock = System.Windows.Forms.DockStyle.Top;
             this.buttonPostTagsAnalytics.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonPostTagsAnalytics.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.buttonPostTagsAnalytics.ForeColor = System.Drawing.Color.White;
-            this.buttonPostTagsAnalytics.Location = new System.Drawing.Point(0, 90);
+            this.buttonPostTagsAnalytics.Location = new System.Drawing.Point(0, 138);
+            this.buttonPostTagsAnalytics.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonPostTagsAnalytics.Name = "buttonPostTagsAnalytics";
-            this.buttonPostTagsAnalytics.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.buttonPostTagsAnalytics.Size = new System.Drawing.Size(180, 45);
+            this.buttonPostTagsAnalytics.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+            this.buttonPostTagsAnalytics.Size = new System.Drawing.Size(270, 69);
             this.buttonPostTagsAnalytics.TabIndex = 3;
             this.buttonPostTagsAnalytics.Text = "Posts Tags Analytics";
             this.buttonPostTagsAnalytics.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -148,14 +157,16 @@
             // 
             // buttonFeed
             // 
+            this.buttonFeed.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonFeed.Dock = System.Windows.Forms.DockStyle.Top;
             this.buttonFeed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonFeed.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.buttonFeed.ForeColor = System.Drawing.Color.White;
-            this.buttonFeed.Location = new System.Drawing.Point(0, 45);
+            this.buttonFeed.Location = new System.Drawing.Point(0, 69);
+            this.buttonFeed.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonFeed.Name = "buttonFeed";
-            this.buttonFeed.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.buttonFeed.Size = new System.Drawing.Size(180, 45);
+            this.buttonFeed.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+            this.buttonFeed.Size = new System.Drawing.Size(270, 69);
             this.buttonFeed.TabIndex = 1;
             this.buttonFeed.Text = "Feed";
             this.buttonFeed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -164,14 +175,16 @@
             // 
             // buttonProfile
             // 
+            this.buttonProfile.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonProfile.Dock = System.Windows.Forms.DockStyle.Top;
             this.buttonProfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonProfile.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.buttonProfile.ForeColor = System.Drawing.Color.White;
             this.buttonProfile.Location = new System.Drawing.Point(0, 0);
+            this.buttonProfile.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonProfile.Name = "buttonProfile";
-            this.buttonProfile.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.buttonProfile.Size = new System.Drawing.Size(180, 45);
+            this.buttonProfile.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+            this.buttonProfile.Size = new System.Drawing.Size(270, 69);
             this.buttonProfile.TabIndex = 0;
             this.buttonProfile.Text = "Profile";
             this.buttonProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -182,20 +195,22 @@
             // 
             this.panelContent.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.Location = new System.Drawing.Point(180, 86);
+            this.panelContent.Location = new System.Drawing.Point(270, 132);
+            this.panelContent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(1015, 687);
+            this.panelContent.Size = new System.Drawing.Size(1522, 1057);
             this.panelContent.TabIndex = 2;
             // 
             // UserMainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1195, 773);
+            this.ClientSize = new System.Drawing.Size(1792, 1189);
             this.Controls.Add(this.panelContent);
             this.Controls.Add(this.panelSideMenu);
             this.Controls.Add(this.panelHeader);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "UserMainForm";
             this.Text = "Facebook Mini";
             this.Load += new System.EventHandler(this.UserMainForm_Load);
