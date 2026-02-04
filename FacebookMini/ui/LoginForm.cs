@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using FacebookMini.Logic;
-using FacebookMini.utils;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 
@@ -16,6 +9,7 @@ namespace FacebookMini.ui
     public partial class LoginForm : Form
     {
         private FacebookWrapper.LoginResult m_LoginResult;
+        private const int k_CollectionLimit = 25;
 
         private readonly string[] r_RequestedPermissions =
             {   
@@ -32,7 +26,7 @@ namespace FacebookMini.ui
         public LoginForm()
         {
             InitializeComponent();
-            FacebookWrapper.FacebookService.s_CollectionLimit = 25;
+            FacebookWrapper.FacebookService.s_CollectionLimit = k_CollectionLimit;
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
@@ -82,7 +76,7 @@ namespace FacebookMini.ui
             try
             {
                 showLoadingUi("Logging in to Facebook...");
-                m_LoginResult = FacebookService.Connect("EAAUm6cZC4eUEBPZCFs9rJRpwlUmdHcPvU1tUNkIyP37zRZCjSvfdHaW5t3xsOnUL0bEKHL8Snjk6AZC3O32KWEbaItglEnXWQ2zEMXHqsdfdv0ecXNs3hO69juHrZCfRN9FGvfuJZAXhP4Pm57DRRoDeB8De6ZABnfrRflh6zgPwnavpyHS3ZCYX1E6K1QLTHff5sAZDZD");
+                m_LoginResult = FacebookService.Connect("EAAUm6cZC4eUEBQTAa3rRgO39UZCIJLeD9OpF5SYAevqSaFI16sfjT6JznpAUbyX5Soyj4Uv2ZBRkesoHO9omNcJ3KSYPZCExgaKrIprACUMIVnhiHzT5a46zbdC2VkvZC04n1ZARj8WmvOCYyuIdmRZBNjtWZCFJrbjFoms5t3sU8G9dO1xDCYH7kkfU67heIUZCFDIuTtL0CzF2JUHBpRpwPdXYilOJW811z3C5fY9TOyBiUwZAqx4ZAV6YS5ZBBtYKdsb7");
                 showLoadingUi("Opening main window...");
                 openMainForm(m_LoginResult.LoggedInUser);
             }
