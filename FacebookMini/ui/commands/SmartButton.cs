@@ -19,7 +19,7 @@ namespace FacebookMini.ui.commands
 
         public SmartButton(Button i_Button, ICommand i_Command)
         {
-            m_BasicButton = new Button();
+            m_BasicButton = i_Button;
             i_Command.Title = i_Button.Text;
             m_CommandHolder = CommandObserver.CreateCommandHolder(this);
             m_CommandHolder.Command = i_Command;
@@ -41,7 +41,11 @@ namespace FacebookMini.ui.commands
             this.TabIndex = m_BasicButton.TabIndex;
             this.Text = m_BasicButton.Text;
             this.TextAlign = m_BasicButton.TextAlign;
-            this.UseVisualStyleBackColor = m_BasicButton.UseVisualStyleBackColor;
+            this.UseVisualStyleBackColor = false;
+            this.BackColor = m_BasicButton.BackColor;
+            this.FlatAppearance.BorderSize = m_BasicButton.FlatAppearance.BorderSize;
+            this.FlatAppearance.MouseOverBackColor = m_BasicButton.FlatAppearance.MouseOverBackColor;
+            this.FlatAppearance.MouseDownBackColor = m_BasicButton.FlatAppearance.MouseDownBackColor;
 
             m_BasicButton.Visible = false;
             m_BasicButton.Enabled = false;
