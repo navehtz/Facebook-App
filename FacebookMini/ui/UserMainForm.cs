@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using FacebookMini.shared.galleryItem;
 using FacebookMini.shared.adapters;
+using FacebookMini.ui.commands;
 
 namespace FacebookMini.ui
 {
@@ -25,6 +26,11 @@ namespace FacebookMini.ui
 
         private bool m_ProfileLoaded = false;
         private bool m_FeedLoaded = false;
+
+        private ButtonMenuCommand m_ProfileCommand;
+        private ButtonMenuCommand m_FeedCommand;
+        private ButtonMenuCommand m_TagsAnalyticsCommand;
+        private ButtonMenuCommand m_LogoutCommand;
 
         public UserMainForm()
         {
@@ -46,6 +52,7 @@ namespace FacebookMini.ui
             buildPages();
             showPage(m_ProfilePage);// defult
 
+            initCommands();
             startProfileAsyncLoaders();
         }
 
@@ -241,25 +248,34 @@ namespace FacebookMini.ui
                 panelContent.Controls.Add(i_Page);
             }
         }
-
-        private void buttonProfile_Click(object sender, EventArgs e)
+        
+        private void initCommands()
         {
-            showPage(m_ProfilePage);
+            m_ProfileCommand = new ButtonMenuCommand(buttonProfile, onProfileSelected);
+            m_FeedCommand = new ButtonMenuCommand(buttonFeed, onFeedSelected);
+            m_TagsAnalyticsCommand = new ButtonMenuCommand(buttonPostTagsAnalytics, onTagsAnalyticsSelected);
+            m_LogoutCommand = new ButtonMenuCommand(buttonLogout, onLogoutSelected);
         }
 
-        private void buttonFeed_Click(object sender, EventArgs e)
+        private void onProfileSelected()
+        {
+            showPage(m_ProfilePage);
+            startProfileAsyncLoaders();
+        }
+
+        private void onFeedSelected()
         {
             try
             {
                 if (!r_AppLogic.IsUserFriendsAccessibleAndHasFriends())
                 {
                     MessageBox.Show(
-                    @"No friends are available to display in the feed.
+                        @"No friends are available to display in the feed.
 
-                    This can happen if:
-                    • The user has no friends
-                    • Or Facebook did not grant access to friends data",
-                    "Feed is empty",
+This can happen if:
+• The user has no friends
+• Or Facebook did not grant access to friends data",
+                        "Feed is empty",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
@@ -272,23 +288,23 @@ namespace FacebookMini.ui
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"An error occurred while loading the feed.{Environment.NewLine} {ex.Message}",
+                    $"An error occurred while loading the feed.{Environment.NewLine}{ex.Message}",
                     "Feed error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
         }
-        
-        private void buttonTagsAnalytics_Click(object sender, EventArgs e)
+
+        private void onTagsAnalyticsSelected()
         {
             m_Composer.Builder = new TagsAnalyticsPageBuilder();
             m_TagsAnalyticsPage = m_Composer.Compose();
             showPage(m_TagsAnalyticsPage);
         }
 
-        private void buttonLogout_Click(object sender, EventArgs e)
+        private void onLogoutSelected()
         {
-            this.Close();
+            Close();
         }
     }
 }

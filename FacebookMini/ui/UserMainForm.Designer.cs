@@ -135,7 +135,6 @@
             this.buttonLogout.Text = "Logout";
             this.buttonLogout.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonLogout.UseVisualStyleBackColor = true;
-            this.buttonLogout.Click += new System.EventHandler(this.buttonLogout_Click);
             // 
             // buttonPostTagsAnalytics
             // 
@@ -153,7 +152,6 @@
             this.buttonPostTagsAnalytics.Text = "Posts Tags Analytics";
             this.buttonPostTagsAnalytics.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonPostTagsAnalytics.UseVisualStyleBackColor = true;
-            this.buttonPostTagsAnalytics.Click += new System.EventHandler(this.buttonTagsAnalytics_Click);
             // 
             // buttonFeed
             // 
@@ -171,7 +169,6 @@
             this.buttonFeed.Text = "Feed";
             this.buttonFeed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonFeed.UseVisualStyleBackColor = true;
-            this.buttonFeed.Click += new System.EventHandler(this.buttonFeed_Click);
             // 
             // buttonProfile
             // 
@@ -189,7 +186,6 @@
             this.buttonProfile.Text = "Profile";
             this.buttonProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonProfile.UseVisualStyleBackColor = true;
-            this.buttonProfile.Click += new System.EventHandler(this.buttonProfile_Click);
             // 
             // panelContent
             // 
