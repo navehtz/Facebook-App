@@ -93,7 +93,14 @@
     <Compile Include="shared\galleryItem\eGalleryItemType.cs" />
     <Compile Include="shared\galleryItem\GalleryItem.cs" />
     <Compile Include="shared\profileData\UserProfileData.cs" />
-    <Compile Include="ui\commands\ButtonMenuCommand.cs" />
+    <Compile Include="ui\commands\CommandBase.cs" />
+    <Compile Include="ui\commands\CommandObserver.cs" />
+    <Compile Include="ui\commands\CommandObserverForButton.cs" />
+    <Compile Include="ui\commands\CommandWithDelegate.cs" />
+    <Compile Include="ui\commands\ICommand.cs" />
+    <Compile Include="ui\commands\SmartButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ui\CustomComponent\NoteEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
