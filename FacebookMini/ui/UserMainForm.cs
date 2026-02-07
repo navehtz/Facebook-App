@@ -27,10 +27,11 @@ namespace FacebookMini.ui
         private bool m_ProfileLoaded = false;
         private bool m_FeedLoaded = false;
 
-        private ButtonMenuCommand m_ProfileCommand;
-        private ButtonMenuCommand m_FeedCommand;
-        private ButtonMenuCommand m_TagsAnalyticsCommand;
-        private ButtonMenuCommand m_LogoutCommand;
+        private ICommand m_CmdProfile;
+        private ICommand m_CmdFeed;
+        private ICommand m_CmdTagsAnalytics;
+        private ICommand m_CmdLogout;
+        private ICommand m_CurrentSelectedCommand;
 
         public UserMainForm()
         {
@@ -251,14 +252,47 @@ namespace FacebookMini.ui
         
         private void initCommands()
         {
-            m_ProfileCommand = new ButtonMenuCommand(buttonProfile, onProfileSelected);
-            m_FeedCommand = new ButtonMenuCommand(buttonFeed, onFeedSelected);
-            m_TagsAnalyticsCommand = new ButtonMenuCommand(buttonPostTagsAnalytics, onTagsAnalyticsSelected);
-            m_LogoutCommand = new ButtonMenuCommand(buttonLogout, onLogoutSelected);
+            m_CmdProfile = new CommandWithDelegate(onProfileSelected)
+            {
+                Name = "cmdProfile"
+            };
+
+            m_CmdFeed = new CommandWithDelegate(onFeedSelected)
+            {
+                Name = "cmdFeed",
+            };
+
+            m_CmdTagsAnalytics = new CommandWithDelegate(onTagsAnalyticsSelected)
+            {
+                Name = "cmdTagsAnalytics",
+            };
+
+            m_CmdLogout = new CommandWithDelegate(onLogoutSelected)
+            {
+                Name = "cmdLogout",
+            };
+
+            createSmartButtonsAndAddToSidePanel();
+
+            setSelectedCommand(m_CmdProfile);
+        }
+
+        private void createSmartButtonsAndAddToSidePanel()
+        {
+            SmartButton smartButtonProfile = new SmartButton(buttonProfile, m_CmdProfile);
+            SmartButton smartButtonFeed = new SmartButton(buttonFeed, m_CmdFeed);
+            SmartButton smartButtonTagsAnalytics = new SmartButton(buttonPostTagsAnalytics, m_CmdTagsAnalytics);
+            SmartButton smartButtonLogout = new SmartButton(buttonLogout, m_CmdLogout);
+
+            panelSideMenu.Controls.Add(smartButtonLogout);
+            panelSideMenu.Controls.Add(smartButtonTagsAnalytics);
+            panelSideMenu.Controls.Add(smartButtonFeed);
+            panelSideMenu.Controls.Add(smartButtonProfile);
         }
 
         private void onProfileSelected()
         {
+            setSelectedCommand(m_CmdProfile);
             showPage(m_ProfilePage);
             startProfileAsyncLoaders();
         }
@@ -284,6 +318,7 @@ This can happen if:
 
                 showPage(m_FeedPage);
                 startFeedAsyncLoaders();
+                setSelectedCommand(m_CmdFeed);
             }
             catch (Exception ex)
             {
@@ -292,6 +327,8 @@ This can happen if:
                     "Feed error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+
+                setSelectedCommand(m_CurrentSelectedCommand);
             }
         }
 
@@ -300,11 +337,39 @@ This can happen if:
             m_Composer.Builder = new TagsAnalyticsPageBuilder();
             m_TagsAnalyticsPage = m_Composer.Compose();
             showPage(m_TagsAnalyticsPage);
+
+            setSelectedCommand(m_CmdTagsAnalytics);
         }
 
         private void onLogoutSelected()
         {
             Close();
+        }
+
+        private void setSelectedCommand(ICommand i_SelectedCommand)
+        {
+            m_CurrentSelectedCommand = i_SelectedCommand;
+
+            bool isEqualToSelectedCommand = (m_CmdProfile == i_SelectedCommand);
+
+            if(m_CmdProfile != null)
+            {
+                m_CmdProfile.Checked = isEqualToSelectedCommand;
+            }
+
+            isEqualToSelectedCommand = (m_CmdFeed == i_SelectedCommand);
+
+            if(m_CmdFeed != null)
+            {
+                m_CmdFeed.Checked = isEqualToSelectedCommand;
+            }
+
+            isEqualToSelectedCommand = (m_CmdTagsAnalytics == i_SelectedCommand);
+
+            if(m_CmdTagsAnalytics != null)
+            {
+                m_CmdTagsAnalytics.Checked = isEqualToSelectedCommand;
+            }
         }
     }
 }
