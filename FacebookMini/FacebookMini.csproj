@@ -97,7 +97,6 @@
     <Compile Include="ui\commands\CommandObserver.cs" />
     <Compile Include="ui\commands\CommandObserverForButton.cs" />
     <Compile Include="ui\commands\CommandWithDelegate.cs" />
-    <Compile Include="ui\commands\CommandWithToggle.cs" />
     <Compile Include="ui\commands\ICommand.cs" />
     <Compile Include="ui\commands\SmartButton.cs">
       <SubType>Component</SubType>
