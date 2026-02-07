@@ -11,7 +11,7 @@ namespace FacebookMini.ui.commands
     public abstract class CommandObserver
     {
         protected ICommand m_Command;
-        protected Button m_Button;
+        protected Control m_Control;
 
         public ICommand Command
         {
@@ -28,9 +28,9 @@ namespace FacebookMini.ui.commands
             }
         }
 
-        public CommandObserver(Button i_Button)
+        public CommandObserver(Control i_Control)
         {
-            m_Button = i_Button;
+            m_Control = i_Control;
         }
 
         private void hookToCommand()
@@ -53,12 +53,12 @@ namespace FacebookMini.ui.commands
 
         private void updateAccordingToCommandState()
         {
-            m_Button.Enabled = m_Command.Enabled;
-            m_Button.Visible = m_Command.Available;
+            m_Control.Enabled = m_Command.Enabled;
+            m_Control.Visible = m_Command.Available;
 
             if (!string.IsNullOrEmpty(m_Command.Title))
             {
-                m_Button.Text = m_Command.Title;
+                m_Control.Text = m_Command.Title;
             }
 
             UpdateSpecific();
@@ -66,9 +66,22 @@ namespace FacebookMini.ui.commands
 
         protected abstract void UpdateSpecific();
 
-        public static CommandObserver  CreateCommandHolder(Button i_Button)
+        /// Static Factory Method:
+        public static CommandObserver  CreateCommandHolder(Control i_Control)
         {
-            return new CommandObserverForButton(i_Button);
+            if (i_Control == null)
+            {
+                throw new ArgumentNullException(nameof(i_Control));
+            }
+
+            CommandObserver retVal = null;
+
+            if (i_Control is Button button)
+            {
+                retVal = new CommandObserverForButton(button);
+            }
+
+            return retVal;
         }
     }
 }
