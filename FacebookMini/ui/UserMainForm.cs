@@ -31,6 +31,7 @@ namespace FacebookMini.ui
         private ICommand m_CmdFeed;
         private ICommand m_CmdTagsAnalytics;
         private ICommand m_CmdLogout;
+        private ICommand m_CurrentSelectedCommand;
 
         public UserMainForm()
         {
@@ -251,12 +252,12 @@ namespace FacebookMini.ui
         
         private void initCommands()
         {
-            m_CmdProfile = new CommandWithToggle(new CommandWithDelegate(onProfileSelected))
-                               {
-                                   Name = "cmdProfile", Checked = true
-                               };
+            m_CmdProfile = new CommandWithDelegate(onProfileSelected)
+            {
+                Name = "cmdProfile"
+            };
 
-            m_CmdFeed = new CommandWithToggle(new CommandWithDelegate(onFeedSelected))
+            m_CmdFeed = new CommandWithDelegate(onFeedSelected)
             {
                 Name = "cmdFeed",
             };
@@ -298,8 +299,6 @@ namespace FacebookMini.ui
 
         private void onFeedSelected()
         {
-            setSelectedCommand(m_CmdFeed);
-
             try
             {
                 if (!r_AppLogic.IsUserFriendsAccessibleAndHasFriends())
@@ -319,6 +318,7 @@ This can happen if:
 
                 showPage(m_FeedPage);
                 startFeedAsyncLoaders();
+                setSelectedCommand(m_CmdFeed);
             }
             catch (Exception ex)
             {
@@ -327,16 +327,18 @@ This can happen if:
                     "Feed error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+
+                setSelectedCommand(m_CurrentSelectedCommand);
             }
         }
 
         private void onTagsAnalyticsSelected()
         {
-            setSelectedCommand(m_CmdTagsAnalytics);
-
             m_Composer.Builder = new TagsAnalyticsPageBuilder();
             m_TagsAnalyticsPage = m_Composer.Compose();
             showPage(m_TagsAnalyticsPage);
+
+            setSelectedCommand(m_CmdTagsAnalytics);
         }
 
         private void onLogoutSelected()
@@ -346,6 +348,8 @@ This can happen if:
 
         private void setSelectedCommand(ICommand i_SelectedCommand)
         {
+            m_CurrentSelectedCommand = i_SelectedCommand;
+
             bool isEqualToSelectedCommand = (m_CmdProfile == i_SelectedCommand);
 
             if(m_CmdProfile != null)
