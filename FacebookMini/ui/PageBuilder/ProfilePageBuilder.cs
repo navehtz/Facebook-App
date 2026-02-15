@@ -107,13 +107,21 @@ namespace FacebookMini.ui.PageBuilder
 
             if (!string.IsNullOrEmpty(userData.Birthday))
             {
-                if (extraInfo.Length > 0) extraInfo += "   |   ";
+                if(extraInfo.Length > 0)
+                {
+                    extraInfo += "   |   ";
+                }
+
                 extraInfo += $"Birthday: {userData.Birthday}";
             }
 
             if (!string.IsNullOrEmpty(userData.LocationName))
             {
-                if (extraInfo.Length > 0) extraInfo += "   |   ";
+                if(extraInfo.Length > 0)
+                {
+                    extraInfo += "   |   ";
+                }
+
                 extraInfo += userData.LocationName;
             }
 
