@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using FacebookMini.shared.galleryItem;
 using FacebookMini.shared.adapters;
+using FacebookMini.ui.commands;
 
 namespace FacebookMini.ui
 {
@@ -25,6 +26,12 @@ namespace FacebookMini.ui
 
         private bool m_ProfileLoaded = false;
         private bool m_FeedLoaded = false;
+
+        private ICommand m_CmdProfile;
+        private ICommand m_CmdFeed;
+        private ICommand m_CmdTagsAnalytics;
+        private ICommand m_CmdLogout;
+        private ICommand m_CurrentSelectedCommand;
 
         public UserMainForm()
         {
@@ -46,6 +53,7 @@ namespace FacebookMini.ui
             buildPages();
             showPage(m_ProfilePage);// defult
 
+            initCommands();
             startProfileAsyncLoaders();
         }
 
@@ -241,25 +249,67 @@ namespace FacebookMini.ui
                 panelContent.Controls.Add(i_Page);
             }
         }
-
-        private void buttonProfile_Click(object sender, EventArgs e)
+        
+        private void initCommands()
         {
-            showPage(m_ProfilePage);
+            m_CmdProfile = new CommandWithDelegate(onProfileSelected)
+            {
+                Name = "cmdProfile"
+            };
+
+            m_CmdFeed = new CommandWithDelegate(onFeedSelected)
+            {
+                Name = "cmdFeed",
+            };
+
+            m_CmdTagsAnalytics = new CommandWithDelegate(onTagsAnalyticsSelected)
+            {
+                Name = "cmdTagsAnalytics",
+            };
+
+            m_CmdLogout = new CommandWithDelegate(onLogoutSelected)
+            {
+                Name = "cmdLogout",
+            };
+
+            createSmartButtonsAndAddToSidePanel();
+
+            setSelectedCommand(m_CmdProfile);
         }
 
-        private void buttonFeed_Click(object sender, EventArgs e)
+        private void createSmartButtonsAndAddToSidePanel()
+        {
+            SmartButton smartButtonProfile = new SmartButton(buttonProfile, m_CmdProfile);
+            SmartButton smartButtonFeed = new SmartButton(buttonFeed, m_CmdFeed);
+            SmartButton smartButtonTagsAnalytics = new SmartButton(buttonPostTagsAnalytics, m_CmdTagsAnalytics);
+            SmartButton smartButtonLogout = new SmartButton(buttonLogout, m_CmdLogout);
+
+            panelSideMenu.Controls.Add(smartButtonLogout);
+            panelSideMenu.Controls.Add(smartButtonTagsAnalytics);
+            panelSideMenu.Controls.Add(smartButtonFeed);
+            panelSideMenu.Controls.Add(smartButtonProfile);
+        }
+
+        private void onProfileSelected()
+        {
+            setSelectedCommand(m_CmdProfile);
+            showPage(m_ProfilePage);
+            startProfileAsyncLoaders();
+        }
+
+        private void onFeedSelected()
         {
             try
             {
                 if (!r_AppLogic.IsUserFriendsAccessibleAndHasFriends())
                 {
                     MessageBox.Show(
-                    @"No friends are available to display in the feed.
+                        @"No friends are available to display in the feed.
 
-                    This can happen if:
-                    • The user has no friends
-                    • Or Facebook did not grant access to friends data",
-                    "Feed is empty",
+This can happen if:
+• The user has no friends
+• Or Facebook did not grant access to friends data",
+                        "Feed is empty",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
@@ -268,27 +318,58 @@ namespace FacebookMini.ui
 
                 showPage(m_FeedPage);
                 startFeedAsyncLoaders();
+                setSelectedCommand(m_CmdFeed);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"An error occurred while loading the feed.{Environment.NewLine} {ex.Message}",
+                    $"An error occurred while loading the feed.{Environment.NewLine}{ex.Message}",
                     "Feed error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+
+                setSelectedCommand(m_CurrentSelectedCommand);
             }
         }
-        
-        private void buttonTagsAnalytics_Click(object sender, EventArgs e)
+
+        private void onTagsAnalyticsSelected()
         {
             m_Composer.Builder = new TagsAnalyticsPageBuilder();
             m_TagsAnalyticsPage = m_Composer.Compose();
             showPage(m_TagsAnalyticsPage);
+
+            setSelectedCommand(m_CmdTagsAnalytics);
         }
 
-        private void buttonLogout_Click(object sender, EventArgs e)
+        private void onLogoutSelected()
         {
-            this.Close();
+            Close();
+        }
+
+        private void setSelectedCommand(ICommand i_SelectedCommand)
+        {
+            m_CurrentSelectedCommand = i_SelectedCommand;
+
+            bool isEqualToSelectedCommand = (m_CmdProfile == i_SelectedCommand);
+
+            if(m_CmdProfile != null)
+            {
+                m_CmdProfile.Checked = isEqualToSelectedCommand;
+            }
+
+            isEqualToSelectedCommand = (m_CmdFeed == i_SelectedCommand);
+
+            if(m_CmdFeed != null)
+            {
+                m_CmdFeed.Checked = isEqualToSelectedCommand;
+            }
+
+            isEqualToSelectedCommand = (m_CmdTagsAnalytics == i_SelectedCommand);
+
+            if(m_CmdTagsAnalytics != null)
+            {
+                m_CmdTagsAnalytics.Checked = isEqualToSelectedCommand;
+            }
         }
     }
 }

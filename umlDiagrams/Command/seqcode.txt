@@ -1,0 +1,30 @@
+@startuml
+actor FacebookMiniUser
+
+participant "<u>:SmartButton" as SB
+participant "<u>:CommandWithDelegate" as CMD
+participant "<u>:UserMainForm" as FORM
+
+FacebookMiniUser -> SB : click
+activate SB
+
+SB -> CMD : Execute(null)
+activate CMD
+
+CMD -> CMD : InternalExecute()\n(Action.Invoke)
+
+CMD -> FORM : onFeedSelected()
+deactivate CMD
+deactivate SB
+activate FORM
+alt No friends or no permission
+    FORM -> FORM : Show MessageBox\n(\"Feed is empty\")
+    FORM -> FORM : return
+else Feed available
+    FORM -> FORM : showPage(m_FeedPage)
+    FORM -> FORM : startFeedAsyncLoaders()
+    FORM -> FORM : setSelectedCommand(m_CmdFeed)
+end
+
+deactivate FORM
+@enduml
