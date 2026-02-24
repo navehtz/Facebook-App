@@ -1,0 +1,68 @@
+@startuml
+
+title Observer + Command (Success Path) - Click Feed
+
+actor User
+
+participant "<u>feed:SmartButton" as SB
+participant "<u>cmdFeed:CommandWithDelegate" as CMD
+participant "<u>UserMainForm" as FORM
+participant "<u>cmdProfile:CommandBase" as CP
+participant "<u>cmdFeed:CommandBase" as CF
+participant "<u>cmdTags:CommandBase" as CT
+participant "<u>profile:CommandObserverForButton" as OP
+participant "<u>feed:CommandObserverForButton" as OF
+participant "<u>tags:CommandObserverForButton" as OT
+
+== User clicks Feed ==
+User -> SB : Click()
+activate SB
+
+SB -> CMD : Execute(null)
+activate CMD
+
+CMD -> FORM : onFeedSelected()
+activate FORM
+
+note right of FORM
+Assume: friends are accessible and user has friends.
+No error / no alternative flow.
+end note
+
+FORM -> FORM : showPage(m_FeedPage)
+FORM -> FORM : startFeedAsyncLoaders()
+FORM -> FORM : setSelectedCommand(cmdFeed)
+
+== Update Selected State ==
+FORM -> CP : set Checked = false
+activate CP
+CP -> OP : PropertyChanged("Checked")
+deactivate CP
+
+FORM -> CF : set Checked = true
+activate CF
+CF -> OF : PropertyChanged("Checked")
+deactivate CF
+
+FORM -> CT : set Checked = false
+activate CT
+CT -> OT : PropertyChanged("Checked")
+deactivate CT
+
+== Observers update UI ==
+activate OP
+OP -> OP : UpdateAccordingToCommandState()\n+ UpdateSpecific()
+
+activate OF
+OF -> OF : UpdateAccordingToCommandState()\n+ UpdateSpecific()\n(Highlight Feed button)
+deactivate OP
+
+activate OT
+OT -> OT : UpdateAccordingToCommandState()\n+ UpdateSpecific()
+deactivate OF 
+
+deactivate FORM
+deactivate CMD
+deactivate SB
+
+@enduml

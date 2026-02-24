@@ -1,0 +1,49 @@
+@startuml
+autonumber
+participant "<u>:UserMainForm" as UI
+actor FacebookMiniUser as U
+participant "<u>feed:SmartButton" as SB
+participant "<u>m_CmdFeed:CommandWithDelegate" as CMD
+participant "<u>onFeedSelected:Action" as ACT
+
+== Initialization: Inject Strategy ==
+activate UI
+UI -> UI : initCommands()
+
+UI -> CMD : new CommandWithDelegate(onFeedSelected)
+activate CMD
+note right of CMD
+Strategy injected via delegate (Action)
+end note
+deactivate CMD
+
+UI -> SB : new SmartButton(buttonFeed, m_CmdFeed)
+activate SB
+
+deactivate SB
+deactivate UI
+
+== Runtime: Execute Command -> Run Strategy ==
+U -> SB : Click
+activate SB
+
+SB -> CMD : Execute(null)
+activate CMD
+
+CMD -> CMD : InternalExecute(null)
+CMD -> ACT : Invoke()
+activate ACT
+
+ACT -> UI : onFeedSelected()
+activate UI
+note right of UI
+Assume: user has friends and access is granted
+end note
+UI -> UI : showPage(m_FeedPage)
+UI -> UI : startFeedAsyncLoaders()
+UI -> UI : setSelectedCommand(m_CmdFeed)
+
+deactivate ACT
+deactivate CMD
+deactivate SB
+@enduml
